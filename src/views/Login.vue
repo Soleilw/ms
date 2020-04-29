@@ -27,6 +27,8 @@
 import particles from './particles/particles.js'
 import particlesConfig from './particles/particles.json'
 
+
+
 export default {
 	name: 'Login',
 	data() {
@@ -55,19 +57,7 @@ export default {
 	methods: {
 		submitForm() {
 			var self = this;
-			if (self.loginForm.username && self.loginForm.password) {
-				// user.login(
-				// 	self.loginForm.username,
-				// 	self.loginForm.password
-				// ).then(response => {
-				// 	debugger
-				// 	setRoles(roles);
-				// 	self.$router.push('/');
-				// })
-				var roles = 'editor';
-				// setRoles(roles);
-				self.$router.push('/');
-			}
+			self.$router.push('/')
 		}
 	}
 }

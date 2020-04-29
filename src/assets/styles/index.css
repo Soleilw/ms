@@ -1,4 +1,19 @@
-.main {
-	margin-top: 4.17vw;
-	margin-left: 13.54vw;
+/* 侧边栏 */
+.sidebar {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 200px;
+	height: 100%;
+	background: #304156;
+	overflow-x: hidden;
+}
+
+/* 主体 */
+.main-container {
+	position: relative;
+	min-height: 100%;
+	margin-left: 200px;
+	padding: 70px 20px 0 20px;
 }
