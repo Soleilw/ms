@@ -3,15 +3,11 @@ import api from '../api.js'
 
 var aip = {};
 
+
 // 新增百度配置
-aip.aip = function(name, app-id, api_key, secret_key) {
+aip.aip = function(formData) {
 	return new Promise(function(resolve, reject) {
-		api.post(url.Aip, {
-			name: name,
-			app_id: app_id,
-			api_key: api_key,
-			secret_key: secret_key
-		}).then(response => {
+		api.post(url.Aip, formData).then(response => {
 			resolve(response);
 		}).catch(error => {
 			reject(error);
@@ -51,6 +47,85 @@ aip.restoreAip = function(id) {
 	return new Promise(function(resolve, reject) {
 		api.get(url.RestoreAip, {
 			id: id
+		}).then(response => {
+			resolve(response);
+		}).catch(error => {
+			reject(error);
+		})
+	})
+}
+
+
+// 新增项目配置
+aip.project = function(formData) {
+	return new Promise(function(resolve, reject) {
+		api.post(url.Project, formData).then(response => {
+			debugger
+			resolve(response);
+		}).catch(error => {
+			reject(error);
+		})
+	})
+	
+}
+
+// 获取项目
+aip.projects = function(page) {
+	return new Promise(function(resolve,reject) {
+		api.get(url.Projects, {
+			page: page
+		}).then(response => {
+			resolve(response);
+		}).catch(error => {
+			reject(error);
+		})
+	})
+}
+
+// 新增项目配置
+aip.address = function(formData) {
+	return new Promise(function(resolve, reject) {
+		api.post(url.Address, formData).then(response => {
+			debugger
+			resolve(response);
+		}).catch(error => {
+			reject(error);
+		})
+	})
+	
+}
+
+// 获取项目
+aip.addresses = function(page) {
+	return new Promise(function(resolve,reject) {
+		api.get(url.Addresses, {
+			page: page
+		}).then(response => {
+			resolve(response);
+		}).catch(error => {
+			reject(error);
+		})
+	})
+}
+
+// 新增项目配置
+aip.project = function(formData) {
+	return new Promise(function(resolve, reject) {
+		api.post(url.Project, formData).then(response => {
+			debugger
+			resolve(response);
+		}).catch(error => {
+			reject(error);
+		})
+	})
+	
+}
+
+// 获取项目
+aip.projects = function(page) {
+	return new Promise(function(resolve,reject) {
+		api.get(url.Projects, {
+			page: page
 		}).then(response => {
 			resolve(response);
 		}).catch(error => {

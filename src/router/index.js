@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 import DynamicRoutes from './dynamic-router.js'
 import Layout from '@/views/layout/index'
-
+import Home from '@/views/home/index'
 
 Vue.use(Router)
 
@@ -17,7 +17,8 @@ export default new Router({
 		{
 			path: '',
 			component: Layout,
-			children: [...DynamicRoutes]
+			children: [
+				...DynamicRoutes]
 		},
 		{
 			path: '/403',

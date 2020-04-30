@@ -1,13 +1,8 @@
 <template>
-	<div>
-		<div>地址</div>
-	</div>
+	<div>次页</div>
 </template>
 
 <script>
-	export default {
-		
-	}
 </script>
 
 <style>

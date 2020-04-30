@@ -14,24 +14,30 @@ function queryData(data) {
 
 var api = {};
 
+var headersB = {"content-type" : "application/json; charset=UTF-8"};//设置请求头
+var headersC = {"Content-Type" : "application/x-www-form-urlencoded"};//设置请求头
+var headersE = { "content-type": "application/json; charset=UTF-8"};//设置请求头
+
 api.get = function(url, data) {
   return request({
-    url: 'https://easy-mock.com/mock/5de9b43f2e6a182661ce3f36/example' + url + queryData(data),
-    method: 'get'
+    url: 'https://api.fengniaotuangou.cn' + url + queryData(data),
+    method: 'get',
+	headers: headersC
   })
 }
 
 api.post = function(url, data) {
 	return request({
-		url: 'https://easy-mock.com/mock/5de9b43f2e6a182661ce3f36/example' + url,
+		url: 'https://api.fengniaotuangou.cn' + url,
 		method: 'post',
-		data: data
+		data: data,
+		headers: headersC
 	})
 }
 
 api.delete = function(url, data) {
 	return request({
-		url: 'https://gong.fengniaotuangou.cn/api' + url,
+		url: 'https://api.fengniaotuangou.cn' + url,
 		method: 'delete',
 		data: data
 	})

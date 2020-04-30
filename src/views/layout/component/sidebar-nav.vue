@@ -30,8 +30,17 @@ export default {
 			sidebarMenu: dynamicRoutes
 		}
 	},
+	computed: {
+		// currentMenu() {
+		// 	if(this.$route.children) {
+		// 		console.log(this.$route.children.name)
+		// 		return this.$route.children.name;
+		// 	}
+		// }
+	},
 	mounted() {
 		console.log(dynamicRoutes)
+		console.log(this.$route.name)
 	}
 }
 </script>

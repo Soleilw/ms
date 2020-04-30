@@ -26,7 +26,7 @@
 <script>
 import particles from './particles/particles.js'
 import particlesConfig from './particles/particles.json'
-
+import user from '../api/modules/user.js'
 
 
 export default {
@@ -57,7 +57,14 @@ export default {
 	methods: {
 		submitForm() {
 			var self = this;
-			self.$router.push('/')
+			if( self.loginForm.username && self.loginForm.password ) {
+				user.login(
+					self.loginForm.username,
+					self.loginForm.password
+				).then(response => {
+					self.$router.push('/');
+				})
+			}
 		}
 	}
 }
