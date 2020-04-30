@@ -30,7 +30,7 @@ import user from '../api/modules/user.js'
 
 
 export default {
-	name: 'Login',
+	name: 'login',
 	data() {
 		return {
 			loginForm: {
@@ -58,12 +58,14 @@ export default {
 		submitForm() {
 			var self = this;
 			if( self.loginForm.username && self.loginForm.password ) {
-				user.login(
-					self.loginForm.username,
-					self.loginForm.password
-				).then(response => {
-					self.$router.push('/');
-				})
+				// user.login(
+				// 	self.loginForm.username,
+				// 	self.loginForm.password
+				// ).then(response => {
+				// 	self.$router.push('/');
+				// })
+                localStorage.setItem('user',self.loginForm.username);
+                this.$router.replace('/')
 			}
 		}
 	}

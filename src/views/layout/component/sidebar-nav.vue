@@ -14,7 +14,7 @@
 
 <script>
 import DynamicMenu from '@/components/dyanmic-menu'
-import dynamicRoutes from '@/router/dynamic-router'
+import { mapState } from 'vuex'
 
 import { DynamicRoutes } from '@/router/index'
 
@@ -26,11 +26,12 @@ export default {
 	data() {
 		return {
 			isSidebarNavCollapse: false,
-			currentMenu: '',
-			sidebarMenu: dynamicRoutes
+			// currentMenu: '',
+			// sidebarMenu: DynamicRoutes
 		}
 	},
 	computed: {
+        ...mapState('permission', ['sidebarMenu', 'currentMenu'])
 		// currentMenu() {
 		// 	if(this.$route.children) {
 		// 		console.log(this.$route.children.name)
@@ -39,7 +40,7 @@ export default {
 		// }
 	},
 	mounted() {
-		console.log(dynamicRoutes)
+		console.log(DynamicRoutes)
 		console.log(this.$route.name)
 	}
 }

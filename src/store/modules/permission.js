@@ -1,59 +1,43 @@
-// import { asyncRoutes, constantRoutes } from '@/router/index.js'
-
-function hasPermission(roles, route) {
-  if (route.meta && route.meta.roles) {
-    return roles.some(role => route.meta.roles.includes(role))
-  } else {
-    return true
-  }
-}
-
-export function fifterAsyncRoutes(routes, roles) {
-	const res = []
-	routers.forEach(route => {
-		const tmp = { ...route } 
-		if(hasPermission(roles, tmp)) {
-			if(tmp.children) {
-				tmp.children = fifterAsyncRoutes(tmp.children, roles)
-			}
-			res.push(tmp);
-		}
-	})
-	
-	return res;
-}
-
-const state = {
-	routes: [], // 完整的路由表
-	addRoutes: [] // 用户可访问路由表
-}
-
-const mutations = {
-	SET_ROUTES: (state, routes) => {
-		state.addRoutes = routes
-		state.routes = constantRoutes.concat(routes)
-	}
-}
-
-const actions = {
-	generateRoutes({ commit }, roles) {
-		return new Promise(resolve => {
-			let accessedRoutes;
-			if(roles.includes('admin')) {
-				accessedRoutes = asyncRoutes || []
-			} else {
-				accessedRoutes = fifterAsyncRoutes(asyncRoutes, roles);
-			}
-			
-			commit('SET_ROUTES', accessRoutes);
-			resolve(accessRoutes);
-		})
-	}
-}
+import router, { DynamicRoutes } from '@/router/index'
+import dynamicRoutes from '@/router/dynamic-router'
+import { recursionRouter } from '@/utils/recursion-router'
 
 export default {
-  namespaced: true,
-  state,
-  mutations,
-  actions
+    namespaced: true,
+    state: {
+        permissionList: null,
+        sidebarMenu: [],
+        currentMenu: '',
+        control_list: []
+    },
+    mutations: {
+        SET_PERMISSION_LIST(state, routes) {
+            state.permissionList = routes
+        },
+        SET_SIDEBAR_MENU(state, menu) {
+            state.sidebarMenu = menu
+        },
+        SET_CURRENT_MENU(state, currentMenu) {
+            state.currentMenu = currentMenu
+        },
+        SET_CONTROL_LIST(state, list) {
+            state.control_list = list
+        }
+    },
+    actions: {
+        async FETCH_PERMISSION({commit, state}){
+            let arr = ['project','aip','index','abc','address','device'];
+            let routes = recursionRouter(arr, dynamicRoutes);
+            let MainContainer = DynamicRoutes.find(item => item.path === '');
+            let children = MainContainer.children;
+            commit('SET_CONTROL_LIST', [...children, ...dynamicRoutes]);
+            children.push(...routes);
+            commit('SET_SIDEBAR_MENU', children);
+            let initialRoutes = router.options.routes;
+            router.addRoutes(DynamicRoutes);
+            console.log(DynamicRoutes)
+            commit('SET_PERMISSION_LIST', [...initialRoutes, ...DynamicRoutes]);
+        }
+    
+    }
 }

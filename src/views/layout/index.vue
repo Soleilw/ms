@@ -10,6 +10,7 @@
 <script>
 	import sidebarNav from './component/sidebar-nav'
 	import mainContent from './component/main-content/index'
+    import { mapState } from 'vuex'
 	export default {
 		components: {
 			sidebarNav,
@@ -19,7 +20,10 @@
 			return {
 				
 			}
-		}
+		},
+        computed: {
+            
+        }
 	}
 </script>
 

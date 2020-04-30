@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<template v-for="item in menuList">
-			<template v-if="item.children">
+			<!-- <template v-if="item.children">
 				<el-submenu :index="item.name" :key="item.name">
 					<template slot="title">
 						<i :class="item.meta.icon"></i>
@@ -25,26 +25,26 @@
 					<i :class="item.meta.icon"></i>
 					<span slot="title">{{ item.meta.title}}</span>
 				</el-menu-item>
-			</template>
+			</template> -->
 			
-			<!-- 
+			
 			
 			<el-submenu :index="item.name" :key="item.name" v-if="item.children && item.children.length > 0">
 				<template slot="title">
 					<i :class="item.meta.icon"></i>
 					<span>{{ item.meta.title }}</span>
 				</template>
-				<el-menu-item v-for="childrenItem in item.children" :key="childrenItem.name" :index="childrenItem.name" @click="gotoRoute(childrenItem.path)">
+				<!-- <el-menu-item v-for="childrenItem in item.children" :key="childrenItem.name" :index="childrenItem.name" @click="gotoRoute(childrenItem.path)">
 					<span slot='title'>{{ childrenItem.meta.title }}</span>
-				</el-menu-item>
+				</el-menu-item> -->
 				<el-menu-item-group>
 					<my-nav :menuList='item.children'></my-nav>
 				</el-menu-item-group>
 			</el-submenu>
-			<el-menu-item :index="item.name" :key="item.name" @click="gotoRoute(item.path)" v-else>
+			<el-menu-item :index="item.name" :key="item.name" @click="gotoRoute(item.name)" v-else>
 				<i :class="item.meta.icon"></i>
 				<span slot='title'>{{ item.meta.title }}</span>
-			</el-menu-item> -->
+			</el-menu-item>
 		</template>
 	</div>
 </template>
@@ -61,8 +61,8 @@
 			}
 		},
 		methods: {
-			gotoRoute(path) {
-				this.$router.push({path}); 
+			gotoRoute(name) {
+				this.$router.push({name}); 
 			}
 		}
 	}

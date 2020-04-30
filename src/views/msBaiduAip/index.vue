@@ -24,14 +24,14 @@
 					<el-input v-model="form.name"></el-input>
 				</el-form-item>
 				<el-form-item label="AppId">
-					<el-input v-model="form.aip_id"></el-input>
+					<el-input v-model="form.app_id"></el-input>
 				</el-form-item>
-		<!-- 		<el-form-item label="ApiKey">
+				<el-form-item label="ApiKey">
 					<el-input v-model="form.api_key"></el-input>
 				</el-form-item>
 				<el-form-item label="SectetKey">
 					<el-input v-model="form.secret_key"></el-input>
-				</el-form-item> -->
+				</el-form-item>
 				<el-button type="primary" @click="newAip">添加</el-button>
 			</el-form>
 		</el-dialog>
@@ -45,26 +45,11 @@
 		data() {
 			return {
 				dialogFormVisible: false,
-				// form: {
-				// 	name: '小黄',
-				// 	app_id: '250',
-				// 	api_key: '250',
-				// 	secret_key: '250'
-				// },
-				// form: {
-				// 	name: '小黄',
-				// 	aip_id: '1',
-				// },
 				form: {
-					 project_id: "1",
-					    address: "et",
-					    contact: "ut",
-					    face_groups: [
-					        {
-					            name: "vitae",
-					            is_default: "1"
-					        }
-					    ]
+					name: '小黄',
+					app_id: '250',
+					api_key: '250',
+					secret_key: '250'
 				},
 				tableDate: [{
 						name: '1',
@@ -111,11 +96,7 @@
 					inputType: 'Select',
 					inputValue: this.value
 				}).then((inputValue) => {
-					// aip.aips(inputValue).then(response => {
-					// 	console.log(response)
-					// })
-					
-					aip.projects(1).then(response => {
+					aip.aips(inputValue).then(response => {
 						console.log(response)
 					})
 				}).catch(() => {})
@@ -142,15 +123,15 @@
 			
 			// 添加新的AIP			
 			newAip() {
-				// var self = this;
-				// var formData = new FormData();
-				// formData.append('name', self.form.name),
-				// formData.append('app_id', self.form.app_id),
-				// formData.append('api_key', self.form.api_key),
-				// formData.append('secret_key', self.form.secret_key)
-				// aip.aip(formData).then(response => {
-				// 	console.log(111)
-				// })
+				var self = this;
+				var formData = new FormData();
+				formData.append('name', self.form.name),
+				formData.append('app_id', self.form.app_id),
+				formData.append('api_key', self.form.api_key),
+				formData.append('secret_key', self.form.secret_key)
+				aip.aip(formData).then(response => {
+					self.dialogFormVisible = true;
+				})
 				// 项目
 				// var self = this;
 				// var formData = new FormData();
@@ -159,17 +140,12 @@
 				// aip.project(formData).then(response => {
 				// 	console.log(111)
 				// })
-				var self = this;
-				var Qs = require('qs');
-				var body = Qs.stringify(this.form);
-				// for(var i = 0; i < this.form.face_groups.length; i++) {
-					
-				// 	formData.append(`face_groups[${i}].name`, this.form.face_groups[i].name),
-				// 	formData.append(`face_groups[${i}].is_default`, this.form.face_groups[i].is_default)
-				// }
-				aip.address(body).then(response => {
-					console.log(111)
-				})
+				// var self = this;
+				// var Qs = require('qs');
+				// var body = Qs.stringify(this.form);
+				// aip.address(body).then(response => {
+				// 	console.log(111)
+				// })
 			}
 		}
 	}
