@@ -14,12 +14,10 @@ service.interceptors.request.use(config => {
 
 // 添加响应拦截器
 service.interceptors.response.use(response => {
-	debugger
 	// let res = response.data;
 	if(response.status === 200) {
 		return response;
 	} else {
-		debugger
 		if(response.status === 401) {
 			this.$router.push('/login');
 		}

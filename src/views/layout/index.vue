@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div>
+		<div :class="{navCollapsed:isSidebarNavCollapse}">
 			<sidebarNav class="sidebar"/>
 			<mainContent/>
 		</div>
@@ -22,7 +22,7 @@
 			}
 		},
         computed: {
-            
+            ...mapState(['isSidebarNavCollapse'])
         }
 	}
 </script>

@@ -9,6 +9,7 @@
 	background: #304156;
 	overflow-x: hidden;
 	z-index: 100;
+
 }
 
 /* 主体 */
@@ -17,4 +18,26 @@
 	min-height: 100%;
 	margin-left: 200px;
 	padding: 70px 20px 0 20px;
+}
+
+/* 折叠菜单下的样式 */
+.navCollapsed {
+    .sidebar {
+        width: 64px !important;
+        ul {
+            display: none;
+        }
+        .iconfont+span {
+            display: none;
+        }
+        .el-submenu__icon-arrow {
+            display: none;
+        }
+    }
+    .main-container {
+        margin-left: 64px;
+    }
+    .aside__top{
+        left:64px!important;
+    }
 }

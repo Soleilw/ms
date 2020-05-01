@@ -46,5 +46,24 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+	.el-menu {
+	    border: none;
+	    .iconfont {
+	        color: #fff;
+	        font-size: 16px;
+	    }
+	     .el-submenu__title {
+	        &:hover {
+	            background: none !important;
+	        }
+	        i.el-submenu__icon-arrow {
+	            color: #ddd;
+	            font-size: 15px;
+	        }
+	    } 
+	    .el-menu-item-group__title {
+	        padding: 0;
+	    }
+	}
 </style>

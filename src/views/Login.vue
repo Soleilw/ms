@@ -24,104 +24,103 @@
 </template>
 
 <script>
-import particles from './particles/particles.js'
-import particlesConfig from './particles/particles.json'
-import user from '../api/modules/user.js'
+	import particles from './particles/particles.js'
+	import particlesConfig from './particles/particles.json'
+	import user from '../api/modules/user.js'
 
 
-export default {
-	name: 'login',
-	data() {
-		return {
-			loginForm: {
-				username: 'admin',
-				password: '123456'
-			},
-			loginRules: {
-				username: [{
-					required: true,
-					message: '请输入账号',
-					trigger: 'blur'
-				}],
-				password: [{
-					required: true,
-					message: '请输入密码',
-					trigger: 'blur'
-				}]
+	export default {
+		name: 'login',
+		data() {
+			return {
+				loginForm: {
+					username: 'admin',
+					password: '123123'
+				},
+				loginRules: {
+					username: [{
+						required: true,
+						message: '请输入账号',
+						trigger: 'blur'
+					}],
+					password: [{
+						required: true,
+						message: '请输入密码',
+						trigger: 'blur'
+					}]
+				}
 			}
-		}
-	},
-	mounted() {
-		particlesJS("particle", particlesConfig);
-	},
-	methods: {
-		submitForm() {
-			var self = this;
-			if( self.loginForm.username && self.loginForm.password ) {
-				// user.login(
-				// 	self.loginForm.username,
-				// 	self.loginForm.password
-				// ).then(response => {
-				// 	self.$router.push('/');
-				// })
-                localStorage.setItem('user',self.loginForm.username);
-                this.$router.replace('/')
+		},
+		mounted() {
+			particlesJS("particle", particlesConfig);
+		},
+		methods: {
+			submitForm() {
+				var self = this;
+				if (self.loginForm.username && self.loginForm.password) {
+					var formData = new FormData();
+					formData.append('username', self.loginForm.username);
+					formData.append('password', self.loginForm.password);
+					user.login(formData).then(response => {
+						localStorage.setItem('user', self.loginForm.username);
+						self.$router.replace('/')
+					})
+				}
 			}
 		}
 	}
-}
 </script>
 
 <style scoped lang="scss">
-body {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	min-width: 760px;
-	overflow: hidden;
-}
-
-#particle {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	background-color: #000;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: 50% 50%;
-
-	canvas {
-		display: block;
-		vertical-align: bottom;
-	}
-}
-
-.login {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	margin: auto;
-	width: 30vw;
-	height: 20vw;
-	background-color: #fff;
-	border-radius: 1vw;
-	color: #000;
-	text-align: center;
-	overflow-x: auto;
-
-	.title {
-		padding-top: 3vw;
-		font-size: 1.4vw;
-	}
-
-	.form_info {
-		padding: 3vw 2vw 0 2vw;
-	}
-
-	.login_btn button {
+	body {
+		position: absolute;
 		width: 100%;
+		height: 100%;
+		min-width: 760px;
+		overflow: hidden;
 	}
-}
+
+	#particle {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		background-color: #000;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: 50% 50%;
+
+		canvas {
+			display: block;
+			vertical-align: bottom;
+		}
+	}
+
+	.login {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		margin: auto;
+		width: 30vw;
+		height: 20vw;
+		background-color: #fff;
+		border-radius: 1vw;
+		color: #000;
+		text-align: center;
+		overflow-x: auto;
+
+		.title {
+			padding-top: 3vw;
+			font-size: 1.4vw;
+		}
+
+		.form_info {
+			padding: 3vw 2vw 0 2vw;
+		}
+
+		.login_btn button {
+			width: 100%;
+		}
+	}
 </style>

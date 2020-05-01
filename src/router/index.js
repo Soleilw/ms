@@ -11,7 +11,10 @@ export default new Router({
 	mode: 'history',
 	routes: [{
 			path: '/login',
-			component: resolve => require(['@/views/Login'], resolve)
+			component: resolve => require(['@/views/Login'], resolve),
+			meta: {
+			    title: '登录'
+			},
 		}
 	]
 })
