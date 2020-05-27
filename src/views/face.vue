@@ -4,7 +4,7 @@
 			<el-button type="primary" @click="dialogFace = true">添加人脸</el-button>
 		</div>
 
-		<el-dialog title="添加年级" :visible.sync="dialogFace">
+		<el-dialog title="添加人脸" :visible.sync="dialogFace">
 			<div class="box">
 				<el-form :model="form" label-width="100px">
 					<el-form-item label="选择地址">

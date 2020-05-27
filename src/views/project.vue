@@ -4,7 +4,7 @@
 			<el-button type="primary" @click="dialogProject = true">添加项目</el-button>
 		</div>
 
-		<el-dialog title="添加年级" :visible.sync="dialogProject">
+		<el-dialog title="添加项目" :visible.sync="dialogProject">
 			<div class="box">
 				<el-form :model="form" label-width="100px">
 					<el-form-item label="选择AIPID">

@@ -4,7 +4,7 @@
 			<el-button type="primary" @click="dialogDevice = true">添加设备</el-button>
 		</div>
 
-		<el-dialog title="添加年级" :visible.sync="dialogDevice">
+		<el-dialog title="添加设备" :visible.sync="dialogDevice">
 			<div class="box">
 				<el-form :model="form" label-width="100px">
 					<el-form-item label="设备名称">
@@ -222,7 +222,7 @@
 					})
 				}
 				var self = this;
-				API.aip(self.form).then(res => {
+				API.device(self.form).then(res => {
 					self.dialogDevice = false;
 					self.$message.success("提交成功");
 					self.getDevice();

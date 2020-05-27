@@ -4,7 +4,7 @@
 			<el-button type="primary" @click="dialogApk = true">添加AIP</el-button>
 		</div>
 
-		<el-dialog title="添加年级" :visible.sync="dialogApk">
+		<el-dialog title="添加AIP" :visible.sync="dialogApk">
 			<div class="box">
 				<el-form :model="form" label-width="80px">
 					<el-form-item label="APK名字">

@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<div class="btn">
-			<el-button type="primary" @click="dialogProject = true">添加地址</el-button>
+			<el-button type="primary" @click="addProject">添加地址</el-button>
 		</div>
 
-		<el-dialog title="添加年级" :visible.sync="dialogProject">
+		<el-dialog title="添加地址" :visible.sync="dialogProject" :close-on-click-modal="false">
 			<div class="box">
 				<el-form :model="form" label-width="100px">
 					<el-form-item label="选择项目">
@@ -103,6 +103,16 @@
 					self.tableDate = res.data;
 					self.totalPage = res.total;
 				})
+			},
+			addProject() {
+				var self = this;
+				self.dialogProject = true;
+				self.form = {
+					project_id: '',
+					address: '',
+					contact: '',
+					face_groups: []
+				}
 			},
 			// 添加人脸分组名称
 			addFace() {
