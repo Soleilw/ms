@@ -1,6 +1,0 @@
-export default {
-    /* 导航菜单是否折叠 */
-    isSidebarNavCollapse: false,
-    /* 面包屑导航列表 */
-    crumbList: []
-}

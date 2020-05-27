@@ -1,53 +1,33 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
+import DynamicRouter from './dynamicRouter.js'
 
-import Layout from '@/views/layout/index'
-import Home from '@/views/home/index'
+Vue.use(VueRouter)
 
-Vue.use(Router)
-
-/* 初始路由 */
-export default new Router({
-	mode: 'history',
-	routes: [{
-			path: '/login',
-			component: resolve => require(['@/views/Login'], resolve),
-			meta: {
-			    title: '登录'
-			},
-		}
-	]
-})
-
-// 准备添加的动态路由
-export const DynamicRoutes = [
+const routes = [{
+        path: '/',
+        redirect: '/baiduaip'
+    },
     {
-        path: '',
-        component: Layout,
-        name: 'container',
-        redirect: 'home',
-        meta: {
-            requireAuth: true,
-            title: '首页'
-        },
+        path: '/',
+        component: () => import('@/components/Home.vue'),
+		meta: { title: '自述文件' },
         children: [
-            {
-                path: 'home',
-                component: Home,
-                name: 'home',
-                meta: {
-                    title: '首页',
-                    icon: 'el-icon-user'
-                }
-            }
+            ...DynamicRouter
         ]
     },
     {
-    	path: '/403',
-    	component: resolve => require(['@/views/errorPage/403'], resolve)
-    },
-    {
-    	path: '*',
-    	component: resolve => require(['@/views/errorPage/404'], resolve)
+        path: '/login',
+        component: () => import('@/views/login.vue'),
+        meta: { title: '登录' },
     }
+
 ]
+
+const router = new VueRouter({
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes
+})
+
+export default router

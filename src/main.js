@@ -1,50 +1,41 @@
 import Vue from 'vue'
+import './plugins/axios'
 import App from './App.vue'
-import router from './router/index.js'
+import router from './router'
 import store from './store'
-
 // 引入ui
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
-import '@/assets/styles/reset.css'
-import '@/assets/styles/index.css'
+import '@/assets/style/reset.css'
+import '@/assets/style/commom.scss'
 
 Vue.config.productionTip = false
 
-// 路由拦截
-const whiteList = ['/login']
-router.beforeEach((to, from, next) => {
-	document.title = `${to.meta.title} - 图巴诺`;
-	if (whiteList.indexOf(to.path) !== -1) {
-		next();
-	} else {
-		if(localStorage.getItem('user')) {
-		    if (to.matched.length > 0 && !to.matched.some(item => item.meta.requiresAuth)) {
-		        next()
-		    } else {
-		        store.dispatch('permission/FETCH_PERMISSION').then(() => {
-		            next({ path: to.path })
-		        })
-		    }
-		    
-		} else {
-		    if (to.path !== '/login') {
-		        next()
-		    } else {
-		        next({ path: '/login' })
-		    }
-		}
-	}
-})
+// router.beforeEach((to, from, next) => {
+//     document.title = `${to.meta.title} | 图巴诺校园安全系统`
+//     const token = localStorage.getItem('token');
+//     if (!token && to.path !== '/login') {
+//         next({ path: "/login" });
+//     } else if (token) {
+//         next()
+//     }
+// });
 
-// 进入路由
-router.afterEach((to, from, next) => {
-	var routerList = to.matched
-	store.commit('setCrumbList', routerList)
-    store.commit('permission/SET_CURRENT_MENU', to.name)
-})
+const whiteList = ['/login']
+// router.beforeEach((to, from, next) => {
+// 	document.title = `${to.meta.title} - 图巴诺总控`;
+// 	// const token = localStorage.getItem('crl-token');
+// 	if (whiteList.indexOf(to.path) !== -1) {
+// 		next();
+// 	} 
+// 	// if(!token && to.path !== '/login') {
+// 	// 	next({ path: "/login" });
+// 	// } else if(token) {
+// 	// 	next();
+// 	// }
+// })
 
 new Vue({
   router,

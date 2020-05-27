@@ -30,13 +30,17 @@ const url = {
 	// 设备管理
 	'Device': '/device', // 新增设备
 	'Devices': '/devices', // 获取设备列表
+	'Uuid': '/unknown/devices', // 添加设备人脸组
 	'DeviceFaceGroup': '/device/face/group', // 添加设备人脸组
+	"FaceGroup": '/face/groups',
 	
 	// apk管理
 	'Apk': '/apk', // 创建apk
 	'Apks': '/apks', // 获取apk列表
 	'ApkVersion': '/apk/version', // 新增apk版本
 	'ApkVersions': '/apk/versions', // 获取apk版本列表
+	
+	'PublishApk': '/publish/apk', // 获取apk版本列表
 	
 	// 上传人脸
 	'UploadFace': '/upload/face', // 上传人脸

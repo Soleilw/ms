@@ -1,8 +1,5 @@
 <template>
-	<div>
-		<!-- 粒子背景 -->
-		<div id="particle">
-			<canvas class="particles-js-canvas-el" style="'width: 100%; height: 100%;"></canvas>
+	<div class="login-wrap">
 			<div class="login">
 				<div class="title">
 					图巴诺校园安全管理后台(小学版)
@@ -19,14 +16,11 @@
 					</el-form-item>
 				</el-form>
 			</div>
-		</div>
 	</div>
 </template>
 
 <script>
-	import particles from './particles/particles.js'
-	import particlesConfig from './particles/particles.json'
-	import user from '../api/modules/user.js'
+	import API from '@/api/login.js'
 
 
 	export default {
@@ -34,8 +28,8 @@
 		data() {
 			return {
 				loginForm: {
-					username: 'admin',
-					password: '123123'
+					username: '',
+					password: ''
 				},
 				loginRules: {
 					username: [{
@@ -51,49 +45,33 @@
 				}
 			}
 		},
-		mounted() {
-			particlesJS("particle", particlesConfig);
-		},
 		methods: {
 			submitForm() {
 				var self = this;
-				if (self.loginForm.username && self.loginForm.password) {
-					var formData = new FormData();
-					formData.append('username', self.loginForm.username);
-					formData.append('password', self.loginForm.password);
-					user.login(formData).then(response => {
-						localStorage.setItem('user', self.loginForm.username);
-						self.$router.replace('/')
-					})
-				}
+                // localStorage.setItem('token', '123455')
+                // // localStorage.setItem('role', res.role)
+                self.$router.replace('/')
+				// if (self.loginForm.username && self.loginForm.password) {
+				// 	API.login(self.loginForm).then(res => {
+				// 		localStorage.setItem('crl-token', res.token)
+				// 		localStorage.setItem('username', self.loginForm.username)
+				// 		self.$router.replace('/')
+				// 	})
+				// }
 			}
 		}
 	}
 </script>
 
 <style scoped lang="scss">
-	body {
-		position: absolute;
+	.login-wrap {
 		width: 100%;
 		height: 100%;
 		min-width: 760px;
+        background-color: #000;
 		overflow: hidden;
 	}
 
-	#particle {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		background-color: #000;
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-position: 50% 50%;
-
-		canvas {
-			display: block;
-			vertical-align: bottom;
-		}
-	}
 
 	.login {
 		position: absolute;

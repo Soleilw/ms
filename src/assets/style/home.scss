@@ -1,0 +1,45 @@
+html,
+body,
+#app,
+.wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.main {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    left: 200px;
+    bottom: 0;
+    padding: 20px 20px 100px 20px;
+    background: #f0f0f0;
+}
+
+.content {
+    width: auto;
+	height: 100%;
+	padding: 20px 20px 50px;
+	border-radius: 0 0 5px 5px;
+	background-color: #fff;
+	overflow-y: scroll;
+}
+
+.content-collapse {
+    left: 65px;
+}
+
+.el-menu-item, .el-submenu__title{
+		height: 45px !important;
+		line-height: 45px !important;
+}
+
+.tags-li.active {
+    border: 1px solid #fff;
+    background-color: #fff;
+}
+
+
+
+
