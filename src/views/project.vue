@@ -89,7 +89,7 @@
 				API.project(self.form).then(res => {
 					self.dialogProject = false;
 					self.$message.success("提交成功");
-					self.getAip();
+					self.getProject();
 					self.currentPage = 1
 					self.form = {}
 				})
@@ -100,7 +100,7 @@
 			// 分页
 			handleCurrentChange(val) {
 				var self = this;
-				self.getAip();
+				self.getProject();
 			},
 		}
 	}

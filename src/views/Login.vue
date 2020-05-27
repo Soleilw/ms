@@ -1,21 +1,21 @@
 <template>
 	<div class="login-wrap">
-			<div class="login">
-				<div class="title">
-					图巴诺校园安全管理后台(小学版)
-				</div>
-				<el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="3vw" class="form_info">
-					<el-form-item prop="username" label="账号">
-						<el-input v-model="loginForm.username" placeholder="username"></el-input>
-					</el-form-item>
-					<el-form-item prop="password" label="密码">
-						<el-input type="password" v-model="loginForm.password" placeholder="password"></el-input>
-					</el-form-item>
-					<el-form-item class="login_btn">
-						<el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
-					</el-form-item>
-				</el-form>
+		<div class="login">
+			<div class="title">
+				图巴诺校园安全管理后台(小学版)
 			</div>
+			<el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-width="3vw" class="form_info">
+				<el-form-item prop="username" label="账号">
+					<el-input v-model="loginForm.username" placeholder="username"></el-input>
+				</el-form-item>
+				<el-form-item prop="password" label="密码">
+					<el-input type="password" v-model="loginForm.password" placeholder="password"></el-input>
+				</el-form-item>
+				<el-form-item class="login_btn">
+					<el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+				</el-form-item>
+			</el-form>
+		</div>
 	</div>
 </template>
 
@@ -48,9 +48,12 @@
 		methods: {
 			submitForm() {
 				var self = this;
-                // localStorage.setItem('token', '123455')
-                // // localStorage.setItem('role', res.role)
-                self.$router.replace('/')
+				localStorage.setItem('token', '12345678')
+				localStorage.setItem('role', 'super')
+				localStorage.setItem('username', '总控')
+				var permissions = ['baiduaip', 'package', 'project', 'address', 'face', 'device']
+				localStorage.setItem('permissions', permissions)
+				self.$router.replace('/')
 				// if (self.loginForm.username && self.loginForm.password) {
 				// 	API.login(self.loginForm).then(res => {
 				// 		localStorage.setItem('crl-token', res.token)
@@ -68,7 +71,7 @@
 		width: 100%;
 		height: 100%;
 		min-width: 760px;
-        background-color: #000;
+		background-color: #000;
 		overflow: hidden;
 	}
 

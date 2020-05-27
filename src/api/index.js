@@ -34,6 +34,16 @@ API.apkVersions = function(page) {
 	return axios.get(url.ApkVersions, {page: page})
 }
 
+// 获取版本
+API._apkVersions = function(id) {
+	return axios.get(url.ApkVersions, {id: id})
+}
+
+// 发布版本
+API.publishApk = function(data) {
+	return axios.post(url.PublishApk, data)
+}
+
 // 项目管理
 API.project = function(data) {
 	return axios.post(url.Project, data)
@@ -87,15 +97,7 @@ API.uuid = function(page,limit) {
 	return axios.get(url.Uuid, {page: page, limit: limit})
 }
 
-// 获取版本
-API._apkVersions = function(id) {
-	return axios.get(url.ApkVersions, {id: id})
-}
 
-// 发布版本
-API.publishApk = function(data) {
-	return axios.post(url.PublishApk, data)
-}
 
 
 

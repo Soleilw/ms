@@ -1,9 +1,9 @@
 <template>
-	<div class="wrapper">
+	<div :class="{navCollapsed:collapse}">
 		<v-header></v-header>
-		<v-siderbar></v-siderbar>
-		<div class="main" :class="{'content-collapse':collapse}">
-			<v-tags></v-tags>
+		<v-siderbar class="sidebar"></v-siderbar>
+		<div class="main">
+			<v-tags class="tags"></v-tags>
 			<div class="content">
 				<transition name="move" mode="out-in">
 					<keep-alive :include="tagsList">
@@ -21,6 +21,8 @@
 	import vSiderbar from './Sidebar.vue'
 	import vTags from './Tags.vue'
 	import bus from './bus'
+    import { mapState } from 'vuex'
+    
 	export default {
 		components: {
 			vHeader,
@@ -30,24 +32,16 @@
 		data() {
 			return {
 				tagsList: [],
-				collapse: false
 			}
 		},
-		mounted() {
-			console.log(99999, this.tagsList)
-		},
+        computed: {
+            ...mapState(['collapse'])
+        },
 		created() {
-			bus.$on('collapse-content', msg => {
-					this.collapse = msg;
-				}),
-
 				bus.$on('tags', msg => {
-					console.log('msg', msg)
 					let arr = [];
 					for (let i = 0, len = msg.length; i < len; i++) {
 						msg[i].name && arr.push(msg[i].name);
-						console.log(msg[i].name)
-						console.log(arr.push(msg[i].name))
 					}
 					this.tagsList = arr;
 				});

@@ -13,29 +13,35 @@ import '@/assets/style/commom.scss'
 
 Vue.config.productionTip = false
 
-// router.beforeEach((to, from, next) => {
-//     document.title = `${to.meta.title} | 图巴诺校园安全系统`
-//     const token = localStorage.getItem('token');
-//     if (!token && to.path !== '/login') {
-//         next({ path: "/login" });
-//     } else if (token) {
-//         next()
-//     }
-// });
 
-const whiteList = ['/login']
-// router.beforeEach((to, from, next) => {
-// 	document.title = `${to.meta.title} - 图巴诺总控`;
-// 	// const token = localStorage.getItem('crl-token');
-// 	if (whiteList.indexOf(to.path) !== -1) {
-// 		next();
-// 	} 
-// 	// if(!token && to.path !== '/login') {
-// 	// 	next({ path: "/login" });
-// 	// } else if(token) {
-// 	// 	next();
-// 	// }
-// })
+router.beforeEach((to, from, next) => {
+	document.title = `${to.meta.title} - 图巴诺总控系统`;
+	const token = localStorage.getItem('token');
+    if (!token) {
+        if (to.matched.length > 0 && !to.matched.some(record => record.meta.requiresAuth)) {
+            next()
+        } else {
+            next({ path: '/login' })
+        }
+    } else {
+        if (!store.state.permission.permissionList) {
+            store.dispatch('permission/FETCH_PERMISSION').then(() => {
+                next({ path: to.path })
+            })
+        } else {
+            if (to.path !== '/login') {
+                next()
+            } else {
+                next(from.fullPath)
+            }
+        }
+    }
+})
+
+router.afterEach((to, from, next) => {
+    var routerList = to.matched
+    store.commit('setCrumbList', routerList)
+})
 
 new Vue({
   router,
