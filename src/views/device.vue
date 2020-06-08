@@ -33,7 +33,7 @@
 					</div>
 					<el-form-item label="选择uuid">
 						<el-select v-model="form.uuid" placeholder="请选择uuid">
-							<el-option v-for="item in uuidList" :key="item.id" :label="item.uuid" :value="item.id">
+							<el-option v-for="item in uuidList" :key="item.id" :label="item.uuid" :value="item.uuid">
 							</el-option>
 						</el-select>
 					</el-form-item>
@@ -56,6 +56,12 @@
 							<el-radio :label="3">关闭</el-radio>
 						</el-radio-group>
 					</el-form-item>
+					<el-form-item label="选择方向">
+						<el-select v-model="form.direction" placeholder="请选择地址">
+							<el-option v-for="item in directionList" :key="item.id" :label="item.direction" :value="item.id">
+							</el-option>
+						</el-select>
+					</el-form-item>
 					<div class="submit">
 						<el-form-item>
 							<el-button type="primary" @click="newDevice">提交</el-button>
@@ -73,15 +79,18 @@
 			<el-table-column prop="type" label="类型" align="center"></el-table-column>
 			<el-table-column prop="direction" label="方向" align="center"></el-table-column>
 			<el-table-column prop="version" label="版本" align="center"></el-table-column>
-			<el-table-column prop="remark" label="ReMark" align="center"></el-table-column>
-			<el-table-column label="操作" align="center">
+			<el-table-column prop="remark" label="备注" align="center"></el-table-column>
+			<el-table-column prop="last_login" label="最后登录时间" align="center" width="200px"></el-table-column>
+			<el-table-column label="操作" align="center" width="400px">
 				<template slot-scope="scope">
+					<el-button size="mini" type="success" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
+					<el-button size="mini" type="success" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
 					<el-button size="mini" type="success" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
-		
+
 		<!-- 查看人脸组 -->
 		<el-dialog title="查看人脸组" :visible.sync="dialogFaceGroup" width="80%">
 			<el-table :data="facetable">
@@ -89,7 +98,7 @@
 				<el-table-column prop="device_id" label="设备ID" align="center"></el-table-column>
 				<el-table-column prop="group_id" label="人脸组ID" align="center"></el-table-column>
 				<el-table-column prop="group_name" label="人脸组名字" align="center"></el-table-column>
-			<!-- 	<el-table-column label="操作" align="center">
+				<!-- 	<el-table-column label="操作" align="center">
 					<template slot-scope="scope">
 						<el-button size="mini" type="success" @click="handleDelete(scope.$index, scope.row)">查看人脸组</el-button>
 						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -120,6 +129,13 @@
 				uuidList: [],
 				apkList: [],
 				versionList: [],
+				directionList: [{
+					id: 'in',
+					direction: '进'
+				}, {
+					id: 'out',
+					direction: '出'
+				}],
 				hotness: 1,
 				form: {
 					name: '',
@@ -131,6 +147,7 @@
 					apk: '',
 					apk_version: '',
 					face_groups: [],
+					direction: ''
 				},
 				tableDate: [],
 				dialogFaceGroup: false,
@@ -205,24 +222,24 @@
 			// 添加新的AIP
 			newDevice() {
 				var self = this;
-				switch(self.hotness) {
-					case 1: 
-					self.form.configs.push({
-						heatvision: 'normal'
-					})
-					break;
+				switch (self.hotness) {
+					case 1:
+						self.form.configs.push({
+							heatvision: 'normal'
+						})
+						break;
 					case 2:
-					self.form.configs.push({
-						heatvision: 'strict'
-					})
-					break;
-					case 3: 
-					self.form.configs.push({
-						heatvision: 'none'
-					})
+						self.form.configs.push({
+							heatvision: 'strict'
+						})
+						break;
+					case 3:
+						self.form.configs.push({
+							heatvision: 'none'
+						})
 				}
-				var self = this;
 				API.device(self.form).then(res => {
+					self.getUuid();
 					self.dialogDevice = false;
 					self.$message.success("提交成功");
 					self.getDevice();
@@ -237,11 +254,12 @@
 						apk: '',
 						apk_version: '',
 						face_groups: [],
+						direction: ''
 					}
 				})
 			},
 			// 操作
-			handleShowFace(index,row) {
+			handleShowFace(index, row) {
 				console.log(row.groups)
 				this.dialogFaceGroup = true;
 				this.facetable = row.groups;
@@ -262,7 +280,7 @@
 		display: flex;
 		flex-wrap: wrap;
 	}
-	
+
 	.facebox-item {
 		margin: 10px;
 		padding: 0 10px;

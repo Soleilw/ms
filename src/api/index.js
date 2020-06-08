@@ -30,8 +30,8 @@ API.apkVersion = function(formData) {
 	return axios.post(url.ApkVersion, formData)
 }
 
-API.apkVersions = function(page) {
-	return axios.get(url.ApkVersions, {page: page})
+API.apkVersions = function(page, apk_id) {
+	return axios.get(url.ApkVersions, {page: page, apk_id: apk_id})
 }
 
 // 获取版本
