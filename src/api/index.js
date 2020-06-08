@@ -87,6 +87,10 @@ API._devices = function(direction,addresses,limit) {
 	return axios.get(url.Devices, {direction: direction,addresses:addresses,limit:limit})
 }
 
+API.deviceLogs = function(page, limit, uuid, type) {
+	return axios.get(url.DeviceLogs, {page: page,limit:limit,uuid:uuid, type:type})
+}
+
 // 获取人脸组
 API.faceGroup = function(address_id) {
 	return axios.get(url.FaceGroup, {address_id: address_id})

@@ -91,6 +91,45 @@
 			</el-table-column>
 		</el-table>
 
+		<!-- 查看日志 -->
+		<el-dialog title="查看日志" :visible.sync="dialogLogs" width="80%">
+			<el-table :data="logstable">
+				<el-table-column prop="id" label="ID" align="center"></el-table-column>
+				<el-table-column prop="uuid" label="设备ID" align="center"></el-table-column>
+				<el-table-column prop="time" label="时间" align="center"></el-table-column>
+				<el-table-column prop="logCat" label="消息" align="center" width="400px">
+					<template slot-scope="scope">
+						<div class="logcat">{{scope.row.logCat}} </div>
+						<div v-if="scope.row.logCat">
+							<el-button size="mini"  @click="showlogcat(scope.$index, scope.row)">查看更多</el-button>
+						</div>
+					</template>
+				</el-table-column>
+				<el-table-column prop="type" label="状态" align="center">
+					<template slot-scope="scope">
+						<span v-text="scope.row.type == 1 ? '正常' : '异常' "></span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="created_at" label="创建时间" align="center"></el-table-column>
+
+				<!-- 	<el-table-column label="操作" align="center">
+					<template slot-scope="scope">
+						<el-button size="mini" type="success" @click="handleDelete(scope.$index, scope.row)">查看人脸组</el-button>
+						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					</template>
+				</el-table-column> -->
+			</el-table>
+			<div class="block">
+				<el-pagination @current-change="handleCurrentLogsChange" :current-page.sync="currentLogsPage" :page-size="10"
+				 layout="prev, pager, next, jumper" :total="totalLogsPage">
+				</el-pagination>
+			</div>
+		</el-dialog>
+		
+		<el-dialog title="查看人脸组" :visible.sync="dialogLogcat" width="800px">
+			<textarea class="temp" v-model="logCat"></textarea>
+		</el-dialog>
+
 		<!-- 查看人脸组 -->
 		<el-dialog title="查看人脸组" :visible.sync="dialogFaceGroup" width="80%">
 			<el-table :data="facetable">
@@ -122,6 +161,8 @@
 		name: 'gradems',
 		data() {
 			return {
+				dialogLogcat: false,
+				logCat: '',
 				dialogDevice: false,
 				addressList: [],
 				faceGroupList: [],
@@ -152,6 +193,11 @@
 				tableDate: [],
 				dialogFaceGroup: false,
 				facetable: [], // 人脸组表格
+				dialogLogs: false, // 查看日志
+				logstable: [],
+				uuid: '',
+				currentLogsPage: 1,
+				totalLogsPage: 0,
 				currentPage: 1,
 				totalPage: 0
 			}
@@ -259,12 +305,30 @@
 				})
 			},
 			// 操作
+			handleShowLog(index, row) {
+				this.dialogLogs = true;
+				this.uuid = row.uuid;
+				API.deviceLogs(1, 10, row.uuid).then(res => {
+					this.logstable = res.data;
+					this.totalLogsPage = res.total;
+				})
+			},
+			handleCurrentLogsChange(val) {
+				API.deviceLogs(val, 10, this.uuid).then(res => {
+					this.logstable = res.data;
+					this.totalLogsPage = res.total;
+				})
+			},
 			handleShowFace(index, row) {
 				console.log(row.groups)
 				this.dialogFaceGroup = true;
 				this.facetable = row.groups;
 			},
 			handleDel() {},
+			showlogcat(index,row) {
+				this.dialogLogcat = true;
+				this.logCat = row.logCat
+			},
 
 			// 分页
 			handleCurrentChange(val) {
@@ -284,5 +348,20 @@
 	.facebox-item {
 		margin: 10px;
 		padding: 0 10px;
+	}
+
+	.logcat {
+		text-align: left;
+		/* width: 300px; */
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	
+	.temp {
+		width: 700px;
+		height: 800px;
+		font-size: 16px;
+		padding: 10px;
 	}
 </style>

@@ -33,6 +33,7 @@ const url = {
 	'Uuid': '/unknown/devices', // 添加设备人脸组
 	'DeviceFaceGroup': '/device/face/group', // 添加设备人脸组
 	"FaceGroup": '/face/groups',
+	"DeviceLogs": '/device/logs', // 查看日志
 	
 	// apk管理
 	'Apk': '/apk', // 创建apk
