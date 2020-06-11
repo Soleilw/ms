@@ -30,5 +30,9 @@ export const DynamicRoutes = [
         },
         children: [
         ]
-    }
+    },
+	{
+		path: '*',
+		component: () => import('@/views/404.vue')
+	}
 ]

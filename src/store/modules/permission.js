@@ -34,16 +34,6 @@ export default {
 	
     actions: {
         async FETCH_PERMISSION({ commit, state }) {
-			let role = localStorage.getItem('role');
-			if(role === 'super') {
-				let MainContainer = DynamicRoutes.find(v => v.path === '')
-				let children = MainContainer.children
-			  children.push(...dynamicRouter)
-			  commit('SET_MENU', children)
-			  let initialRoutes = router.options.routes
-			  router.addRoutes(DynamicRoutes)
-			  commit('SET_PERMISSION', [...initialRoutes, ...DynamicRoutes])
-			} else {
 				let arr = localStorage.getItem('permissions')
 				let routes = recursionRouter(arr, dynamicRouter)
 				let MainContainer = DynamicRoutes.find(v => v.path === '')
@@ -54,7 +44,6 @@ export default {
 				let initialRoutes = router.options.routes
 				router.addRoutes(DynamicRoutes)
 				commit('SET_PERMISSION', [...initialRoutes, ...DynamicRoutes])
-			}
         }
     }
 }
