@@ -13,8 +13,8 @@ API.delAip = function(id) {
 	return axios.delete(url.Aip, {id:id})
 }
 
-API.aips = function(page) {
-	return axios.get(url.Aips, {page: page})
+API.aips = function(page,limit) {
+	return axios.get(url.Aips, {page: page,limit: limit})
 }
 
 // 包管理&版本
@@ -22,16 +22,16 @@ API.apk = function(formData) {
 	return axios.post(url.Apk, formData)
 }
 
-API.apks = function(page) {
-	return axios.get(url.Apks, {page: page})
+API.apks = function(page,limit) {
+	return axios.get(url.Apks, {page: page, limit: limit})
 }
 
 API.apkVersion = function(formData) {
 	return axios.post(url.ApkVersion, formData)
 }
 
-API.apkVersions = function(page, apk_id) {
-	return axios.get(url.ApkVersions, {page: page, apk_id: apk_id})
+API.apkVersions = function(page, limit, apk_id) {
+	return axios.get(url.ApkVersions, {page: page,limit: limit, apk_id: apk_id})
 }
 
 // 获取版本
@@ -50,8 +50,8 @@ API.project = function(data) {
 	
 }
 
-API.projects = function(page) {
-	return axios.get(url.Projects, {page: page})
+API.projects = function(page,limit) {
+	return axios.get(url.Projects, {page: page, limit: limit})
 }
 
 // 地址管理
@@ -59,8 +59,8 @@ API.address = function(data) {
 	return axios.post(url.Address, data)
 }
 
-API.addresses = function(page) {
-	return axios.get(url.Addresses, {page: page})
+API.addresses = function(page,limit) {
+	return axios.get(url.Addresses, {page: page, limit: limit})
 }
 
 // 人脸管理
@@ -68,8 +68,8 @@ API.face = function(data) {
 	return axios.post(url.Face, data)
 }
 
-API.faces = function(page) {
-	return axios.get(url.Faces, {page: page})
+API.faces = function(page,limit) {
+	return axios.get(url.Faces, {page: page, limit: limit})
 }
 
 
@@ -79,8 +79,8 @@ API.device = function(data) {
 	return axios.post(url.Device, data)
 }
 
-API.devices = function(page) {
-	return axios.get(url.Devices, {page: page})
+API.devices = function(page,limit) {
+	return axios.get(url.Devices, {page: page, limit: limit})
 }
 
 API._devices = function(direction,addresses,limit) {
@@ -89,6 +89,15 @@ API._devices = function(direction,addresses,limit) {
 
 API.deviceLogs = function(page, limit, uuid, type) {
 	return axios.get(url.DeviceLogs, {page: page,limit:limit,uuid:uuid, type:type})
+}
+
+API.deviceFaceLogs = function(page, limit, uuid, address_id) {
+	return axios.get(url.DeviceRecord, {page: page,limit:limit,uuid:uuid, address_id:address_id})
+}
+
+// 搜索设备好
+API.search = function(uuid) {
+	return axios.get(url.Devices, {uuid:uuid})
 }
 
 // 获取人脸组
@@ -100,7 +109,6 @@ API.faceGroup = function(address_id) {
 API.uuid = function(page,limit) {
 	return axios.get(url.Uuid, {page: page, limit: limit})
 }
-
 
 
 

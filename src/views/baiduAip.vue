@@ -28,7 +28,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" ref="multipleTable">
+		<el-table :data="tableData" ref="multipleTable">
 			<el-table-column label="名称" type="selection" align="center"></el-table-column>
 			<el-table-column prop="id" label="ID" align="center"></el-table-column>
 			<el-table-column prop="name" label="名称" align="center"></el-table-column>
@@ -45,8 +45,8 @@
 		</el-table>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="10" layout="prev, pager, next, jumper"
-			 :total="totalPage">
+			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
 			</el-pagination>
 		</div>
 	</div>
@@ -66,8 +66,9 @@
 					api_key: '',
 					secret_key: ''
 				},
-				tableDate: [],
+				tableData: [],
 				currentPage: 1,
+				pageSize: 10,
 				totalPage: 0
 			}
 		},
@@ -78,7 +79,7 @@
 			getAip() {
 				var self = this;
 				API.aips(self.currentPage).then(res => {
-					self.tableDate = res.data;
+					self.tableData = res.data;
 					self.totalPage = res.total;
 				})
 			},
@@ -108,8 +109,21 @@
 			// 分页
 			handleCurrentChange(val) {
 				var self = this;
-				self.getAip();
+				API.aips(val, self.pageSize).then(res => {
+					self.tableData = res.data;
+					self.totalPage = res.total;
+				})
 			},
+			// 每页显示条数
+			handleSizeChange(val) {
+				var self = this;
+				self.pageSize = val
+				API.aips(1, val).then(res => {
+					self.tableData = res.data;
+					self.totalPage = res.total;
+					self.currentPage = 1;
+				})
+			}
 		}
 	}
 </script>

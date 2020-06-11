@@ -13,6 +13,10 @@ import '@/assets/style/commom.scss'
 
 Vue.config.productionTip = false
 
+import VueClipboard from 'vue-clipboard2'
+VueClipboard.config.autoSetContainer = true
+Vue.use(VueClipboard)
+
 
 router.beforeEach((to, from, next) => {
 	document.title = `${to.meta.title} - 图巴诺总控系统`;

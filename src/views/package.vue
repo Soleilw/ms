@@ -1,55 +1,16 @@
-<!-- <template>
-	<div>
-		<el-tabs v-model="activeName" @tab-click="handleClick">
-			<el-tab-pane label="APK管理" name="apk">
-				<v-apk></v-apk>
-			</el-tab-pane>
-			<el-tab-pane label="APK版本管理" name="version">
-				<v-version></v-version>
-			</el-tab-pane>
-		</el-tabs>
-	</div>
-</template>
-
-<script>
-	import vApk from '@/components/package/apk.vue'
-	import vVersion from '@/components/package/version.vue'
-	import API from '@/api/index.js'
-
-	export default {
-		components: {
-			vApk,
-			vVersion
-		},
-		data() {
-			return {
-				activeName: 'apk'
-			}
-		},
-		methods: {
-			handleClick(tab, event) {
-				
-			}
-		}
-	}
-</script>
-
-<style>
-</style>
- -->
-
 <template>
 	<div>
 		<div class="btn">
 			<el-button type="primary" @click="dialogAPK = true">添加APK</el-button>
 		</div>
-		
-		
+
+
 		<el-table :data="tableDate" ref="multipleTable">
 			<el-table-column label="名称" type="selection" align="center"></el-table-column>
 			<el-table-column prop="id" label="APKID" align="center"></el-table-column>
 			<el-table-column prop="name" label="名称" align="center"></el-table-column>
 			<el-table-column prop="description" label="描述" align="center"></el-table-column>
+			<el-table-column prop="created_at" label="创建日期" align="center"></el-table-column>
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -77,13 +38,13 @@
 			</div>
 		</el-dialog>
 
-		
-		<el-dialog title="查看版本" :visible.sync="dialogShowVersion" :modal="false" width="80% " :close-on-click-modal="false" >
+
+		<el-dialog title="查看版本" :visible.sync="dialogShowVersion" :modal="false" width="80% " :close-on-click-modal="false">
 			<div>
 				<div class="btn">
 					<el-button type="primary" @click="dialogVersion = true">添加版本</el-button>
 				</div>
-			
+
 				<el-dialog title="添加版本" :visible.sync="dialogVersion" :close-on-click-modal="false" :modal="false">
 					<div class="box">
 						<el-form :model="versionForm" label-width="100px">
@@ -99,8 +60,9 @@
 								<el-input v-model="form.version"></el-input>
 							</el-form-item> -->
 							<el-form-item label="上传版本">
-								<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeAvatarUpload" :on-success="handleAvatarSuccess"
-								 :on-remove="handleRemove" :on-exceed="handleExceed" :on-progress="uploadProcess" :data="versionData">
+								<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeAvatarUpload"
+								 :on-success="handleAvatarSuccess" :on-remove="handleRemove" :on-exceed="handleExceed" :on-progress="uploadProcess"
+								 :data="versionData">
 									<el-button size="small" type="primary">选择包</el-button>
 								</el-upload>
 								<el-progress v-if="hasFile === true" :text-inside="true" :stroke-width="15" :percentage="percentage"></el-progress>
@@ -116,20 +78,23 @@
 						</el-form>
 					</div>
 				</el-dialog>
-			
+
 				<el-table :data="versionTableData" ref="multipleTable">
 					<el-table-column label="名称" type="selection" align="center"></el-table-column>
 					<el-table-column prop="id" label="ID" align="center"></el-table-column>
 					<el-table-column prop="apk_id" label="APKID" align="center"></el-table-column>
 					<el-table-column prop="version" label="版本" align="center"></el-table-column>
+					<el-table-column prop="created_at" label="创建日期" align="center"></el-table-column>
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
-							<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 							<el-button size="mini" type="primary" @click="handleSend(scope.$index, scope.row)">发布</el-button>
+							<el-button size="mini" type="primary" class="copy" v-clipboard:copy="scope.row.href" v-clipboard:success="onCopy"
+							 v-clipboard:error="onError">复制链接</el-button>
+							<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
-			
+
 				<el-dialog title="发布" :visible.sync="dialogSend" :modal="false">
 					<div class="box">
 						<el-form :model="sendForm" label-width="100px">
@@ -173,7 +138,7 @@
 										<el-option v-for="(item, index) in directionList" :label="item.name" :value="item.value" :key="index"></el-option>
 									</el-select>
 								</el-form-item>
-			
+
 								<el-form-item label="选择设备">
 									<div class="facebox">
 										<div v-for="(item,index) in deviceList" :key="index">
@@ -184,7 +149,7 @@
 									</div>
 								</el-form-item>
 							</div>
-			
+
 							<div class="submit">
 								<el-form-item>
 									<el-button type="primary" @click="newSend">提交</el-button>
@@ -193,10 +158,10 @@
 						</el-form>
 					</div>
 				</el-dialog>
-			
+
 				<div class="block">
-					<el-pagination @current-change="handleCurrentVersionChange" :current-page.sync="currentVersionPage" :page-size="10" layout="prev, pager, next, jumper"
-					 :total="totalVersionPage">
+					<el-pagination @current-change="handleCurrentVersionChange" :current-page.sync="currentVersionPage" :page-size="10"
+					 layout="prev, pager, next, jumper" :total="totalVersionPage">
 					</el-pagination>
 				</div>
 			</div>
@@ -213,6 +178,8 @@
 <script>
 	import API from '@/api/index.js'
 	import axios from 'axios'
+	import md5 from 'blueimp-md5'
+	import Clipboard from 'clipboard'
 
 	export default {
 		name: 'gradems',
@@ -227,10 +194,11 @@
 				tableDate: [],
 				currentPage: 1,
 				totalPage: 0,
-				
+
 				dialogShowVersion: false,
 				apkList: [],
 				qiniuaddr: "https://tu.fengniaotuangou.cn", // 七牛云图片外链地址
+				fileName: '',
 				suffix: '', // 后缀
 				percentage: 0,
 				hasFile: '', // 进度条显示
@@ -317,7 +285,7 @@
 				var self = this;
 				self.dialogShowVersion = true;
 				self.versionForm.apk_id = row.id
-				API.apkVersions(self.currentPage, self.versionForm.apk_id).then(res => {
+				API.apkVersions(self.currentPage, 10, self.versionForm.apk_id).then(res => {
 					self.versionTableData = res.data;
 					self.totalVersionPage = res.total;
 				})
@@ -328,20 +296,23 @@
 				var self = this;
 				self.getApk();
 			},
-			
-			// getApkVersion() {
-			// 	var self = this;
-			// 	API.apkVersions(self.currentPage).then(res => {
-			// 		self.versionTableData = res.data;
-			// 		self.totalVersionPage = res.total;
-			// 	})
-			// },
+
+			getApkVersion() {
+				var self = this;
+				API.apkVersions(self.currentPage, 10, self.versionForm.apk_id).then(res => {
+					self.versionTableData = res.data;
+					self.totalVersionPage = res.total;
+				})
+			},
 			// 添加新的ApkVersion
 			newApkVersion() {
 				var self = this;
 				API.apkVersion(self.versionForm).then(res => {
 					self.$message.success("提交成功");
-					self.handleShowVersion()
+					API.apkVersions(self.currentPage, 10, self.versionForm.apk_id).then(res => {
+						self.versionTableData = res.data;
+						self.totalVersionPage = res.total;
+					})
 					self.dialogVersion = false;
 					self.currentPage = 1;
 					self.form = {};
@@ -360,7 +331,7 @@
 				})
 				console.log(self.addressList)
 			},
-			
+
 			typeChange(val) {
 				var self = this;
 				console.log(self.sendForm.addresses)
@@ -372,7 +343,7 @@
 					self.sendForm.addresses = []
 				}
 			},
-			
+
 			// handleCheckAllAddress(val) {
 			// 	var self = this;
 			// 	console.log(self.sendForm.addresses)
@@ -380,7 +351,7 @@
 			// 		self.hasType = true;
 			// 	}
 			// },
-			
+
 			handleCheckeddirection(val) {
 				var self = this;
 				self.getDevice(val);
@@ -421,7 +392,17 @@
 						})
 				}
 			},
-			
+
+			// 复制链接
+			onCopy(e) {
+				var self = this;
+				self.$message.success("复制成功");
+			},
+			onError(e) {
+				var self = this;
+				self.$message.warning("复制失败");
+			},
+
 			// 人脸信息
 			handleRemove(file, fileList) {
 				var self = this;
@@ -431,7 +412,9 @@
 			},
 			beforeAvatarUpload(file) {
 				var self = this;
-				self.versionData.key = `${file.name}`;
+				self.fileName = md5(file.name);
+				self.suffix = file.name.substring(file.name.lastIndexOf('.') + 1);
+				self.versionData.key = `${self.fileName}.${self.suffix}`;
 			},
 			handleAvatarSuccess(res, file) {
 				var self = this;
@@ -452,8 +435,8 @@
 				self.hasFile = true;
 				self.percentage = (event.loaded / event.total * 100 | 0);
 			},
-			
-			
+
+
 			// 七牛云token
 			getQiniuToken() {
 				var self = this;
@@ -461,10 +444,13 @@
 					self.versionData.token = res.data.uptoken;
 				})
 			},
-			
+
 			handleCurrentVersionChange(val) {
 				var self = this;
-				self.getApkVersion();
+				API.apkVersions(val, 10, self.versionForm.apk_id).then(res => {
+					self.versionTableData = res.data;
+					self.totalVersionPage = res.total;
+				})
 			}
 		}
 	}

@@ -34,6 +34,7 @@ const url = {
 	'DeviceFaceGroup': '/device/face/group', // 添加设备人脸组
 	"FaceGroup": '/face/groups',
 	"DeviceLogs": '/device/logs', // 查看日志
+	"DeviceRecord": '/face/logs', // 查看日志
 	
 	// apk管理
 	'Apk': '/apk', // 创建apk

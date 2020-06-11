@@ -1,3 +1,5 @@
+$color: #2a9f93;
+
 html,
 body,
 #app {
@@ -28,7 +30,7 @@ body,
     width: 200px !important;
     height: 100%;
     position: fixed;
-    top: 50px;
+    top: 51px;
     bottom: 0;
     left: 0;
     z-index: 100;
@@ -39,12 +41,14 @@ body,
     /* 菜单hover时的背景 */
     .el-submenu__title:hover,
     .el-menu-item:hover {
-        background: #786aed !important;
+        background: $color !important; 
+		// background-image: linear-gradient(to right, #4CA1AF , #4CA1AF) !important;
 		color: #fff !important;
     }
     // 菜单active时的背景
     .el-menu-item.is-active {
-        background: #786aed !important;
+        background: $color !important;
+		// background-image: linear-gradient(to right, #4CA1AF , #4CA1AF) !important;
 		color: #fff !important;
     }
     
@@ -84,12 +88,32 @@ body,
 
 
 .tags-li.active {
-    border: 1px solid #fff;
-    background-color: #786aed;
+    border: 1px solid $color;
+    background-color: $color;
+	// background-image: linear-gradient(to right, #4CA1AF , #4CA1AF);
 }
  
 .tags-li.active .tags-li-icon {
 	color: #fff;
+}
+
+// primary按钮样式
+.el-button--primary {
+	background-color: $color !important;
+	border-color: $color !important;
+}
+
+// tabs样式
+.el-tabs__item.is-active {
+	color: $color !important;
+}
+
+.el-tabs__active-bar {
+	background-color: $color !important;
+}
+
+.el-tabs__item:hover {
+	color: $color !important;
 }
 
 

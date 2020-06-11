@@ -54,7 +54,7 @@
 			<el-table-column prop="id" label="ID" align="center"></el-table-column>
 			<el-table-column prop="name" label="名字" align="center"></el-table-column>
 			<el-table-column prop="face_id" label="人脸ID" align="center"></el-table-column>
-			<el-table-column prop="group" label="人脸组" align="center"></el-table-column>
+			<el-table-column prop="group" label="人脸组" align="center" width="200px"></el-table-column>
 			<el-table-column prop="number" label="学号" align="center"></el-table-column>
 			<el-table-column prop="href" label="人脸图片" align="center">
 				<template slot-scope="scope"><img :src="scope.row.href" style="max-width:180px;max-height:80px;" /></template>
@@ -62,7 +62,7 @@
 			<el-table-column prop="type" label="类型" align="center"></el-table-column>
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>

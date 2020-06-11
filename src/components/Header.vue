@@ -150,7 +150,8 @@
 		left: 0;
 		height: 50px;
 		font-size: 20px;
-		background-color: #333;
+		// background-image: linear-gradient(to right, #4CA1AF , #4CA1AF);
+		background: #2a9f93;
 		color: #fff;
 		z-index: 100;
 	}

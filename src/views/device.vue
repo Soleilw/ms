@@ -3,6 +3,13 @@
 		<div class="btn">
 			<el-button type="primary" @click="dialogDevice = true">添加设备</el-button>
 		</div>
+		<div class="btn">
+			<el-input v-model="uuid" placeholder="输入设备号" class="search" @keyup.enter.native="search(uuid)"></el-input>
+		</div>
+		<div class="btn">
+			<el-button type="primary" @click="search(uuid)">搜索</el-button>
+		</div>
+		
 
 		<el-dialog title="添加设备" :visible.sync="dialogDevice">
 			<div class="box">
@@ -83,9 +90,9 @@
 			<el-table-column prop="last_login" label="最后登录时间" align="center" width="200px"></el-table-column>
 			<el-table-column label="操作" align="center" width="400px">
 				<template slot-scope="scope">
-					<el-button size="mini" type="success" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
-					<el-button size="mini" type="success" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
-					<el-button size="mini" type="success" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
+					<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
+					<el-button size="mini" type="primary" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
+					<el-button size="mini" type="primary" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -100,7 +107,7 @@
 				<el-table-column prop="logCat" label="消息" align="center" width="400px">
 					<template slot-scope="scope">
 						<div class="logcat">{{scope.row.logCat}} </div>
-						<div v-if="scope.row.logCat">
+						<div v-if="scope.row.logCat" style="text-align: left;">
 							<el-button size="mini"  @click="showlogcat(scope.$index, scope.row)">查看更多</el-button>
 						</div>
 					</template>
@@ -126,13 +133,32 @@
 			</div>
 		</el-dialog>
 		
-		<el-dialog title="查看人脸组" :visible.sync="dialogLogcat" width="800px">
+		<el-dialog title="查看日志" :visible.sync="dialogLogcat" width="800px">
 			<textarea class="temp" v-model="logCat"></textarea>
+		</el-dialog>
+		
+		<!-- 查看进出记录 -->
+		<el-dialog title="查看进出记录" :visible.sync="dialogShowRecord" width="80%">
+			<el-table :data="faceLogsTable">
+				<el-table-column prop="id" label="ID" align="center"></el-table-column>
+				<el-table-column prop="device_uuid" label="设备ID" align="center"></el-table-column>
+				<el-table-column prop="timestamp" label="时间" align="center"></el-table-column>
+				<el-table-column prop="temp" label="温度" align="center"></el-table-column>
+				<el-table-column prop="face_id" label="人脸ID" align="center"></el-table-column>
+				<el-table-column prop="image" label="人脸图片" align="center">
+					<template slot-scope="scope"><img :src="scope.row.image" style="max-width:180px;max-height:80px;" /></template>
+				</el-table-column>
+			</el-table>
+			<div class="block">
+				<el-pagination @current-change="handleCurrentFaceLogsChange" :current-page.sync="currentFaceLogsPage" :page-size="10"
+				 layout="prev, pager, next, jumper" :total="totalFaceLogsPage">
+				</el-pagination>
+			</div>
 		</el-dialog>
 
 		<!-- 查看人脸组 -->
 		<el-dialog title="查看人脸组" :visible.sync="dialogFaceGroup" width="80%">
-			<el-table :data="facetable">
+			<el-table :data="faceLogsTable">
 				<el-table-column prop="id" label="ID" align="center"></el-table-column>
 				<el-table-column prop="device_id" label="设备ID" align="center"></el-table-column>
 				<el-table-column prop="group_id" label="人脸组ID" align="center"></el-table-column>
@@ -156,6 +182,7 @@
 
 <script>
 	import API from '@/api/index.js'
+	import DATE from '@/utils/date.js'
 
 	export default {
 		name: 'gradems',
@@ -195,7 +222,12 @@
 				facetable: [], // 人脸组表格
 				dialogLogs: false, // 查看日志
 				logstable: [],
+				dialogShowRecord: false, // 查看进出记录
+				faceLogsTable: [],
 				uuid: '',
+				address_id: '',
+				currentFaceLogsPage: 1,
+				totalFaceLogsPage: 0,
 				currentLogsPage: 1,
 				totalLogsPage: 0,
 				currentPage: 1,
@@ -209,6 +241,20 @@
 			this.getApk();
 		},
 		methods: {
+			// 搜索
+			search() {
+				var self = this;
+				if (self.uuid) {
+					API.search(self.uuid).then(res => {
+						self.tableDate = res.data;
+						self.totalPage = 1;
+						self.uuid = '';
+						self.$message.success('搜索成功！');
+					})
+				} else {
+					self.$message.warning('输入设备号');
+				}
+			},
 			getDevice() {
 				var self = this;
 				API.devices(this.currentPage).then(res => {
@@ -324,6 +370,18 @@
 				this.dialogFaceGroup = true;
 				this.facetable = row.groups;
 			},
+			handleShowRecord(index, row) {
+				this.dialogShowRecord = true;
+				this.uuid = row.uuid;
+				this.address_id = row.address_id;
+				API.deviceFaceLogs(1,10,row.uuid, row.address_id).then(res => {
+					this.faceLogsTable = res.data;
+					this.totalFaceLogsPage = res.total;
+					this.faceLogsTable.forEach(item => {
+						item.timestamp = DATE.formatTime(item.timestamp, 'Y-M-D h:m:s')
+					})
+				})
+			},
 			handleDel() {},
 			showlogcat(index,row) {
 				this.dialogLogcat = true;
@@ -335,6 +393,12 @@
 				var self = this;
 				self.getDevice();
 			},
+			handleCurrentFaceLogsChange(val) {
+				API.deviceFaceLogs(val,10,this.uuid, this.address_id).then(res => {
+					this.faceLogsTable = res.data;
+					this.totalFaceLogsPage = res.total;
+				})
+			}
 		}
 	}
 </script>
@@ -360,7 +424,7 @@
 	
 	.temp {
 		width: 700px;
-		height: 800px;
+		height: 650px;
 		font-size: 16px;
 		padding: 10px;
 	}
