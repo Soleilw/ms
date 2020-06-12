@@ -142,7 +142,7 @@
 			<el-table :data="faceLogsTable">
 				<el-table-column prop="id" label="ID" align="center"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID" align="center"></el-table-column>
-				<el-table-column prop="timestamp" label="时间" align="center"></el-table-column>
+				<el-table-column prop="time" label="时间" align="center"></el-table-column>
 				<el-table-column prop="temp" label="温度" align="center"></el-table-column>
 				<el-table-column prop="face_id" label="人脸ID" align="center"></el-table-column>
 				<el-table-column prop="image" label="人脸图片" align="center">
@@ -377,9 +377,9 @@
 				API.deviceFaceLogs(1,10,row.uuid, row.address_id).then(res => {
 					this.faceLogsTable = res.data;
 					this.totalFaceLogsPage = res.total;
-					this.faceLogsTable.forEach(item => {
-						item.timestamp = DATE.formatTime(item.timestamp, 'Y-M-D h:m:s')
-					})
+					// this.faceLogsTable.forEach(item => {
+					// 	item.timestamp = DATE.formatTime(item.timestamp, 'Y-M-D h:m:s')
+					// })
 				})
 			},
 			handleDel() {},

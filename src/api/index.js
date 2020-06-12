@@ -10,7 +10,7 @@ API.aip = function(data) {
 
 // 删除
 API.delAip = function(id) {
-	return axios.delete(url.Aip, {id:id})
+	return axios.del(url.Aip, {id:id})
 }
 
 API.aips = function(page,limit) {
@@ -110,6 +110,20 @@ API.uuid = function(page,limit) {
 	return axios.get(url.Uuid, {page: page, limit: limit})
 }
 
+// 创建可疑人脸
+API.dangerFace = function(data) {
+	return axios.post(url.DangerFace, data)
+}
+
+// 删除可疑人脸
+API.delDangerFace = function(id) {
+	return axios.del(url.DelDangerFace, {id: id})
+}
+
+// 获取可疑人脸
+API.dangerFaces = function(page, limit) {
+	return axios.get(url.DangerFaces, {page: page, limit: limit})
+}
 
 
 

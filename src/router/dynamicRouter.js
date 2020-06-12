@@ -53,13 +53,15 @@ const dynamicRouter = [
 			icon: 'el-icon-document'
 		}
 	},
-	// {
-	// 	path: '/version',
-	// 	component: () => import('@/views/version'),
-	// 	meta: {
-	// 		title: 'APK版本管理'
-	// 	}
-	// },
+	{
+		path: '/doubtable',
+		name: 'doubtable',
+		component: () => import('@/views/doubtable'),
+		meta: {
+			title: '可疑人脸管理',
+			icon: 'el-icon-document'
+		}
+	}
 ]
 
 export default dynamicRouter

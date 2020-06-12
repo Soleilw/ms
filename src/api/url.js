@@ -41,8 +41,12 @@ const url = {
 	'Apks': '/apks', // 获取apk列表
 	'ApkVersion': '/apk/version', // 新增apk版本
 	'ApkVersions': '/apk/versions', // 获取apk版本列表
-	
 	'PublishApk': '/publish/apk', // 获取apk版本列表
+	
+	// 可疑人脸
+	'DangerFace': '/danger/face', // 新增可疑人脸
+	'DangerFaces': '/danger/faces', // 获取可疑人脸
+	'DelDangerFace': '/danger/face', // 删除可疑人脸
 	
 	// 上传人脸
 	'UploadFace': '/upload/face', // 上传人脸
