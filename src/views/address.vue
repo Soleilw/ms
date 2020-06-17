@@ -6,7 +6,7 @@
 
 		<el-dialog title="添加地址" :visible.sync="dialogProject" :close-on-click-modal="false">
 			<div class="box">
-				<el-form :model="form" label-width="100px">
+				<el-form :model="form" label-width="120px">
 					<el-form-item label="选择项目">
 						<el-select v-model="form.project_id">
 							<el-option v-for="(item, index) in projectList" :label="item.name" :value="item.id" :key="index"></el-option>
@@ -24,6 +24,13 @@
 						</el-form-item>
 						<el-form-item label="是否默认分组">
 							<el-radio-group v-model="item.is_default">
+								<el-radio :label="1">是</el-radio>
+								<el-radio :label="2">否</el-radio>
+							</el-radio-group>
+							<!-- <el-input v-model="item.is_default"></el-input> -->
+						</el-form-item>
+						<el-form-item label="是否为在线分组">
+							<el-radio-group v-model="item.online">
 								<el-radio :label="1">是</el-radio>
 								<el-radio :label="2">否</el-radio>
 							</el-radio-group>

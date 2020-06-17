@@ -18,7 +18,10 @@
 						<el-input v-model="form.name"></el-input>
 					</el-form-item>
 					<el-form-item label="类型">
-						<el-input v-model="form.type"></el-input>
+						<el-select v-model="form.type" placeholder="请选择类型">
+							<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
+							</el-option>
+						</el-select>
 					</el-form-item>
 					<el-form-item label="选择地址">
 						<el-select v-model="form.address_id" placeholder="请选择地址" @change="addressChange">
@@ -158,7 +161,7 @@
 
 		<!-- 查看人脸组 -->
 		<el-dialog title="查看人脸组" :visible.sync="dialogFaceGroup" width="80%">
-			<el-table :data="faceLogsTable">
+			<el-table :data="facetable">
 				<el-table-column prop="id" label="ID" align="center"></el-table-column>
 				<el-table-column prop="device_id" label="设备ID" align="center"></el-table-column>
 				<el-table-column prop="group_id" label="人脸组ID" align="center"></el-table-column>
@@ -191,6 +194,8 @@
 				dialogLogcat: false,
 				logCat: '',
 				dialogDevice: false,
+				typeList: [], // 设备类型
+				label: '',
 				addressList: [],
 				faceGroupList: [],
 				checkAll: false, // 全选人脸组
@@ -239,6 +244,7 @@
 			this.getAddress();
 			this.getUuid();
 			this.getApk();
+			this.getTypes()
 		},
 		methods: {
 			// 搜索
@@ -262,6 +268,17 @@
 					self.totalPage = res.total;
 				})
 			},
+			// 获取设备类型
+			getTypes() {
+				API.deviceTypes().then(res => {
+					console.log(res)
+					this.typeList = res;
+					// for(var i = 0; i < this.typeList.length; i++) {
+					// 	this.label = this.typeList[i]
+					// }
+				})
+			},
+			
 			// 获取地址
 			getAddress() {
 				var self = this;

@@ -79,8 +79,8 @@ API.device = function(data) {
 	return axios.post(url.Device, data)
 }
 
-API.devices = function(page,limit) {
-	return axios.get(url.Devices, {page: page, limit: limit})
+API.devices = function(page,limit,id) {
+	return axios.get(url.Devices, {page: page, limit: limit, id: id})
 }
 
 API._devices = function(direction,addresses,limit) {
@@ -93,6 +93,10 @@ API.deviceLogs = function(page, limit, uuid, type) {
 
 API.deviceFaceLogs = function(page, limit, uuid, address_id) {
 	return axios.get(url.DeviceRecord, {page: page,limit:limit,uuid:uuid, address_id:address_id})
+}
+
+API.deviceTypes = function() {
+	return axios.get(url.DeviceTypes)
 }
 
 // 搜索设备好
