@@ -99,7 +99,12 @@ API.deviceTypes = function() {
 	return axios.get(url.DeviceTypes)
 }
 
-// 搜索设备好
+// 查看心跳
+API.deviceHeart = function(uuid) {
+	return axios.get(url.DeviceHeartbeat, {uuid: uuid})
+}
+
+// 搜索设备号
 API.search = function(uuid) {
 	return axios.get(url.Devices, {uuid:uuid})
 }

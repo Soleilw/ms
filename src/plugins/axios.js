@@ -11,7 +11,7 @@ var Qs = require('qs')
 const http = {}
 
 const instance = axios.create({
-	timeout: 5000,
+	timeout: 200000,
 	baseURL: 'https://api.fengniaotuangou.cn',
 	headers: {
 		'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'

@@ -9,7 +9,7 @@
 		<div class="btn">
 			<el-button type="primary" @click="search(uuid)">搜索</el-button>
 		</div>
-		
+
 
 		<el-dialog title="添加设备" :visible.sync="dialogDevice">
 			<div class="box">
@@ -91,12 +91,33 @@
 			<el-table-column prop="version" label="版本" align="center"></el-table-column>
 			<el-table-column prop="remark" label="备注" align="center"></el-table-column>
 			<el-table-column prop="last_login" label="最后登录时间" align="center" width="200px"></el-table-column>
-			<el-table-column label="操作" align="center" width="400px">
+			<el-table-column label="操作" align="center" width="200px">
 				<template slot-scope="scope">
-					<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
-					<el-button size="mini" type="primary" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
-					<el-button size="mini" type="primary" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
-					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					<el-dropdown>
+						<el-button type="primary">
+							操作<i class="el-icon-arrow-down el-icon--right"></i>
+						</el-button>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item>
+								<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
+							</el-dropdown-item>
+							<el-dropdown-item>
+								<el-button size="mini" type="primary" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
+							</el-dropdown-item>
+							<el-dropdown-item>
+								<el-button size="mini" type="primary" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
+							</el-dropdown-item>
+							<el-dropdown-item>
+								<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看指令</el-button>
+							</el-dropdown-item>
+							<el-dropdown-item>
+								<el-button size="mini" type="primary" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
+							</el-dropdown-item>
+							<el-dropdown-item>
+								<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+							</el-dropdown-item>
+						</el-dropdown-menu>
+					</el-dropdown>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -111,7 +132,7 @@
 					<template slot-scope="scope">
 						<div class="logcat">{{scope.row.logCat}} </div>
 						<div v-if="scope.row.logCat" style="text-align: left;">
-							<el-button size="mini"  @click="showlogcat(scope.$index, scope.row)">查看更多</el-button>
+							<el-button size="mini" @click="showlogcat(scope.$index, scope.row)">查看更多</el-button>
 						</div>
 					</template>
 				</el-table-column>
@@ -135,11 +156,11 @@
 				</el-pagination>
 			</div>
 		</el-dialog>
-		
+
 		<el-dialog title="查看日志" :visible.sync="dialogLogcat" width="800px">
 			<textarea class="temp" v-model="logCat"></textarea>
 		</el-dialog>
-		
+
 		<!-- 查看进出记录 -->
 		<el-dialog title="查看进出记录" :visible.sync="dialogShowRecord" width="80%">
 			<el-table :data="faceLogsTable">
@@ -172,6 +193,17 @@
 						<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 					</template>
 				</el-table-column> -->
+			</el-table>
+		</el-dialog>
+
+		<!-- 查看心跳 -->
+		<el-dialog :title="'设备：' + uuid" :visible.sync="dialogHeart" width="100%">
+			<div id="heartChart" ref="heartChart" style="width: 100%;height:600px;"></div>
+			<el-table :data="arr">
+				<el-table-column prop="id" label="ID" align="center"></el-table-column>
+				<el-table-column prop="device_uuid" label="设备ID" align="center"></el-table-column>
+				<el-table-column prop="time" label="时间" align="center"></el-table-column>
+				<el-table-column prop="updated_at" label="更新时间" align="center"></el-table-column>
 			</el-table>
 		</el-dialog>
 
@@ -231,6 +263,9 @@
 				faceLogsTable: [],
 				uuid: '',
 				address_id: '',
+				dialogHeart: false, // 查看心跳
+				x_formatData: [],
+				arr: [],
 				currentFaceLogsPage: 1,
 				totalFaceLogsPage: 0,
 				currentLogsPage: 1,
@@ -244,7 +279,7 @@
 			this.getAddress();
 			this.getUuid();
 			this.getApk();
-			this.getTypes()
+			this.getTypes();
 		},
 		methods: {
 			// 搜索
@@ -278,7 +313,7 @@
 					// }
 				})
 			},
-			
+
 			// 获取地址
 			getAddress() {
 				var self = this;
@@ -391,7 +426,7 @@
 				this.dialogShowRecord = true;
 				this.uuid = row.uuid;
 				this.address_id = row.address_id;
-				API.deviceFaceLogs(1,10,row.uuid, row.address_id).then(res => {
+				API.deviceFaceLogs(1, 10, row.uuid, row.address_id).then(res => {
 					this.faceLogsTable = res.data;
 					this.totalFaceLogsPage = res.total;
 					// this.faceLogsTable.forEach(item => {
@@ -400,9 +435,68 @@
 				})
 			},
 			handleDel() {},
-			showlogcat(index,row) {
+			showlogcat(index, row) {
 				this.dialogLogcat = true;
 				this.logCat = row.logCat
+			},
+			// 查看心跳
+			handleHeart(index, row) {
+				console.log(row)
+				var self = this;
+				self.dialogHeart = true;
+				self.uuid = row.uuid;
+				self.x_formatData = [];
+				self.$nextTick(function() {
+					self.drawLine()
+				})
+				API.deviceHeart(self.uuid).then(res => {
+					self.arr = res.originData;
+					self.arr.forEach(item => {
+						item.time = DATE.formatTime(item.time, 'Y-M-D h:m:s')
+					})
+				});
+			},
+			drawLine() {
+				var self = this;
+				let heartChart = self.$echarts.init(self.$refs.heartChart);
+				heartChart.setOption({
+					title: {
+						text: '网络心跳图',
+					},
+					tooltip: {},
+					legend: {
+						data: ['销量']
+					},
+					xAxis: {
+						name: '时间/分钟',
+						data: []
+					},
+					yAxis: {},
+					series: [{
+						name: 'time',
+						type: 'line',
+						data: []
+					}]
+				});
+				heartChart.showLoading();
+				API.deviceHeart(self.uuid).then(res => {
+					heartChart.hideLoading();
+					var x_formatData_value = [];
+					for (var i = 0; i < res.formatData.length; i++) {
+						self.x_formatData.push(i);
+						x_formatData_value.push(res.formatData[i]);
+					}
+					heartChart.setOption({
+						xAxis: {
+							data: self.x_formatData
+						},
+						series: [{
+							// 根据名字对应到相应的系列
+							name: 'time',
+							data: x_formatData_value
+						}]
+					});
+				});
 			},
 
 			// 分页
@@ -411,7 +505,7 @@
 				self.getDevice();
 			},
 			handleCurrentFaceLogsChange(val) {
-				API.deviceFaceLogs(val,10,this.uuid, this.address_id).then(res => {
+				API.deviceFaceLogs(val, 10, this.uuid, this.address_id).then(res => {
 					this.faceLogsTable = res.data;
 					this.totalFaceLogsPage = res.total;
 				})
@@ -438,7 +532,7 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-	
+
 	.temp {
 		width: 700px;
 		height: 650px;
