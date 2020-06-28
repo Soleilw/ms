@@ -89,7 +89,7 @@
 			<el-table-column prop="type" label="类型" align="center"></el-table-column>
 			<el-table-column prop="direction" label="方向" align="center"></el-table-column>
 			<el-table-column prop="version" label="版本" align="center"></el-table-column>
-			<el-table-column prop="remark" label="备注" align="center"></el-table-column>
+			<el-table-column prop="remark" label="备注" align="center" width="200px"></el-table-column>
 			<el-table-column prop="last_login" label="最后登录时间" align="center" width="200px"></el-table-column>
 			<el-table-column label="操作" align="center" width="200px">
 				<template slot-scope="scope">
@@ -197,7 +197,7 @@
 		</el-dialog>
 
 		<!-- 查看心跳 -->
-		<el-dialog :title="'设备：' + uuid" :visible.sync="dialogHeart" width="100%">
+		<el-dialog :title="'设备：' + uuid" :visible.sync="dialogHeart" :fullscreen="true">
 			<div id="heartChart" ref="heartChart" style="width: 100%;height:600px;"></div>
 			<el-table :data="arr">
 				<el-table-column prop="id" label="ID" align="center"></el-table-column>
@@ -317,7 +317,7 @@
 			// 获取地址
 			getAddress() {
 				var self = this;
-				API.addresses(self.currentPage).then(res => {
+				API.addresses(self.currentPage, 1000).then(res => {
 					self.addressList = res.data;
 				})
 			},
@@ -342,7 +342,7 @@
 			// 获取uuid
 			getUuid() {
 				var self = this;
-				API.uuid(self.currentPage, 100).then(res => {
+				API.uuid(self.currentPage, 1000).then(res => {
 					self.uuidList = res.data;
 				})
 			},
