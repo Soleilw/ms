@@ -326,7 +326,7 @@
 			// 获取地址
 			getAddress() {
 				var self = this;
-				API.addresses(self.currentPage).then(res => {
+				API.addresses(self.currentPage, 1000).then(res => {
 					self.addressList = res.data;
 				})
 				console.log(self.addressList)
@@ -344,13 +344,13 @@
 				}
 			},
 
-			// handleCheckAllAddress(val) {
-			// 	var self = this;
-			// 	console.log(self.sendForm.addresses)
-			// 	if (self.sendForm.type === 3) {
-			// 		self.hasType = true;
-			// 	}
-			// },
+			handleCheckAllAddress(val) {
+				var self = this;
+				console.log(self.sendForm.addresses)
+				if (self.sendForm.type === 3) {
+					self.hasType = true;
+				}
+			},
 
 			handleCheckeddirection(val) {
 				var self = this;
