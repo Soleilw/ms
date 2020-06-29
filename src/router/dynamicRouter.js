@@ -1,5 +1,4 @@
-const dynamicRouter = [
-	{
+const dynamicRouter = [{
 		path: '/baiduaip',
 		name: 'baiduaip',
 		component: () => import('@/views/baiduAip'),
@@ -61,7 +60,18 @@ const dynamicRouter = [
 			title: '可疑人脸管理',
 			icon: 'el-icon-document'
 		}
+	},
+	{
+		path: '/dangerlogs',
+		name: 'dangerlogs',
+		component: () => import('@/views/dangerlogs'),
+		meta: {
+			title: '可疑人脸日志',
+			icon: 'el-icon-document'
+		},
 	}
 ]
+
+
 
 export default dynamicRouter

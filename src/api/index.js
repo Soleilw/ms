@@ -134,6 +134,11 @@ API.dangerFaces = function(page, limit) {
 	return axios.get(url.DangerFaces, {page: page, limit: limit})
 }
 
+// 获取可疑人脸
+API.dangerLogs = function(page, limit) {
+	return axios.get(url.DangerLogs, {page: page, limit: limit})
+}
+
 
 
 export default API

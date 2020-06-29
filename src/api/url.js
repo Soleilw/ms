@@ -49,6 +49,7 @@ const url = {
 	'DangerFace': '/danger/face', // 新增可疑人脸
 	'DangerFaces': '/danger/faces', // 获取可疑人脸
 	'DelDangerFace': '/danger/face', // 删除可疑人脸
+	'DangerLogs': '/danger/logs', // 可疑人脸日志
 	
 	// 上传人脸
 	'UploadFace': '/upload/face', // 上传人脸
