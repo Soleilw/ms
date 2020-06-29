@@ -166,11 +166,17 @@
 			<el-table :data="faceLogsTable">
 				<el-table-column prop="id" label="ID" align="center"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID" align="center"></el-table-column>
+				<el-table-column prop="face.name" label="名称" align="center"></el-table-column>
 				<el-table-column prop="time" label="时间" align="center"></el-table-column>
 				<el-table-column prop="temp" label="温度" align="center"></el-table-column>
 				<el-table-column prop="face_id" label="人脸ID" align="center"></el-table-column>
 				<el-table-column prop="image" label="人脸图片" align="center">
-					<template slot-scope="scope"><img :src="scope.row.image" style="max-width:180px;max-height:80px;" /></template>
+					<template slot-scope="scope">
+						<el-popover placement="top-start" title="" trigger="click">
+							<img :src="scope.row.image" style="max-width:800px; max-height:800px;" />
+							<img slot="reference" :src="scope.row.image" style="max-width:180px;max-height:80px;">
+						</el-popover>
+					</template>
 				</el-table-column>
 			</el-table>
 			<div class="block">
