@@ -13,7 +13,7 @@ const dynamicRouter = [{
 		component: () => import('@/views/project'),
 		meta: {
 			title: '项目管理',
-			icon: 'el-icon-document'
+			icon: 'el-icon-folder'
 		}
 	},
 	{
@@ -22,7 +22,7 @@ const dynamicRouter = [{
 		component: () => import('@/views/address'),
 		meta: {
 			title: '地址管理',
-			icon: 'el-icon-document'
+			icon: 'el-icon-location'
 		}
 	},
 	{
@@ -31,7 +31,7 @@ const dynamicRouter = [{
 		component: () => import('@/views/face'),
 		meta: {
 			title: '人脸管理',
-			icon: 'el-icon-document'
+			icon: 'el-icon-picture'
 		}
 	},
 	{
@@ -40,7 +40,7 @@ const dynamicRouter = [{
 		component: () => import('@/views/device'),
 		meta: {
 			title: '设备管理',
-			icon: 'el-icon-document'
+			icon: 'el-icon-video-camera'
 		}
 	},
 	{
@@ -49,27 +49,42 @@ const dynamicRouter = [{
 		component: () => import('@/views/package'),
 		meta: {
 			title: '包管理',
-			icon: 'el-icon-document'
+			icon: 'el-icon-shopping-bag-2'
 		}
 	},
 	{
-		path: '/doubtable',
-		name: 'doubtable',
-		component: () => import('@/views/doubtable'),
+		path: '/danger',
+		name: 'danger',
+		component: () => import('@/views/danger/index'),
 		meta: {
-			title: '可疑人脸管理',
-			icon: 'el-icon-document'
-		}
-	},
-	{
-		path: '/dangerlogs',
-		name: 'dangerlogs',
-		component: () => import('@/views/dangerlogs'),
-		meta: {
-			title: '可疑人脸日志',
-			icon: 'el-icon-document'
+			title: '可疑管理',
+			icon: 'el-icon-picture-outline',
 		},
-	}
+		children: [{
+				path: '/doubtable',
+				name: 'doubtable',
+				component: () => import('@/views/danger/doubtable'),
+				meta: {
+					title: '可疑人脸管理',
+					icon: 'el-icon-warning'
+				}
+			},
+			{
+				path: '/dangerlogs',
+				name: 'dangerlogs',
+				component: () => import('@/views/danger/dangerlogs'),
+				meta: {
+					title: '可疑人脸日志',
+					icon: 'el-icon-s-release'
+				},
+			}
+		]
+	},
+
+
+
+
+
 ]
 
 

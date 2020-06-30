@@ -81,15 +81,14 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" ref="multipleTable">
-			<el-table-column label="名称" type="selection" align="center"></el-table-column>
-			<el-table-column prop="id" label="ID" align="center"></el-table-column>
-			<el-table-column prop="address_id" label="地址ID" align="center"></el-table-column>
-			<el-table-column prop="uuid" label="uuid" align="center"></el-table-column>
+		<el-table :data="tableDate">
+			<el-table-column prop="id" label="ID" align="center" width="80px"></el-table-column>
+			<el-table-column prop="address_id" label="地址ID" align="center" width="80px"></el-table-column>
+			<el-table-column prop="uuid" label="uuid" align="center" width="300px"></el-table-column>
 			<el-table-column prop="type" label="类型" align="center"></el-table-column>
 			<el-table-column prop="direction" label="方向" align="center"></el-table-column>
-			<el-table-column prop="version" label="版本" align="center"></el-table-column>
-			<el-table-column prop="remark" label="备注" align="center" width="200px"></el-table-column>
+			<el-table-column prop="version" label="版本" align="center" width="80px"></el-table-column>
+			<el-table-column prop="remark" label="备注" align="center" width="400px"></el-table-column>
 			<el-table-column prop="last_login" label="最后登录时间" align="center" width="200px"></el-table-column>
 			<el-table-column label="操作" align="center" width="200px">
 				<template slot-scope="scope">
@@ -214,8 +213,8 @@
 		</el-dialog>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="10" layout="prev, pager, next, jumper"
-			 :total="totalPage">
+			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
 			</el-pagination>
 		</div>
 	</div>
@@ -277,6 +276,7 @@
 				currentLogsPage: 1,
 				totalLogsPage: 0,
 				currentPage: 1,
+				pageSize: 10,
 				totalPage: 0
 			}
 		},
@@ -291,16 +291,12 @@
 			// 搜索
 			search() {
 				var self = this;
-				if (self.uuid) {
-					API.search(self.uuid).then(res => {
-						self.tableDate = res.data;
-						self.totalPage = 1;
-						self.uuid = '';
-						self.$message.success('搜索成功！');
-					})
-				} else {
-					self.$message.warning('输入设备号');
-				}
+				API.search(self.uuid).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = 1;
+					self.uuid = '';
+					self.$message.success('搜索成功！');
+				})
 			},
 			getDevice() {
 				var self = this;
@@ -505,17 +501,33 @@
 				});
 			},
 
-			// 分页
 			handleCurrentChange(val) {
 				var self = this;
-				self.getDevice();
+				self.currentPage = val;
+				API.devices(val, self.pageSize).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = res.total;
+				})
 			},
+			// 每页显示条数
+			handleSizeChange(val) {
+				var self = this;
+				self.pageSize = val;
+				API.devices(self.currentPage, val).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = res.total;
+				})
+			},
+
 			handleCurrentFaceLogsChange(val) {
 				API.deviceFaceLogs(val, 10, this.uuid, this.address_id).then(res => {
 					this.faceLogsTable = res.data;
 					this.totalFaceLogsPage = res.total;
 				})
-			}
+			},
+
+
+
 		}
 	}
 </script>

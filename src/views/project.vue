@@ -24,14 +24,13 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" ref="multipleTable">
-			<el-table-column label="名称" type="selection" align="center"></el-table-column>
+		<el-table :data="tableDate">
 			<el-table-column prop="id" label="ID" align="center"></el-table-column>
 			<el-table-column prop="name" label="名称" align="center"></el-table-column>
 			<el-table-column prop="state" label="State" align="center"></el-table-column>
-			<el-table-column prop="app_id" label="AppId" align="center"  width="300px"></el-table-column>
+			<el-table-column prop="app_id" label="AppId" align="center" width="300px"></el-table-column>
 			<el-table-column prop="aip_id" label="AipId" align="center"></el-table-column>
-			<el-table-column prop="secret" label="Sectet" align="center"  width="300px"></el-table-column>
+			<el-table-column prop="secret" label="Sectet" align="center" width="300px"></el-table-column>
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
 					<el-button size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -40,8 +39,8 @@
 		</el-table>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="10" layout="prev, pager, next, jumper"
-			 :total="totalPage">
+			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
 			</el-pagination>
 		</div>
 	</div>
@@ -62,6 +61,7 @@
 				},
 				tableDate: [],
 				currentPage: 1,
+				pageSize: 10,
 				totalPage: 0
 			}
 		},
@@ -100,8 +100,21 @@
 			// 分页
 			handleCurrentChange(val) {
 				var self = this;
-				self.getProject();
+				self.currentPage = val;
+				API.projects(val, self.pageSize).then(res => {
+					self.tableData = res.data;
+					self.totalPage = res.total;
+				})
 			},
+			// 每页显示条数
+			handleSizeChange(val) {
+				var self = this;
+				self.pageSize = val;
+				API.projects(self.currentPage, val).then(res => {
+					self.tableData = res.data;
+					self.totalPage = res.total;
+				})
+			}
 		}
 	}
 </script>

@@ -28,8 +28,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableData" ref="multipleTable">
-			<el-table-column label="名称" type="selection" align="center"></el-table-column>
+		<el-table :data="tableData">
 			<el-table-column prop="id" label="ID" align="center"></el-table-column>
 			<el-table-column prop="name" label="名称" align="center"></el-table-column>
 			<el-table-column prop="remark" label="备注" align="center"></el-table-column>
@@ -109,6 +108,7 @@
 			// 分页
 			handleCurrentChange(val) {
 				var self = this;
+				self.currentPage = val;
 				API.aips(val, self.pageSize).then(res => {
 					self.tableData = res.data;
 					self.totalPage = res.total;
@@ -117,11 +117,10 @@
 			// 每页显示条数
 			handleSizeChange(val) {
 				var self = this;
-				self.pageSize = val
-				API.aips(1, val).then(res => {
+				self.pageSize = val;
+				API.aips(self.currentPage, val).then(res => {
 					self.tableData = res.data;
 					self.totalPage = res.total;
-					self.currentPage = 1;
 				})
 			}
 		}

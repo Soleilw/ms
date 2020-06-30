@@ -5,8 +5,7 @@
 		</div>
 
 
-		<el-table :data="tableDate" ref="multipleTable">
-			<el-table-column label="名称" type="selection" align="center"></el-table-column>
+		<el-table :data="tableDate">
 			<el-table-column prop="id" label="APKID" align="center"></el-table-column>
 			<el-table-column prop="name" label="名称" align="center"></el-table-column>
 			<el-table-column prop="description" label="描述" align="center"></el-table-column>
@@ -39,10 +38,10 @@
 		</el-dialog>
 
 
-		<el-dialog title="查看版本" :visible.sync="dialogShowVersion" :modal="false" width="80% " :close-on-click-modal="false">
+		<el-dialog title="查看版本" :visible.sync="dialogShowVersion" :modal="false" width="80%" :close-on-click-modal="false">
 			<div>
 				<div class="btn">
-					<el-button type="primary" @click="dialogVersion = true">添加版本</el-button>
+					<el-button type="primary" @click="addVersion">添加版本</el-button>
 				</div>
 
 				<el-dialog title="添加版本" :visible.sync="dialogVersion" :close-on-click-modal="false" :modal="false">
@@ -79,8 +78,7 @@
 					</div>
 				</el-dialog>
 
-				<el-table :data="versionTableData" ref="multipleTable">
-					<el-table-column label="名称" type="selection" align="center"></el-table-column>
+				<el-table :data="versionTableData">
 					<el-table-column prop="id" label="ID" align="center"></el-table-column>
 					<el-table-column prop="apk_id" label="APKID" align="center"></el-table-column>
 					<el-table-column prop="version" label="版本" align="center"></el-table-column>
@@ -168,8 +166,8 @@
 		</el-dialog>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="10" layout="prev, pager, next, jumper"
-			 :total="totalPage">
+			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
 			</el-pagination>
 		</div>
 	</div>
@@ -193,6 +191,7 @@
 				dialogVersion: false,
 				tableDate: [],
 				currentPage: 1,
+				pageSize: 10,
 				totalPage: 0,
 
 				dialogShowVersion: false,
@@ -294,7 +293,20 @@
 			// 分页
 			handleCurrentChange(val) {
 				var self = this;
-				self.getApk();
+				self.currentPage = val;
+				API.apks(val, self.pageSize).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = res.total;
+				})
+			},
+			// 每页显示条数
+			handleSizeChange(val) {
+				var self = this;
+				self.pageSize = val;
+				API.apks(self.currentPage, val).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = res.total;
+				})
 			},
 
 			getApkVersion() {
@@ -303,6 +315,16 @@
 					self.versionTableData = res.data;
 					self.totalVersionPage = res.total;
 				})
+			},
+
+			addVersion() {
+				var self = this;
+				self.dialogVersion = true;
+				self.versionForm = {
+					apk_id: '',
+					version: '',
+					href: ''
+				};
 			},
 			// 添加新的ApkVersion
 			newApkVersion() {
@@ -315,7 +337,11 @@
 					})
 					self.dialogVersion = false;
 					self.currentPage = 1;
-					self.form = {};
+					self.versionForm = {
+						apk_id: '',
+						version: '',
+						href: ''
+					};
 				})
 			},
 			// 操作
@@ -419,6 +445,7 @@
 			handleAvatarSuccess(res, file) {
 				var self = this;
 				self.versionForm.href = `${self.qiniuaddr}/${res.key}`;
+				self.$message.success('上传成功')
 				console.log(self.versionForm.href)
 			},
 			handleExceed(file, fileList) { //图片上传超过数量限制

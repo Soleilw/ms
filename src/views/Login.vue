@@ -51,7 +51,7 @@
 				localStorage.setItem('token', '12345678')
 				localStorage.setItem('role', 'super')
 				localStorage.setItem('username', 'ss')
-				var permissions = ['baiduaip', 'package', 'address', 'face', 'device', 'project', 'doubtable', 'dangerlogs']
+				var permissions = ['baiduaip', 'package', 'address', 'face', 'device', 'project', 'danger']
 				localStorage.setItem('permissions', permissions)
 				self.$router.replace('/')
 				// if (self.loginForm.username && self.loginForm.password) {

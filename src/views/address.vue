@@ -51,8 +51,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" ref="multipleTable">
-			<el-table-column label="名称" type="selection" align="center"></el-table-column>
+		<el-table :data="tableDate">
 			<el-table-column prop="id" label="ID" align="center"></el-table-column>
 			<el-table-column prop="project_id" label="项目ID" align="center"></el-table-column>
 			<el-table-column prop="address" label="地址" align="center"></el-table-column>
@@ -66,8 +65,8 @@
 		</el-table>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="10" layout="prev, pager, next, jumper"
-			 :total="totalPage">
+			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
 			</el-pagination>
 		</div>
 	</div>
@@ -90,6 +89,7 @@
 				},
 				tableDate: [],
 				currentPage: 1,
+				pageSize: 10,
 				totalPage: 0
 			}
 		},
@@ -147,8 +147,21 @@
 			// 分页
 			handleCurrentChange(val) {
 				var self = this;
-				self.getAddress();
+				self.currentPage = val;
+				API.addresses(val, self.pageSize).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = res.total;
+				})
 			},
+			// 每页显示条数
+			handleSizeChange(val) {
+				var self = this;
+				self.pageSize = val;
+				API.addresses(self.currentPage, val).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = res.total;
+				})
+			}
 		}
 	}
 </script>

@@ -49,15 +49,19 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" ref="multipleTable">
-			<el-table-column label="名称" type="selection" align="center"></el-table-column>
+		<el-table :data="tableDate">
 			<el-table-column prop="id" label="ID" align="center"></el-table-column>
 			<el-table-column prop="name" label="名字" align="center"></el-table-column>
 			<el-table-column prop="face_id" label="人脸ID" align="center"></el-table-column>
 			<el-table-column prop="group" label="人脸组" align="center" width="200px"></el-table-column>
 			<el-table-column prop="number" label="学号" align="center"></el-table-column>
 			<el-table-column prop="href" label="人脸图片" align="center">
-				<template slot-scope="scope"><img :src="scope.row.href" style="max-width:180px;max-height:80px;" /></template>
+				<template slot-scope="scope">
+					<el-popover placement="top-start" title="" trigger="click">
+						<img :src="scope.row.href" style="max-width:800px;max-height:800px;" />
+						<img slot="reference" :src="scope.row.href" style="max-width:180px;max-height:80px;">
+					</el-popover>
+				</template>
 			</el-table-column>
 			<el-table-column prop="type" label="类型" align="center"></el-table-column>
 			<el-table-column label="操作" align="center">
@@ -68,8 +72,8 @@
 		</el-table>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="10" layout="prev, pager, next, jumper"
-			 :total="totalPage">
+			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
 			</el-pagination>
 		</div>
 	</div>
@@ -95,6 +99,7 @@
 				},
 				tableDate: [],
 				currentPage: 1,
+				pageSize: 10,
 				totalPage: 0
 			}
 		},
@@ -167,8 +172,21 @@
 			// 分页
 			handleCurrentChange(val) {
 				var self = this;
-				self.getFace();
+				self.currentPage = val;
+				API.faces(val, self.pageSize).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = res.total;
+				})
 			},
+			// 每页显示条数
+			handleSizeChange(val) {
+				var self = this;
+				self.pageSize = val;
+				API.faces(self.currentPage, val).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = res.total;
+				})
+			}
 		}
 	}
 </script>
