@@ -107,7 +107,7 @@
 								<el-button size="mini" type="primary" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
 							</el-dropdown-item>
 							<el-dropdown-item>
-								<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看指令</el-button>
+								<el-button size="mini" type="primary" @click="handleShowCommands (scope.$index, scope.row)">查看指令</el-button>
 							</el-dropdown-item>
 							<el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
@@ -212,6 +212,23 @@
 			</el-table>
 		</el-dialog>
 
+		<!-- 查看指令-->
+		<el-dialog title="查看指令" :visible.sync="dialogCommands">
+			<el-table :data="commandsData">
+				<el-table-column prop="id" label="ID" align="center"></el-table-column>
+				<el-table-column prop="device_uuid" label="设备ID" align="center"></el-table-column>
+				<el-table-column prop="command" label="指令" align="center"></el-table-column>
+				<el-table-column prop="command_title" label="指令名字" align="center"></el-table-column>
+				<el-table-column prop="updated_at" label="更新时间" align="center"></el-table-column>
+			</el-table>
+			<div class="block">
+				<el-pagination @current-change="handleCurrentCommandsChange" :current-page.sync="currentCommandsPage" :page-sizes="[10, 20, 30, 40, 50]"
+				 :page-size="pageCommandsSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeCommandsChange"
+				 :total="totalCommandsPage">
+				</el-pagination>
+			</div>
+		</el-dialog>
+
 		<div class="block">
 			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
 			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
@@ -271,6 +288,12 @@
 				dialogHeart: false, // 查看心跳
 				x_formatData: [],
 				arr: [],
+				dialogCommands: false, // 查看指令
+				commandsData: [],
+				command_uuid: '',
+				currentCommandsPage: 1,
+				pageCommandsSize: 10,
+				totalCommandsPage: 0,
 				currentFaceLogsPage: 1,
 				totalFaceLogsPage: 0,
 				currentLogsPage: 1,
@@ -500,6 +523,16 @@
 					});
 				});
 			},
+			// 查看指令
+			handleShowCommands(index, row) {
+				var self = this;
+				self.dialogCommands = true;
+				self.command_uuid = row.uuid;
+				API.deviceCommands(1, 10, row.uuid).then(res => {
+					self.commandsData = res.data;
+					self.totalCommandsPage = res.total;
+				})
+			},
 
 			handleCurrentChange(val) {
 				var self = this;
@@ -526,6 +559,24 @@
 				})
 			},
 
+			// 每页显示条数
+			handleSizeCommandsChange(val) {
+				var self = this;
+				self.pageCommandsSize = val;
+				API.deviceCommands(self.currentCommandsPage, val, self.command_uuid).then(res => {
+					self.commandsData = res.data;
+					self.totalCommandsPage = res.total;
+				})
+			},
+
+			handleCurrentCommandsChange(val) {
+				var self = this;
+				self.currentCommandsPage = val;
+				API.deviceCommands(val, self.pageCommandsSize, self.command_uuid).then(res => {
+					self.commandsData = res.data;
+					self.totalCommandsPage = res.total;
+				})
+			},
 
 
 		}

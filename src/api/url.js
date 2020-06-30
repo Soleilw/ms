@@ -37,6 +37,7 @@ const url = {
 	"DeviceRecord": '/face/logs', // 查看进出记录
 	"DeviceTypes": '/device/types', // 查看日志
 	"DeviceHeartbeat": '/device/heartbeat', // 查看心跳
+	"DeviceCommands": '/device/commands', // 获取指令
 	
 	// apk管理
 	'Apk': '/apk', // 创建apk
