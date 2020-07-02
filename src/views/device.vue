@@ -287,6 +287,7 @@
 				address_id: '',
 				dialogHeart: false, // 查看心跳
 				x_formatData: [],
+				x_formatData_value: [],
 				arr: [],
 				dialogCommands: false, // 查看指令
 				commandsData: [],
@@ -479,6 +480,10 @@
 					self.arr.forEach(item => {
 						item.time = DATE.formatTime(item.time, 'Y-M-D h:m:s')
 					})
+					for (var i = 0; i < res.formatData.length; i++) {
+						self.x_formatData.push(i);
+						self.x_formatData_value.push(res.formatData[i]);
+					}
 				});
 			},
 			drawLine() {
@@ -503,25 +508,26 @@
 						data: []
 					}]
 				});
-				heartChart.showLoading();
-				API.deviceHeart(self.uuid).then(res => {
-					heartChart.hideLoading();
-					var x_formatData_value = [];
-					for (var i = 0; i < res.formatData.length; i++) {
-						self.x_formatData.push(i);
-						x_formatData_value.push(res.formatData[i]);
-					}
-					heartChart.setOption({
-						xAxis: {
-							data: self.x_formatData
-						},
-						series: [{
-							// 根据名字对应到相应的系列
-							name: 'time',
-							data: x_formatData_value
-						}]
-					});
+				heartChart.setOption({
+					xAxis: {
+						data: self.x_formatData
+					},
+					series: [{
+						// 根据名字对应到相应的系列
+						name: 'time',
+						data: self.x_formatData_value
+					}]
 				});
+				// heartChart.showLoading();
+				// API.deviceHeart(self.uuid).then(res => {
+				// 	heartChart.hideLoading();
+				// 	var x_formatData_value = [];
+				// 	for (var i = 0; i < res.formatData.length; i++) {
+				// 		self.x_formatData.push(i);
+				// 		x_formatData_value.push(res.formatData[i]);
+				// 	}
+
+				// });
 			},
 			// 查看指令
 			handleShowCommands(index, row) {

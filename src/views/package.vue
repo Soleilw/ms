@@ -321,7 +321,7 @@
 				var self = this;
 				self.dialogVersion = true;
 				self.versionForm = {
-					apk_id: '',
+					apk_id: self.versionForm.apk_id,
 					version: '',
 					href: ''
 				};
