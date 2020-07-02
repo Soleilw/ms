@@ -240,7 +240,6 @@
 <script>
 	import API from '@/api/index.js'
 	import DATE from '@/utils/date.js'
-
 	export default {
 		name: 'gradems',
 		data() {
@@ -301,7 +300,10 @@
 				totalLogsPage: 0,
 				currentPage: 1,
 				pageSize: 10,
-				totalPage: 0
+				totalPage: 0,
+
+				timer: '',
+				langtime: 10
 			}
 		},
 		mounted() {
@@ -472,63 +474,125 @@
 				self.dialogHeart = true;
 				self.uuid = row.uuid;
 				self.x_formatData = [];
-				self.$nextTick(function() {
-					self.drawLine()
-				})
+				clearInterval(self.timer)
+				self.langtime = 10;
+				self.drawLine()
+				// self.$nextTick(function() {
+				// 	self.drawLine()
+				// })
+
 				API.deviceHeart(self.uuid).then(res => {
 					self.arr = res.originData;
 					self.arr.forEach(item => {
 						item.time = DATE.formatTime(item.time, 'Y-M-D h:m:s')
 					})
-					for (var i = 0; i < res.formatData.length; i++) {
-						self.x_formatData.push(i);
-						self.x_formatData_value.push(res.formatData[i]);
-					}
+					// for (var i = 0; i < res.formatData.length; i++) {
+					// 	self.x_formatData.push(i);
+					// 	self.x_formatData_value.push(res.formatData[i]);
+					// }
 				});
+
 			},
 			drawLine() {
 				var self = this;
-				let heartChart = self.$echarts.init(self.$refs.heartChart);
-				heartChart.setOption({
-					title: {
-						text: '网络心跳图',
-					},
-					tooltip: {},
-					legend: {
-						data: ['销量']
-					},
-					xAxis: {
-						name: '时间/分钟',
-						data: []
-					},
-					yAxis: {},
-					series: [{
-						name: 'time',
-						type: 'line',
-						data: []
-					}]
-				});
-				heartChart.setOption({
-					xAxis: {
-						data: self.x_formatData
-					},
-					series: [{
-						// 根据名字对应到相应的系列
-						name: 'time',
-						data: self.x_formatData_value
-					}]
-				});
-				// heartChart.showLoading();
-				// API.deviceHeart(self.uuid).then(res => {
-				// 	heartChart.hideLoading();
-				// 	var x_formatData_value = [];
-				// 	for (var i = 0; i < res.formatData.length; i++) {
-				// 		self.x_formatData.push(i);
-				// 		x_formatData_value.push(res.formatData[i]);
-				// 	}
-
-				// });
+				self.$nextTick(function() {
+					self.x_formatData = [];
+					var x_formatData_value = [];
+					let heartChart = self.$echarts.init(self.$refs.heartChart);
+					heartChart.setOption({
+						title: {
+							text: '网络心跳图' + +'秒后刷新',
+						},
+						tooltip: {},
+						legend: {
+							data: ['销量']
+						},
+						xAxis: {
+							name: '时间/分钟',
+							data: []
+						},
+						yAxis: {},
+						series: [{
+							name: 'time',
+							type: 'line',
+						}]
+					});
+					heartChart.showLoading();
+					API.deviceHeart(self.uuid).then(res => {
+						heartChart.hideLoading();
+						x_formatData_value = [];
+						for (var i = 0; i < res.formatData.length; i++) {
+							self.x_formatData.push(i);
+							x_formatData_value.push(res.formatData[i]);
+						}
+						heartChart.setOption({
+							xAxis: {
+								data: self.x_formatData
+							},
+							series: [{
+								// 根据名字对应到相应的系列
+								name: 'time',
+								data: x_formatData_value
+							}]
+						});
+					});
+					self.timer = setInterval(() => {
+						if(self.langtime == 0) {
+							self.x_formatData = [];
+							x_formatData_value = [];
+							let heartChart = self.$echarts.init(self.$refs.heartChart);
+							heartChart.setOption({
+								title: {
+									text: '网络心跳图' + self.langtime-- + '秒后刷新',
+								},
+								tooltip: {},
+								legend: {
+									data: ['销量']
+								},
+								xAxis: {
+									name: '时间/分钟',
+									data: []
+								},
+								yAxis: {},
+								series: [{
+									name: 'time',
+									type: 'line', 
+								}]
+							});
+							heartChart.showLoading();
+							API.deviceHeart(self.uuid).then(res => {
+								heartChart.hideLoading();
+								for (var i = 0; i < res.formatData.length; i++) {
+									self.x_formatData.push(i);
+									x_formatData_value.push(res.formatData[i]);
+								}
+								heartChart.setOption({
+									xAxis: {
+										data: self.x_formatData
+									},
+									series: [{
+										// 根据名字对应到相应的系列
+										name: 'time',
+										data: x_formatData_value
+									}]
+								});
+							});
+							self.langtime = 10;
+						} else {
+							self.$nextTick(function() {
+								let heartChart = self.$echarts.init(self.$refs.heartChart);
+								heartChart.setOption({
+									title: {
+										text: '网络心跳图' + self.langtime-- + '秒后刷新',
+									}
+								});
+							})
+						}
+						
+					}, 1000)
+				})
 			},
+
 			// 查看指令
 			handleShowCommands(index, row) {
 				var self = this;
@@ -585,6 +649,10 @@
 			},
 
 
+		},
+
+		beforeDestroy() {
+			clearInterval(this.timer)
 		}
 	}
 </script>

@@ -13,6 +13,12 @@
 					<el-form-item label="身份证号">
 						<el-input v-model="form.number" placeholder="请输入身份证号"></el-input>
 					</el-form-item>
+					<el-form-item label="通知相似度">
+						<el-input v-model="form.notify_score" placeholder="请输入通知相似度(保留一位小数点,例如78.9)"></el-input>
+					</el-form-item>
+					<el-form-item label="通知列表">
+						<el-input type="textarea" v-model="form.notify_user" placeholder="请输入手机号码,多个手机号用逗号分隔(例如: +8613212341234,8613212341234)"></el-input>
+					</el-form-item>
 					<div class="tips">
 						<p><span>提示：</span>如有人脸照片会覆盖掉原有的人脸照片！</p>
 					</div>
@@ -96,7 +102,9 @@
 				form: {
 					href: '',
 					name: '',
-					number: ''
+					number: '',
+					notify_score: '',
+					notify_user: ''
 				},
 				old_href: '', // 原人脸图片
 				change_href: '',
@@ -129,7 +137,9 @@
 				self.form = {
 					href: '',
 					name: '',
-					number: ''
+					number: '',
+					notify_score: '',
+					notify_user: ''
 				};
 				self.change_href = '';
 			},
