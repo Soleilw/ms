@@ -439,6 +439,7 @@
 					self.form = {
 						name: '',
 						address_id: '',
+						project_id: '',
 						type: '人脸机',
 						uuid: '',
 						remark: '',
