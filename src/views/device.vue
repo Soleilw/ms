@@ -23,6 +23,12 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="选择项目">
+						<el-select v-model="form.project_id" placeholder="请选择项目" @change="changeProject">
+							<el-option v-for="(item,index) in projectList" :key="index" :label="item.name" :value="item.id">
+							</el-option>
+						</el-select>
+					</el-form-item>
 					<el-form-item label="选择地址">
 						<el-select v-model="form.address_id" placeholder="请选择地址" @change="addressChange">
 							<el-option v-for="item in addressList" :key="item.id" :label="item.address" :value="item.id">
@@ -249,6 +255,7 @@
 				dialogDevice: false,
 				typeList: [], // 设备类型
 				label: '',
+				projectList: [],
 				addressList: [],
 				faceGroupList: [],
 				checkAll: false, // 全选人脸组
@@ -266,6 +273,7 @@
 				form: {
 					name: '',
 					address_id: '',
+					project_id: '',
 					type: '人脸机',
 					uuid: '',
 					remark: '',
@@ -312,6 +320,7 @@
 			this.getUuid();
 			this.getApk();
 			this.getTypes();
+			this.getProject();
 		},
 		methods: {
 			// 搜索
@@ -341,11 +350,22 @@
 					// }
 				})
 			},
+			getProject() {
+				var self = this;
+				API.projects(self.currentPage).then(res => {
+					self.projectList = res.data;
+				})
+			},
+			
+			changeProject(val) {
+				var self = this;
+				self.getAddress(val)
+			},
 
 			// 获取地址
-			getAddress() {
+			getAddress(val) {
 				var self = this;
-				API.addresses(self.currentPage, 1000).then(res => {
+				API.addresses(self.currentPage, 1000, val).then(res => {
 					self.addressList = res.data;
 				})
 			},

@@ -107,6 +107,14 @@
 								</el-select>
 							</el-form-item>
 							<div v-if="sendForm.type === 2">
+								<el-form-item label="选择项目">
+									<el-select v-model="sendForm.project_id" placeholder="请选择项目" @change="changeProject">
+										<el-option v-for="(item,index) in projectList" :key="index" :label="item.name" :value="item.id">
+										</el-option>
+									</el-select>
+								</el-form-item>
+							</div>
+							<div v-if="sendForm.type === 2 && hasAddress">
 								<el-form-item label="选择地址">
 									<!-- <el-checkbox v-model="checkAll" @change="handleCheckAllAddress">全选</el-checkbox> -->
 									<div class="facebox">
@@ -119,6 +127,14 @@
 								</el-form-item>
 							</div>
 							<div v-if="sendForm.type === 3">
+								<el-form-item label="选择项目">
+									<el-select v-model="sendForm.project_id" placeholder="请选择项目" @change="changeProject">
+										<el-option v-for="(item,index) in projectList" :key="index" :label="item.name" :value="item.id">
+										</el-option>
+									</el-select>
+								</el-form-item>
+							</div>
+							<div v-if="sendForm.type === 3 && hasAddress">
 								<el-form-item label="选择地址">
 									<!-- <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox> -->
 									<div class="facebox">
@@ -212,6 +228,8 @@
 				},
 				// 发布
 				dialogSend: false,
+				projectList: [],
+				hasAddress: false,
 				typeList: [{
 					value: 1,
 					label: '全部设备'
@@ -237,6 +255,7 @@
 					direction: '',
 					devices: [],
 					version_id: '',
+					project_id: ''
 				},
 				addressList: [],
 				addresses: [],
@@ -348,27 +367,65 @@
 			handleSend(index, row) {
 				this.dialogSend = true;
 				this.sendForm.version_id = row.id;
+				this.sendForm = {
+					type: '',
+					addresses: [],
+					direction: '',
+					devices: [],
+					version_id: '',
+					project_id: ''
+				}
 			},
-			// 获取地址
-			getAddress() {
-				var self = this;
-				API.addresses(self.currentPage, 1000).then(res => {
-					self.addressList = res.data;
-				})
-				console.log(self.addressList)
-			},
-
 			typeChange(val) {
 				var self = this;
 				console.log(self.sendForm.addresses)
+				if (self.sendForm.type === 1) {
+					self.addressList = [];
+					self.sendForm.project_id = '';
+					self.sendForm.addresses = [];
+					self.hasAddress = false;
+					self.hasType = false;
+				}
 				if (self.sendForm.type === 3) {
-					self.hasType = true;
-					self.sendForm.addresses = []
+					self.addressList = [];
+					self.sendForm.project_id = '';
+					self.sendForm.addresses = [];
+					self.hasAddress = false;
+					self.hasType = false;
+					self.getProject()
 				}
 				if (self.sendForm.type === 2) {
-					self.sendForm.addresses = []
+					self.addressList = [];
+					self.sendForm.project_id = '';
+					self.sendForm.addresses = [];
+					self.hasAddress = false;
+					self.hasType = false;
+					self.getProject()
 				}
 			},
+			getProject() {
+				var self = this;
+				API.projects(self.currentPage).then(res => {
+					self.projectList = res.data;
+				})
+			},
+
+			changeProject(val) {
+				var self = this;
+				self.sendForm.addresses = [];
+				self.getAddress(val);
+				self.hasAddress = true;
+			},
+
+			// 获取地址
+			getAddress(val) {
+				var self = this;
+				API.addresses(self.currentPage, 1000, val).then(res => {
+					self.addressList = res.data;
+				})
+			},
+
+
 
 			handleCheckAllAddress(val) {
 				var self = this;
@@ -415,7 +472,7 @@
 						API.publishApk(self.sendForm).then(res => {
 							self.$message.success("发布成功");
 							this.dialogSend = false;
-						})
+						});
 				}
 			},
 

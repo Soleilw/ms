@@ -59,8 +59,8 @@ API.address = function(data) {
 	return axios.post(url.Address, data)
 }
 
-API.addresses = function(page,limit) {
-	return axios.get(url.Addresses, {page: page, limit: limit})
+API.addresses = function(page,limit,project_id) {
+	return axios.get(url.Addresses, {page: page, limit: limit,project_id:project_id})
 }
 
 // 人脸管理
