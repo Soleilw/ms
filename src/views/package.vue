@@ -148,7 +148,7 @@
 							</div>
 							<div v-if="hasType">
 								<el-form-item label="选择方向">
-									<el-select v-model="form.direction" @change="handleCheckeddirection">
+									<el-select v-model="sendForm.direction" @change="handleCheckeddirection">
 										<el-option v-for="(item, index) in directionList" :label="item.name" :value="item.value" :key="index"></el-option>
 									</el-select>
 								</el-form-item>
@@ -166,7 +166,7 @@
 
 							<div class="submit">
 								<el-form-item>
-									<el-button type="primary" @click="newSend">提交</el-button>
+									<el-button type="primary" @click="newSend">发布</el-button>
 								</el-form-item>
 							</div>
 						</el-form>
@@ -366,7 +366,6 @@
 			// 操作
 			handleSend(index, row) {
 				this.dialogSend = true;
-				this.sendForm.version_id = row.id;
 				this.sendForm = {
 					type: '',
 					addresses: [],
@@ -375,6 +374,7 @@
 					version_id: '',
 					project_id: ''
 				}
+				this.sendForm.version_id = row.id;
 			},
 			typeChange(val) {
 				var self = this;
