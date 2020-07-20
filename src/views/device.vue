@@ -89,7 +89,7 @@
 
 		<el-table :data="tableDate">
 			<el-table-column prop="id" label="ID" align="center" width="80px"></el-table-column>
-			<el-table-column prop="address_id" label="地址ID" align="center" width="80px"></el-table-column>
+			<el-table-column prop="address.address" label="地址" align="center" width="80px"></el-table-column>
 			<el-table-column prop="uuid" label="uuid" align="center" width="300px"></el-table-column>
 			<el-table-column prop="type" label="类型" align="center"></el-table-column>
 			<el-table-column prop="direction" label="方向" align="center"></el-table-column>
