@@ -80,7 +80,15 @@ const dynamicRouter = [{
 			}
 		]
 	},
-
+	{
+	    path: '/permission',
+	    name: 'permission',
+	    component: () => import('@/views/permission/permission.vue'),
+	    meta: {
+	        title: '权限管理',
+	        icon: 'el-icon-setting'
+	    }
+	}
 
 
 

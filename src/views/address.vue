@@ -59,7 +59,7 @@
 			<el-table-column prop="address_uuid" label="address_uuid" align="center"></el-table-column>
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
-					<el-button size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>

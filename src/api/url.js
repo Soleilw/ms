@@ -2,6 +2,8 @@ const url = {
 	// 用户管理接口
 	'Login': '/login', // 登录
 	'Password': '/password', // 重置密码
+	'Token': '/token', // 重置密码
+
 	
 	// 百度配置
 	'Aip': '/aip', // 新增百度配置
