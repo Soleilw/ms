@@ -1,6 +1,7 @@
 import router, { DynamicRoutes } from '@/router/index'
 import { recursionRouter } from '@/utils/recursion-router'
 import dynamicRouter from '@/router/dynamicRouter'
+import API from '@/api/login.js'
 
 export default {
     namespaced: true,
@@ -10,7 +11,6 @@ export default {
         currentMenu: '' /** 当前active导航菜单 */,
         control_list: [] /** 完整的权限列表 */,
     },
-    getters: {},
     mutations: {
         SET_PERMISSION(state, routes) {
             state.permissionList = routes
@@ -34,6 +34,12 @@ export default {
 	
     actions: {
         async FETCH_PERMISSION({ commit, state }) {
+				// var form = {
+				// 	username: localStorage.getItem('username'),
+				// 	password: localStorage.getItem('password')
+				// }
+				// var res = await API.login(form)
+				// let arr = res.permissions;
 				let arr = localStorage.getItem('permissions')
 				let routes = recursionRouter(arr, dynamicRouter)
 				let MainContainer = DynamicRoutes.find(v => v.path === '')

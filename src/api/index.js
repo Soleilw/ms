@@ -144,6 +144,27 @@ API.dangerLogs = function(page, limit) {
 	return axios.get(url.DangerLogs, {page: page, limit: limit})
 }
 
+// 权限管理
+// 获取角色
+API.roles = function(page, limit) {
+	return axios.get(url.Roles, {
+		page: page,
+		limit: limit
+	})
+}
+
+// 获取单个角色
+API.oneRole = function(name) {
+	return axios.get(url.Role, {
+		name: name
+	})
+}
+
+// 增加角色
+API.role = function(data) {
+	return axios.post(url.Role, data)
+}
+
 
 
 export default API

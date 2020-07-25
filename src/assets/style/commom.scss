@@ -1,20 +1,28 @@
-.btn {
-		display: inline-block;
-		margin-right: 10px;
-		margin-bottom: 20px;
+.handle-box {
+	display: flex;
+	background: #f0f0f0;
+	margin-bottom: 20px;
+	padding: 5px;
+	border-radius: 5px;
+}
+
+.btn {	
+		margin: 5px;
 	}
 	
 .el-table {
 		border: 1px solid #dfe6ec;
+		border-radius: 5px;
 	}
 	
 .block {
 		text-align: center;
 		margin-top: 1vw;
-	}
+}
     
 .box {
     margin-right: 20px;
+	padding: 0 50px;
 }
 
 .submit {

@@ -1,4 +1,12 @@
 const dynamicRouter = [{
+	    path: '/overview',
+	    name: 'overview',
+	    component: () => import('@/views/overview'),
+	    meta: {
+	        title: '数据总览',
+	        icon: 'el-icon-menu'
+	    }
+	},{
 		path: '/baiduaip',
 		name: 'baiduaip',
 		component: () => import('@/views/baiduAip'),
@@ -48,7 +56,7 @@ const dynamicRouter = [{
 		name: 'package',
 		component: () => import('@/views/package'),
 		meta: {
-			title: '包管理',
+			title: '安装包管理',
 			icon: 'el-icon-shopping-bag-2'
 		}
 	},
@@ -89,6 +97,7 @@ const dynamicRouter = [{
 	        icon: 'el-icon-setting'
 	    }
 	}
+	
 
 
 

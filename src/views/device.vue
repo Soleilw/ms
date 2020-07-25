@@ -1,14 +1,17 @@
 <template>
 	<div>
-		<div class="btn">
-			<el-button type="primary" @click="dialogDevice = true">添加设备</el-button>
+		<div class="handle-box">
+			<div class="btn">
+				<el-button type="primary" @click="dialogDevice = true">添加设备</el-button>
+			</div>
+			<div class="btn">
+				<el-input v-model="uuid" placeholder="输入设备号" class="search" @keyup.enter.native="search(uuid)"></el-input>
+			</div>
+			<div class="btn">
+				<el-button type="primary" @click="search(uuid)">搜索</el-button>
+			</div>
 		</div>
-		<div class="btn">
-			<el-input v-model="uuid" placeholder="输入设备号" class="search" @keyup.enter.native="search(uuid)"></el-input>
-		</div>
-		<div class="btn">
-			<el-button type="primary" @click="search(uuid)">搜索</el-button>
-		</div>
+	
 
 
 		<el-dialog title="添加设备" :visible.sync="dialogDevice">
@@ -87,16 +90,16 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate">
-			<el-table-column prop="id" label="ID" align="center" width="80px"></el-table-column>
-			<el-table-column prop="address.address" label="地址" align="center" width="200px"></el-table-column>
-			<el-table-column prop="uuid" label="uuid" align="center" width="300px"></el-table-column>
-			<el-table-column prop="type" label="类型" align="center"></el-table-column>
-			<el-table-column prop="direction" label="方向" align="center"></el-table-column>
-			<el-table-column prop="version" label="版本" align="center" width="80px"></el-table-column>
-			<el-table-column prop="remark" label="备注" align="center" width="400px"></el-table-column>
-			<el-table-column prop="last_login" label="最后登录时间" align="center" width="200px"></el-table-column>
-			<el-table-column label="操作" align="center" width="200px">
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table-column prop="id" label="ID" width="80px"></el-table-column>
+			<el-table-column prop="address.address" label="地址" width="200px"></el-table-column>
+			<el-table-column prop="uuid" label="uuid" width="300px"></el-table-column>
+			<el-table-column prop="type" label="类型" width="100px"></el-table-column>
+			<el-table-column prop="direction" label="方向"></el-table-column>
+			<el-table-column prop="version" label="版本" width="80px"></el-table-column>
+			<el-table-column prop="remark" label="备注" width="400px"></el-table-column>
+			<el-table-column prop="last_login" label="最后登录时间" width="200px"></el-table-column>
+			<el-table-column label="操作" width="200px">
 				<template slot-scope="scope">
 					<el-dropdown>
 						<el-button type="primary">

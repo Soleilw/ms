@@ -58,7 +58,11 @@ const url = {
 	'UploadFace': '/upload/face', // 上传人脸
 	
 	// token
-	'ApiToken': '/api/token'
+	'ApiToken': '/api/token',
+	
+	// 权限管理
+	'Role': '/role' ,// 新增角色
+	'Roles': '/roles' // 获取角色
 }
 
 module.exports = url;

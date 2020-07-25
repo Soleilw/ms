@@ -11,14 +11,13 @@ import cookies from "@/utils/cookies.js"
 
 
 const http = {}
+// var xsrfCookieName;
 
 const instance = axios.create({
 	timeout: 200000,
-	// withCredentials: true,
-	// xsrfCookieName: '',
-	// xsrfHeaderName: 'X-CSRF-TOKEN',
+	withCredentials: true,
 	// baseURL: 'https://api.fengniaotuangou.cn',
-	baseURL: 'http://192.168.0.108/FaceCore/public',
+	baseURL: 'http://192.168.0.109/FaceCore/public',
 	headers: {
 		'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 	},
@@ -56,23 +55,9 @@ const instance = axios.create({
 	}
 })
 
+
 // 请求拦截
 instance.interceptors.request.use(config => {
-	// var token = localStorage.getItem('token');
-	// 	if(token) {
-	// 		config.headers[config.xsrfHeaderName] = token
-	// 	}
-
-	// if (config.withCredentials) {
-	// 	let xsrfValue;
-	// 	config.xsrfCookieName ? xsrfValue : undefined
-	// 	if(xsrfValue) {
-	// 		config.headers[config.xsrfHeaderName] = xsrfValue
-	// 	}
-	// }
-
-	// var token = localStorage.getItem('token');
-
 	return config
 }, err => {
 	return Promise.reject(error)
@@ -80,18 +65,16 @@ instance.interceptors.request.use(config => {
 
 // 响应拦截
 instance.interceptors.response.use(res => {
-	if(res.config.url === "/token") {
-		debugger
-		return res.config.xsrfCookieName = res.data;
-	} else {
-		debugger
+	if(res.status === 200 && res.config.url === "/login") {
+		return res
+	} else if (res.status === 200) {
 		return res.data
 	}
 }, err => {
 	return Promise.reject(err)
 })
 
-http.get = function (url, data = {}) {
+http.get = function(url, data = {}) {
 	return new Promise((resolve, reject) => {
 		instance.get(url, {
 			params: data
@@ -103,7 +86,7 @@ http.get = function (url, data = {}) {
 	})
 }
 
-http.del = function (url, data = {}) {
+http.del = function(url, data = {}) {
 	return new Promise((resolve, reject) => {
 		instance.delete(url, {
 			params: data
@@ -115,7 +98,7 @@ http.del = function (url, data = {}) {
 	})
 }
 
-http.post = function (url, data) {
+http.post = function(url, data) {
 	return new Promise((resolve, reject) => {
 		instance.post(url, Qs.stringify(data)).then(res => {
 			resolve(res.data)

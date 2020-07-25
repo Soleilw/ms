@@ -4,7 +4,8 @@
 			<span style="color: #67C23A;">0</span>
 			<span style="color: #0074D9;">4</span>
 		<div>
-			<p>Page Not Found</p>
+			<!-- <p>Page Not Found</p> -->
+			<p>你页面走丢了~</p>
 			<p>
 				<router-link to="/baiduaip"><el-button type="primary">返回首页</el-button></router-link>
 			</p>

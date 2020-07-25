@@ -4,7 +4,7 @@
 			<el-button type="primary" @click="addProject">添加地址</el-button>
 		</div>
 
-		<el-dialog title="添加地址" :visible.sync="dialogProject" :close-on-click-modal="false">
+		<el-dialog title="添加地址" :visible.sync="dialogProject" :close-on-click-modal="false" width="80%">
 			<div class="box">
 				<el-form :model="form" label-width="120px">
 					<el-form-item label="选择项目">
@@ -12,8 +12,14 @@
 							<el-option v-for="(item, index) in projectList" :label="item.name" :value="item.id" :key="index"></el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="选择类型">
+						<el-select v-model="form.type">
+							<el-option v-for="(item, index) in typeList" :label="item.name" :value="item.id" :key="index"></el-option>
+						</el-select>
+					</el-form-item>
 					<el-form-item label="地址">
 						<el-input v-model="form.address"></el-input>
+						<v-map ref="map"></v-map>
 					</el-form-item>
 					<el-form-item label="联系方式">
 						<el-input v-model="form.contact"></el-input>
@@ -41,7 +47,7 @@
 						<el-button size="mini" type="success" @click="addFace">添加人脸姓名</el-button>
 						<el-button size="mini" type="danger" @click="delFace">删除人脸姓名</el-button>
 					</el-form-item>
-					
+
 					<div class="submit">
 						<el-form-item>
 							<el-button type="primary" @click="newProject">提交</el-button>
@@ -59,6 +65,7 @@
 			<el-table-column prop="address_uuid" label="address_uuid" align="center"></el-table-column>
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
+					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -74,18 +81,25 @@
 
 <script>
 	import API from '@/api/index.js'
+	import vMap from '@/components/map/map.vue'
 
 	export default {
-		name: 'gradems',
+		components: {
+			vMap
+		},
 		data() {
 			return {
 				dialogProject: false,
 				projectList: [],
+				typeList: [],
 				form: {
 					project_id: '',
+					type: '',
 					address: '',
 					contact: '',
-					face_groups: []
+					face_groups: [],
+					lng: '',
+					lat: ''
 				},
 				tableDate: [],
 				currentPage: 1,
@@ -133,6 +147,9 @@
 			// 添加新的AIP
 			newProject() {
 				var self = this;
+				let latLng = this.$refs['map'].getAddressCode();
+				self.form.lng = latLng.lng;
+				self.form.lat = latLng.lat;
 				API.address(self.form).then(res => {
 					self.dialogProject = false;
 					self.$message.success("提交成功");

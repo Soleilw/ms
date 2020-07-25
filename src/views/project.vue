@@ -24,7 +24,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate">
+		<el-table :data="tableData">
 			<el-table-column prop="id" label="ID" align="center"></el-table-column>
 			<el-table-column prop="name" label="名称" align="center"></el-table-column>
 			<el-table-column prop="state" label="State" align="center"></el-table-column>
@@ -59,7 +59,7 @@
 					aip_id: '',
 					name: ''
 				},
-				tableDate: [],
+				tableData: [],
 				currentPage: 1,
 				pageSize: 10,
 				totalPage: 0
@@ -79,7 +79,7 @@
 			getProject() {
 				var self = this;
 				API.projects(self.currentPage).then(res => {
-					self.tableDate = res.data;
+					self.tableData = res.data;
 					self.totalPage = res.total;
 				})
 			},

@@ -23,7 +23,7 @@ export const DynamicRoutes = [
         path: '',
         component: () => import('@/components/Home.vue'),
         name: 'container',
-        redirect: 'baiduaip',
+        redirect: 'overview',
         meta: {
             requiresAuth: true,
             title: '首页'
