@@ -34,13 +34,13 @@ export default {
 	
     actions: {
         async FETCH_PERMISSION({ commit, state }) {
-				// var form = {
-				// 	username: localStorage.getItem('username'),
-				// 	password: localStorage.getItem('password')
-				// }
-				// var res = await API.login(form)
-				// let arr = res.permissions;
-				let arr = localStorage.getItem('permissions')
+				var form = {
+					username: localStorage.getItem('username'),
+					password: localStorage.getItem('password')
+				}
+				var res = await API.login(form)
+				let arr = res.permissions;
+				// let arr = localStorage.getItem('permissions')
 				let routes = recursionRouter(arr, dynamicRouter)
 				let MainContainer = DynamicRoutes.find(v => v.path === '')
 				let children = MainContainer.children

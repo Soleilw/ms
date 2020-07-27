@@ -48,9 +48,9 @@
 			submitForm() {
 				var self = this;
 				localStorage.setItem("username", self.adminForm.username);
-				// localStorage.setItem("password", self.adminForm.password);
-				var arr = ['overview','address']
-				localStorage.setItem("permissions", arr);
+				localStorage.setItem("password", self.adminForm.password);
+				// var arr = ['overview','address'];
+				// localStorage.setItem("permissions", arr);
 				self.$router.replace("/");
 			}
 		}

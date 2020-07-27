@@ -22,6 +22,7 @@ const url = {
 	'Addresses': '/addresses', // 获取地址列表
 	'Address': '/address', // 删除地址,方式‘delete’
 	'RestoreAddress': '/restore/address', // 恢复地址
+	'AddressTypes': '/address/types', // 恢复地址
 	
 	// 人脸管理
 	'Face': '/face', // 新增人脸
@@ -62,7 +63,7 @@ const url = {
 	
 	// 权限管理
 	'Role': '/role' ,// 新增角色
-	'Roles': '/roles' // 获取角色
+	'Roles': '/roles' ,// 获取角色
 }
 
 module.exports = url;

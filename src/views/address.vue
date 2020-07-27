@@ -14,34 +14,36 @@
 					</el-form-item>
 					<el-form-item label="选择类型">
 						<el-select v-model="form.type">
-							<el-option v-for="(item, index) in typeList" :label="item.name" :value="item.id" :key="index"></el-option>
+							<el-option v-for="(value, name) in typeList" :label="value" :value="name" :key="name"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="地址">
-						<el-input v-model="form.address"></el-input>
-						<v-map ref="map"></v-map>
+						<div class="address-info">
+							<el-input v-model="form.address" placeholder="地址显示"></el-input>
+							<el-input v-model="form.lng" placeholder="经度显示"></el-input>
+							<el-input v-model="form.lat" placeholder="纬度显示"></el-input>
+						</div>
+						<v-map @callback="getLoc"></v-map>
 					</el-form-item>
 					<el-form-item label="联系方式">
 						<el-input v-model="form.contact"></el-input>
 					</el-form-item>
 					<div v-for="(item,index) in form.face_groups" :key="index">
-						<el-form-item label="人脸分组姓名">
-							<el-input v-model="item.name"></el-input>
-						</el-form-item>
+					<el-form-item label="人脸分组姓名">
+						<el-input v-model="item.group_name"></el-input>
+					</el-form-item>
 						<el-form-item label="是否默认分组">
 							<el-radio-group v-model="item.is_default">
 								<el-radio :label="1">是</el-radio>
 								<el-radio :label="2">否</el-radio>
 							</el-radio-group>
-							<!-- <el-input v-model="item.is_default"></el-input> -->
 						</el-form-item>
 						<el-form-item label="是否为在线分组">
 							<el-radio-group v-model="item.online">
 								<el-radio :label="1">是</el-radio>
 								<el-radio :label="2">否</el-radio>
 							</el-radio-group>
-							<!-- <el-input v-model="item.is_default"></el-input> -->
-						</el-form-item>
+						</el-form-item> -->
 					</div>
 					<el-form-item label="操作">
 						<el-button size="mini" type="success" @click="addFace">添加人脸姓名</el-button>
@@ -81,7 +83,7 @@
 
 <script>
 	import API from '@/api/index.js'
-	import vMap from '@/components/map/map.vue'
+	import vMap from '@/components/map/map-iframe.vue'
 
 	export default {
 		components: {
@@ -101,21 +103,34 @@
 					lng: '',
 					lat: ''
 				},
+				// mapAddress: '', // 传给地图组件的值
 				tableDate: [],
 				currentPage: 1,
 				pageSize: 10,
-				totalPage: 0
+				totalPage: 0,
 			}
 		},
 		mounted() {
 			this.getAddress();
 			this.getProject();
+			this.getAddressType();
 		},
 		methods: {
+			getLoc(mapData) {
+				this.form.lng = mapData.latlng.lng;
+				this.form.lat = mapData.latlng.lat;
+				this.form.address = mapData.poiname;
+			},
 			getProject() {
 				var self = this;
 				API.projects(self.currentPage).then(res => {
 					self.projectList = res.data;
+				})
+			},
+			getAddressType() {
+				var self = this;
+				API.addressTypes(self.currentPage).then(res => {
+					self.typeList = res;
 				})
 			},
 			getAddress() {
@@ -128,11 +143,15 @@
 			addProject() {
 				var self = this;
 				self.dialogProject = true;
+				self.mapAddress = '中山市';
 				self.form = {
 					project_id: '',
+					type: '',
 					address: '',
 					contact: '',
-					face_groups: []
+					face_groups: [],
+					lng: '',
+					lat: ''
 				}
 			},
 			// 添加人脸分组名称
@@ -147,9 +166,6 @@
 			// 添加新的AIP
 			newProject() {
 				var self = this;
-				let latLng = this.$refs['map'].getAddressCode();
-				self.form.lng = latLng.lng;
-				self.form.lat = latLng.lat;
 				API.address(self.form).then(res => {
 					self.dialogProject = false;
 					self.$message.success("提交成功");
@@ -159,6 +175,22 @@
 				})
 			},
 			// 操作
+			handleEdit(index, row) {
+				var self = this;
+				self.dialogProject = true;
+				API.getaddress(row.id).then(res => {
+					debugger
+					self.form = {
+						project_id: res.project_id,
+						type: res.type,
+						address: res.address,
+						contact: res.contact,
+						face_groups: res.groups,
+						lng: res.lng,
+						lat: res.lat
+					}
+				})
+			},
 			handleDel() {},
 
 			// 分页
@@ -184,4 +216,12 @@
 </script>
 
 <style>
+	.map {
+		border: solid 1px #ccc;
+	}
+
+	.address-info {
+		display: flex;
+		margin-bottom: 10px;
+	}
 </style>
