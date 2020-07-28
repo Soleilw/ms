@@ -7,30 +7,38 @@ Vue.use(Router)
 /* 初始路由 */
 export default new Router({
 	mode: 'history',
-    routes: [
-        {
-            path: '/login',
+	routes: [{
+			path: '/login',
 			name: 'login',
-            component: () => import('@/views/login.vue'),
-			meta: { title: '登录' },
-        }
-    ]
+			component: () => import('@/views/login.vue'),
+			meta: {
+				title: '登录'
+			},
+		},
+		{
+			path: '/overview',
+			name: 'overview',
+			component: () => import('@/views/overview'),
+			meta: {
+				title: '数据总览',
+				icon: 'el-icon-menu'
+			}
+		}
+	]
 })
 
 /* 准备动态添加的路由 */
-export const DynamicRoutes = [
-    {
-        path: '',
-        component: () => import('@/components/Home.vue'),
-        name: 'container',
-        redirect: 'overview',
-        meta: {
-            requiresAuth: true,
-            title: '首页'
-        },
-        children: [
-        ]
-    },
+export const DynamicRoutes = [{
+		path: '',
+		component: () => import('@/components/Home.vue'),
+		name: 'container',
+		redirect: 'baiduaip',
+		meta: {
+			requiresAuth: true,
+			title: '百度接口'
+		},
+		children: []
+	},
 	{
 		path: '*',
 		component: () => import('@/views/404.vue')

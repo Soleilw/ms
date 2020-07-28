@@ -1,18 +1,21 @@
 <template>
 	<div>
-		<div class="btn">
-			<el-button type="primary" @click="addUser">添加用户</el-button>
+		<div class="handle-box">
+			<div class="btn">
+				<el-button type="primary" @click="addUser">添加用户</el-button>
+			</div>
 		</div>
-		<el-table :data="tableData">
-			<el-table-column prop="id" label="ID" align="center"></el-table-column>
-			<el-table-column prop="name" label="账号" align="center"></el-table-column>
-			<el-table-column prop="role" label="角色名" align="center"></el-table-column>
-			<el-table-column prop="enable" label="状态" align="center">
+
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table-column prop="id" label="ID"></el-table-column>
+			<el-table-column prop="name" label="账号"></el-table-column>
+			<el-table-column prop="role" label="角色名"></el-table-column>
+			<el-table-column prop="enable" label="状态">
 				<template slot-scope="scope">
 					<span v-text="scope.row.enable == '1' ? '启用' : '禁用'"></span>
 				</template>
 			</el-table-column>
-			<el-table-column label="操作" align="center" width="300px">
+			<el-table-column label="操作" width="300px">
 				<template slot-scope="scope">
 					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">重置密码</el-button>
@@ -196,7 +199,7 @@
 			communityChange(val) {
 				this.form.areas_id = val;
 			},
-			
+
 			getAreas(val) {
 				var self = this;
 				API.areas(self.currentPage, 100, val).then(res => {
@@ -231,11 +234,11 @@
 				self.pro_id = '';
 				self.city_id = '';
 				self.areas_id = '';
-				self.community_id= '';
+				self.community_id = '';
 			},
 			newUser() {
 				var self = this;
-				if(self.form.username && self.form.password && self.form.enable && self.form.role && self.form.areas_id) {
+				if (self.form.username && self.form.password && self.form.enable && self.form.role && self.form.areas_id) {
 					API.user(self.form).then(res => {
 						self.dialogUser = false;
 						self.$message.success('提交成功');
@@ -258,7 +261,7 @@
 				self.pro_id = row.province;
 				self.city_id = row.city;
 				self.areas_id = row.area;
-				self.community_id= row.community;
+				self.community_id = row.community;
 				self.form.areas_id = row.areas_id;
 				self.form.id = row.id;
 			},

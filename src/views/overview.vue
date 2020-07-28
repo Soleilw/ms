@@ -1,133 +1,167 @@
 <template>
-	<div>
-		<div class="welcome">
-			管理员：
-			<span style="color: #2a9f93;">{{username}}</span>
-			当前时间：
-			<span style="color: #F56C6C;">{{ nowDate + ' ' + nowTime + ' ' + nowWeek }}</span>
+	<div id="wrap">
+		<div style="display: flex; justify-content: space-around;">
+			<div class="weather">
+				<div class="item">
+					2020-07-28 00:00:00 星期六
+				</div>
+				<div class="item">
+					广州市[选择城市]
+				</div>
+				<div class="item">
+					温度 38°C
+				</div>
+				<div class="item">
+					多云
+				</div>
+			</div>
+			<div class="canvas">
+				<!-- 获取天气 -->
+				<canvas id="myCanvas" width="450px" height="150px" style="border:0">
+				</canvas>
+				<div class="head">
+					<div class="title">图巴诺安全总控系统</div>
+				</div>
+				<div class="button">
+					<el-button size="mini" type="primary">学校</el-button>
+					<el-button size="mini" type="primary">出租屋</el-button>
+					<el-button size="mini" type="primary" @click="toManage">进入后台管理</el-button>
+				</div>
+			</div>
+			<div class="user"></div>
 		</div>
 
-		<!-- 	<div class="view">
-			<div class="view-box">
-				<div class="title"><span>学校总览</span></div>
-			</div>
-			<div class="view-box">
-				<div class="title"><span>出租屋总览</span></div>
-			</div>
-		</div> -->
-		<div class="view">
-			<el-tabs v-model="activeName" @tab-click="changeActive">
-				<el-tab-pane label="学校总览" name="school">
-					<div class="view-box">
-						<div class="col">
-							dd
-						</div>
-						<div class="col">
-							dd
-						</div>
-						<div class="col">
-							ddddd
-						</div>
-					</div>
-				</el-tab-pane>
-				<el-tab-pane label="出租屋总览" name="rent">
-				</el-tab-pane>
-			</el-tabs>
+
+		<!-- 地图分布数据显示 -->
+		<div class="show-map">
+			<span style="color: #fff;">地图分布</span>
 		</div>
+
+		<div class="summary">
+			<div style="width: 70%; height: 400px;		border: 1px solid #2A9F93;"><span style="color: #fff;">数据</span></div>
+			<div style="width: 29%; 	height: 400px;	border: 1px solid #2A9F93;"><span style="color: #fff;">数据</span></div>
+		</div>
+
+
 	</div>
 </template>
 
 <script>
-	import API from "@/api/index.js";
 	export default {
 		data() {
 			return {
-				username: localStorage.getItem("username"),
-				nowDate: "", // 当前日期
-				nowTime: "", // 当前时间
-				nowWeek: "", // 当前星期
 
-				activeName: 'school'
-			};
+			}
 		},
 		mounted() {
-			this.currentTime();
+			this.initCanvas()
 		},
 		methods: {
-			currentTime() {
-				setInterval(this.getTime, 500);
+			// 进入后台管理系统
+			toManage() {
+				this.$router.replace("/");
 			},
-			getTime() {
-				var self = this;
-				let yy = new Date().getFullYear();
-				let mm = new Date().getMonth() + 1;
-				let dd = new Date().getDate();
-				let week = new Date().getDay();
-				let hh = new Date().getHours();
-				let mf =
-					new Date().getMinutes() < 10 ?
-					"0" + new Date().getMinutes() :
-					new Date().getMinutes();
-				let ss = new Date().getSeconds();
-				switch (week) {
-					case 1:
-						self.nowWeek = "星期一";
-						break;
-					case 2:
-						self.nowWeek = "星期二";
-						break;
-					case 3:
-						self.nowWeek = "星期三";
-						break;
-					case 4:
-						self.nowWeek = "星期四";
-						break;
-					case 5:
-						self.nowWeek = "星期五";
-						break;
-					case 6:
-						self.nowWeek = "星期六";
-						break;
-					case 7:
-						self.nowWeek = "星期日";
-				}
-				self.nowTime = hh + ":" + mf + ":" + ss;
-				self.nowDate = yy + "-" + mm + "-" + dd;
-			},
-		},
-		// 销毁定时器
-		beforeDestroy: function() {
-			if (this.getTime) {
-				clearInterval(this.getTime);
+			// 绘制图形
+			initCanvas() {
+				let canvas = document.getElementById('myCanvas');
+				let ctx = canvas.getContext('2d');
+				// 开始一条路径
+				ctx.beginPath();
+				ctx.moveTo(3, 0);
+				ctx.lineTo(70, 60);
+				ctx.lineTo(70, 60);
+				ctx.lineTo(80, 60);
+				ctx.lineTo(90, 50);
+				ctx.lineTo(370, 50);
+				ctx.lineTo(380, 60);
+				ctx.lineTo(390, 60);
+				ctx.lineTo(447, 0);
+				ctx.strokeStyle = "#2a9f93";
+				ctx.stroke();
+
+				// 再绘制一条路径
+				ctx.beginPath();
+				ctx.moveTo(0, 0);
+				ctx.lineTo(70, 63);
+				ctx.lineTo(70, 63);
+				ctx.lineTo(80, 63);
+				ctx.lineTo(90, 53);
+				ctx.lineTo(370, 53);
+				ctx.lineTo(380, 63);
+				ctx.lineTo(390, 63);
+				ctx.lineTo(450, 0);
+				ctx.strokeStyle = "#2a9f93";
+				ctx.stroke();
+
+				// 再再绘制一条路径
+				ctx.beginPath();
+				ctx.moveTo(90, 53);
+				ctx.lineTo(100, 100);
+				ctx.lineTo(360, 100);
+				ctx.lineTo(370, 53);
+				ctx.stroke();
 			}
 		}
-	};
+	}
 </script>
 
 <style scoped lang="scss">
-	.welcome {
-		padding: 20px 10px;
-		box-shadow: 1px 1px 5px #ccc;
-		font-size: 16px;
+	#wrap {
+		width: 100%;
+		height: 100%;
+		background-image: url(../assets/image/earth2.jpg);
 	}
 
-	.welcome span {
-		padding: 20px 5px;
+	.canvas {
+		width: 33%;
+		height: 160px;
+		display: flex;
+		justify-content: space-around;
+		position: relative;
 	}
 
-	.view {
+	.weather {
+		width: 33%;
+		height: 40px;
+		display: flex;
 		margin-top: 20px;
-		height: 1000px;
-
-		.view-box {
-			display: flex;
-			justify-content: space-around;
-			
-			
-			.col {
-				width: 33%;
-				border: 1px red solid;
-			}
+		padding-left: 20px;
+		border-bottom: 1px solid #2A9F93;
+		color: #fff;
+		font-size: 20px;
+		
+		.item {
+			padding-left: 10px;
 		}
+	}
+
+	.user {
+		width: 33%;
+		height: 60px;
+		border-bottom: 1px solid #2A9F93;
+	}
+
+	.head {
+		position: absolute;
+		top: 10px;
+		font-size: 30px;
+		color: #fff;
+	}
+
+	.button {
+		position: absolute;
+		top: 43%;
+	}
+
+	.show-map {
+		height: 350px;
+		margin: 0 20px;
+		border: 1px solid #2A9F93;
+	}
+
+	.summary {
+		display: flex;
+		justify-content: space-between;
+		margin: 10px 20px;
 	}
 </style>

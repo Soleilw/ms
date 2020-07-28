@@ -1,8 +1,11 @@
 <template>
 	<div>
-		<div class="btn">
-			<el-button type="primary" @click="dialogFace = true">添加人脸</el-button>
+		<div class="handle-box">
+			<div class="btn">
+				<el-button type="primary" @click="dialogFace = true">添加人脸</el-button>
+			</div>
 		</div>
+
 
 		<el-dialog title="添加人脸" :visible.sync="dialogFace">
 			<div class="box">
@@ -49,13 +52,13 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate">
-			<el-table-column prop="id" label="ID" align="center"></el-table-column>
-			<el-table-column prop="name" label="名字" align="center"></el-table-column>
-			<el-table-column prop="face_id" label="人脸ID" align="center"></el-table-column>
-			<el-table-column prop="group" label="人脸组" align="center" width="200px"></el-table-column>
-			<el-table-column prop="number" label="学号" align="center"></el-table-column>
-			<el-table-column prop="href" label="人脸图片" align="center">
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table-column prop="id" label="ID"></el-table-column>
+			<el-table-column prop="name" label="名字"></el-table-column>
+			<el-table-column prop="face_id" label="人脸ID"></el-table-column>
+			<el-table-column prop="group" label="人脸组" width="200px"></el-table-column>
+			<el-table-column prop="number" label="学号"></el-table-column>
+			<el-table-column prop="href" label="人脸图片">
 				<template slot-scope="scope">
 					<el-popover placement="top-start" title="" trigger="click">
 						<img :src="scope.row.href" style="max-width:800px;max-height:800px;" />
@@ -63,20 +66,20 @@
 					</el-popover>
 				</template>
 			</el-table-column>
-			<el-table-column prop="type" label="类型" align="center"></el-table-column>
-			<el-table-column label="操作" align="center">
-				<template slot-scope="scope">
-					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
+			<el-table-column prop="type" label="类型"></el-table-column>
+			<el-table-column label="操作"">
+				<template slot-scope=" scope">
+				<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+</template>
+</el-table-column>
+</el-table>
 
-		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
-			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
-			</el-pagination>
-		</div>
-	</div>
+<div class="block">
+	<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+	 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
+	</el-pagination>
+</div>
+</div>
 </template>
 
 <script>
@@ -130,7 +133,7 @@
 				API.faceGroup(address_id).then(res => {
 					self.faceGroupList = res.data;
 				})
-				
+
 			},
 			// 添加新的AIP
 			newFace() {
@@ -164,7 +167,7 @@
 				this.$message.success('上传成功');
 				this.dialogBanner = false;
 				this.form.href = file.url;
-			
+
 			},
 			handleExceed(files, fileList) { //图片上传超过数量限制
 				this.$message.error('上传图片不能超过1张!');

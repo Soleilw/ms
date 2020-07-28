@@ -10,9 +10,13 @@
 			<div class="btn">
 				<el-button type="primary" @click="search(uuid)">搜索</el-button>
 			</div>
+			<div class="btn">
+				<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
+					<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
+					</el-option>
+				</el-select>
+			</div>
 		</div>
-	
-
 
 		<el-dialog title="添加设备" :visible.sync="dialogDevice">
 			<div class="box">
@@ -257,6 +261,7 @@
 				logCat: '',
 				dialogDevice: false,
 				typeList: [], // 设备类型
+				type: '', // 搜索作用
 				label: '',
 				projectList: [],
 				addressList: [],
@@ -333,6 +338,14 @@
 					self.tableDate = res.data;
 					self.totalPage = 1;
 					self.uuid = '';
+					self.$message.success('搜索成功！');
+				})
+			},
+			typeChange(val) {
+				var self = this;
+				API.searchType(val).then(res => {
+					self.tableDate = res.data;
+					self.totalPage = 1;
 					self.$message.success('搜索成功！');
 				})
 			},

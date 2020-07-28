@@ -122,6 +122,11 @@ API.search = function(uuid) {
 	return axios.get(url.Devices, {uuid:uuid})
 }
 
+// 搜索人脸组
+API.searchType = function(type) {
+	return axios.get(url.Devices, {type:type})
+}
+
 // 获取人脸组
 API.faceGroup = function(address_id) {
 	return axios.get(url.FaceGroup, {address_id: address_id})

@@ -39,7 +39,7 @@
 				</el-dropdown>
 			</div>
 			<div class="logout">
-				<el-button icon="el-icon-circle-close" @click="logout" size="mini" type="infor">退出</el-button>
+				<el-button icon="el-icon-circle-close" @click="logout" size="mini">退出</el-button>
 			</div>
 		</div>
 

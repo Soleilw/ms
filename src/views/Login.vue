@@ -51,7 +51,7 @@
 				localStorage.setItem("password", self.adminForm.password);
 				// var arr = ['overview','address'];
 				// localStorage.setItem("permissions", arr);
-				self.$router.replace("/");
+				self.$router.replace("/overview");
 			}
 		}
 	};

@@ -1,14 +1,16 @@
 <template>
 	<div>
-		<div class="btn">
-			<el-button type="primary" @click="addRole">添加角色</el-button>
+		<div class="handle-box">
+			<div class="btn">
+				<el-button type="primary" @click="addRole">添加角色</el-button>
+			</div>
 		</div>
 
-		<el-table :data="tableData">
-			<el-table-column prop="id" label="ID" align="center"></el-table-column>
-			<el-table-column prop="name" label="角色名" align="center"></el-table-column>
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table-column prop="id" label="ID"></el-table-column>
+			<el-table-column prop="name" label="角色名"></el-table-column>
 			<!-- <el-table-column prop="guard_name" label="角色名" align="center"></el-table-column> -->
-			<el-table-column label="操作" align="center">
+			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑权限</el-button>
 					<el-button type="danger" size="mini" @click="handleDel(scope.$index, scope.row)">删除</el-button>
@@ -35,7 +37,7 @@
 					<el-form-item label="角色名称">
 						<el-input v-model="form.name" placeholder="请输入角色名" :disabled="disabledRole"></el-input>
 					</el-form-item>
-<!-- 					<el-form-item label="角色名称(中文)">
+					<!-- 					<el-form-item label="角色名称(中文)">
 						<el-input v-model="form.name" placeholder="请输入角色名" :disabled="disabledRole"></el-input>
 					</el-form-item> -->
 					<el-form-item label="选择权限">
@@ -68,34 +70,34 @@
 							</el-checkbox-group>
 						</div>
 						<div class="permission">
-						  <el-checkbox-group v-model="form.permissions" class="permission-item">
-						    <el-checkbox class="permission-span" label="address" @change="oneChange" border>
-						      <span style="font-weight: bold;">地址管理页</span>
-						    </el-checkbox>
-						    <el-checkbox label="addressAdd" @change="oneChange">添加地址</el-checkbox>
-						    <el-checkbox label="addressGet" @change="oneChange">获取地址</el-checkbox>
-						    <el-checkbox label="addressDel" @change="oneChange">删除地址</el-checkbox>
-						  </el-checkbox-group>
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="address" @change="oneChange" border>
+									<span style="font-weight: bold;">地址管理页</span>
+								</el-checkbox>
+								<el-checkbox label="addressAdd" @change="oneChange">添加地址</el-checkbox>
+								<el-checkbox label="addressGet" @change="oneChange">获取地址</el-checkbox>
+								<el-checkbox label="addressDel" @change="oneChange">删除地址</el-checkbox>
+							</el-checkbox-group>
 						</div>
 						<div class="permission">
-						  <el-checkbox-group v-model="form.permissions" class="permission-item">
-						    <el-checkbox class="permission-span" label="face" @change="oneChange" border>
-						      <span style="font-weight: bold;">人脸管理页</span>
-						    </el-checkbox>
-						   <el-checkbox label="faceAdd" @change="oneChange">添加人脸</el-checkbox>
-						   <el-checkbox label="faceGet" @change="oneChange">获取人脸</el-checkbox>
-						   <el-checkbox label="faceDel" @change="oneChange">删除人脸</el-checkbox>
-						  </el-checkbox-group>
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="face" @change="oneChange" border>
+									<span style="font-weight: bold;">人脸管理页</span>
+								</el-checkbox>
+								<el-checkbox label="faceAdd" @change="oneChange">添加人脸</el-checkbox>
+								<el-checkbox label="faceGet" @change="oneChange">获取人脸</el-checkbox>
+								<el-checkbox label="faceDel" @change="oneChange">删除人脸</el-checkbox>
+							</el-checkbox-group>
 						</div>
 						<div class="permission">
-						  <el-checkbox-group v-model="form.permissions" class="permission-item">
-						    <el-checkbox class="permission-span" label="device" @change="oneChange" border>
-						      <span style="font-weight: bold;">设备管理页</span>
-						    </el-checkbox>
-						   <el-checkbox label="deviceAdd" @change="oneChange">添加设备</el-checkbox>
-						   <el-checkbox label="deviceGet" @change="oneChange">获取设备</el-checkbox>
-						   <el-checkbox label="deviceDel" @change="oneChange">删除设备</el-checkbox>
-						  </el-checkbox-group>
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="device" @change="oneChange" border>
+									<span style="font-weight: bold;">设备管理页</span>
+								</el-checkbox>
+								<el-checkbox label="deviceAdd" @change="oneChange">添加设备</el-checkbox>
+								<el-checkbox label="deviceGet" @change="oneChange">获取设备</el-checkbox>
+								<el-checkbox label="deviceDel" @change="oneChange">删除设备</el-checkbox>
+							</el-checkbox-group>
 						</div>
 						<div class="permission">
 							<el-checkbox-group v-model="form.permissions" class="permission-item">
@@ -128,7 +130,7 @@
 								<el-checkbox label="dangerLogDel" @change="oneChange">删除可疑日志</el-checkbox>
 							</el-checkbox-group>
 						</div>
-						
+
 						<div class="permission">
 							<el-checkbox-group v-model="form.permissions" class="permission-item">
 								<el-checkbox class="permission-span" label="permission" @change="oneChange" border>
@@ -149,7 +151,7 @@
 								<el-checkbox label="manageDel" @change="oneChange">删除管理员</el-checkbox>
 							</el-checkbox-group>
 						</div>
-						
+
 					</el-form-item>
 
 					<div class="submit">
@@ -160,7 +162,7 @@
 				</el-form>
 			</div>
 		</el-dialog>
-		
+
 	</div>
 </template>
 
@@ -189,32 +191,32 @@
 				checkAll: false,
 				permissionList: [
 					"overview", // 数据总览
-					
+
 					"baiduaip", // 百度接口管理页
 					"baiduaipAdd", // 添加百度接口
 					"baiduaipGet", // 获取百度接口数据
 					"baiduaipDel", // 删除百度接口数据
-					
+
 					"project", // 项目管理页
 					"projectAdd", // 添加项目
 					"projectGet", // 获取项目
 					"projectDel", // 删除项目
-					
+
 					"address", // 地址管理页
 					"addressAdd", // 添加地址
 					"addressGet", // 获取地址
 					"addressDel", // 删除地址
-					
+
 					"face", // 人脸管理页
 					"faceAdd", // 添加人脸
 					"faceGet", // 获取人脸
 					"faceDel", // 删除人脸
-					
+
 					"device", // 设备管理页
 					"deviceAdd", // 添加设备
 					"deviceGet", // 获取设备
 					"deviceDel", // 删除设备
-					
+
 					"package", // 包管理页
 					"apkAdd", // 添加安装包
 					"apkDel", // 获取安装包
@@ -222,7 +224,7 @@
 					"apkVersionAdd", // 添加版本
 					"apkVersionDel", // 删除版本
 					"apkVersionSend", // 发布版本
-					
+
 					"danger", // 可疑管理页
 					"doubtable", // 可疑人脸子页
 					"dangerlogs", // 可疑日志子页
@@ -231,8 +233,8 @@
 					"dangerGet", // 删除安装包
 					"dangerLogGet", // 获取可疑日志列表
 					"dangerLogDel", // 删除可疑日志
-					
-					
+
+
 					"permission", // 角色管理
 					"roleGet",
 					"roleAdd",
@@ -306,7 +308,7 @@
 				// 		name: '重置密码'
 				// 	}
 				// ],
-				
+
 
 				dialogDel: false,
 				id: "", // 删除id
@@ -413,7 +415,7 @@
 		margin: 10px;
 		padding: 0 10px;
 	}
-	
+
 	.permission-span {
 		width: 150px;
 	}

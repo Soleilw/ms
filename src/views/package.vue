@@ -1,16 +1,18 @@
 <template>
 	<div>
+		<div class="handle-box">
 		<div class="btn">
 			<el-button type="primary" @click="dialogAPK = true">添加APK</el-button>
 		</div>
+		</div>
 
 
-		<el-table :data="tableDate">
-			<el-table-column prop="id" label="APKID" align="center"></el-table-column>
-			<el-table-column prop="name" label="名称" align="center"></el-table-column>
-			<el-table-column prop="description" label="描述" align="center"></el-table-column>
-			<el-table-column prop="created_at" label="创建日期" align="center"></el-table-column>
-			<el-table-column label="操作" align="center">
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table-column prop="id" label="APKID"></el-table-column>
+			<el-table-column prop="name" label="名称"></el-table-column>
+			<el-table-column prop="description" label="描述"></el-table-column>
+			<el-table-column prop="created_at" label="创建日期"></el-table-column>
+			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 					<el-button size="mini" type="primary" @click="handleShowVersion(scope.$index, scope.row)">查看版本</el-button>

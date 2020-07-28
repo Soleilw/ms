@@ -1,7 +1,9 @@
 <template>
 	<div>
-		<div class="btn">
-			<el-button type="primary" @click="addProject">添加地址</el-button>
+		<div class="handle-box">
+			<div class="btn">
+				<el-button type="primary" @click="addProject">添加地址</el-button>
+			</div>
 		</div>
 
 		<el-dialog title="添加地址" :visible.sync="dialogProject" :close-on-click-modal="false" width="80%">
@@ -23,7 +25,11 @@
 							<el-input v-model="form.lng" placeholder="经度显示"></el-input>
 							<el-input v-model="form.lat" placeholder="纬度显示"></el-input>
 						</div>
-						<v-map @callback="getLoc"></v-map>
+						<el-button type="primary" @click="openMap">点击选择地址</el-button>
+						<el-button type="danger" @click="closeMap">关闭选择地址</el-button>
+						<div v-if="showMap">
+							<v-map @callback="getLoc"></v-map>
+						</div>
 					</el-form-item>
 					<el-form-item label="联系方式">
 						<el-input v-model="form.contact"></el-input>
@@ -43,10 +49,10 @@
 								<el-radio :label="1">是</el-radio>
 								<el-radio :label="2">否</el-radio>
 							</el-radio-group>
-						</el-form-item> -->
+						</el-form-item>
 					</div>
 					<el-form-item label="操作">
-						<el-button size="mini" type="success" @click="addFace">添加人脸姓名</el-button>
+						<el-button size="mini" type="primary" @click="addFace">添加人脸姓名</el-button>
 						<el-button size="mini" type="danger" @click="delFace">删除人脸姓名</el-button>
 					</el-form-item>
 
@@ -59,13 +65,13 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate">
-			<el-table-column prop="id" label="ID" align="center"></el-table-column>
-			<el-table-column prop="project_id" label="项目ID" align="center"></el-table-column>
-			<el-table-column prop="address" label="地址" align="center"></el-table-column>
-			<el-table-column prop="contact" label="联系方式" align="center"></el-table-column>
-			<el-table-column prop="address_uuid" label="address_uuid" align="center"></el-table-column>
-			<el-table-column label="操作" align="center">
+		<el-table :data="tableDate"  border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table-column prop="id" label="ID"></el-table-column>
+			<el-table-column prop="project_id" label="项目ID"></el-table-column>
+			<el-table-column prop="address" label="地址"></el-table-column>
+			<el-table-column prop="contact" label="联系方式"></el-table-column>
+			<el-table-column prop="address_uuid" label="address_uuid"></el-table-column>
+			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -103,11 +109,11 @@
 					lng: '',
 					lat: ''
 				},
-				// mapAddress: '', // 传给地图组件的值
 				tableDate: [],
 				currentPage: 1,
 				pageSize: 10,
 				totalPage: 0,
+				showMap: '' // 地图显示
 			}
 		},
 		mounted() {
@@ -116,11 +122,7 @@
 			this.getAddressType();
 		},
 		methods: {
-			getLoc(mapData) {
-				this.form.lng = mapData.latlng.lng;
-				this.form.lat = mapData.latlng.lat;
-				this.form.address = mapData.poiname;
-			},
+			
 			getProject() {
 				var self = this;
 				API.projects(self.currentPage).then(res => {
@@ -164,6 +166,18 @@
 				self.form.face_groups.pop({})
 			},
 			// 添加新的AIP
+			openMap() {
+				this.showMap = true;
+			},
+			closeMap() {
+				this.showMap = false;
+			},
+			getLoc(mapData) {
+				this.form.lng = mapData.latlng.lng;
+				this.form.lat = mapData.latlng.lat;
+				this.form.address = mapData.poiname;
+				this.showMap = false;
+			},
 			newProject() {
 				var self = this;
 				API.address(self.form).then(res => {

@@ -1,8 +1,11 @@
 <template>
 	<div>
-		<div class="btn">
-			<el-button type="primary" @click="dialogProject = true">添加项目</el-button>
+		<div class="handle-box">
+			<div class="btn">
+				<el-button type="primary" @click="dialogProject = true">添加项目</el-button>
+			</div>
 		</div>
+		
 
 		<el-dialog title="添加项目" :visible.sync="dialogProject">
 			<div class="box">
@@ -24,14 +27,14 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableData">
-			<el-table-column prop="id" label="ID" align="center"></el-table-column>
-			<el-table-column prop="name" label="名称" align="center"></el-table-column>
-			<el-table-column prop="state" label="State" align="center"></el-table-column>
-			<el-table-column prop="app_id" label="AppId" align="center" width="300px"></el-table-column>
-			<el-table-column prop="aip_id" label="AipId" align="center"></el-table-column>
-			<el-table-column prop="secret" label="Sectet" align="center" width="300px"></el-table-column>
-			<el-table-column label="操作" align="center">
+		<el-table :data="tableData"  border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table-column prop="id" label="ID"></el-table-column>
+			<el-table-column prop="name" label="名称"></el-table-column>
+			<el-table-column prop="state" label="State"></el-table-column>
+			<el-table-column prop="app_id" label="AppId"  width="300px"></el-table-column>
+			<el-table-column prop="aip_id" label="AipId" ></el-table-column>
+			<el-table-column prop="secret" label="Sectet"  width="300px"></el-table-column>
+			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 				</template>

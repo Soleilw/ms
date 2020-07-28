@@ -1,8 +1,11 @@
 <template>
 	<div>
-		<div class="btn">
-			<el-button type="primary" @click="addDoubtable">添加可疑人脸</el-button>
+		<div class="handle-box">
+			<div class="btn">
+				<el-button type="primary" @click="addDoubtable">添加可疑人脸</el-button>
+			</div>
 		</div>
+		
 
 		<el-dialog title="添加可疑人脸" :visible.sync="dialogDoubtable" :close-on-click-modal="false">
 			<div class="box">
@@ -50,15 +53,15 @@
 				</el-form>
 			</div>
 		</el-dialog>
-
-		<el-table :data="tableDate">
-			<el-table-column prop="id" label="ID" align="center"></el-table-column>
-			<el-table-column prop="name" label="姓名" align="center"></el-table-column>
-			<el-table-column prop="number" label="身份证号" align="center"></el-table-column>
-			<el-table-column prop="href" label="人脸图片" align="center">
+ 
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table-column prop="id" label="ID"></el-table-column>
+			<el-table-column prop="name" label="姓名"></el-table-column>
+			<el-table-column prop="number" label="身份证号"></el-table-column>
+			<el-table-column prop="href" label="人脸图片">
 				<template slot-scope="scope"><img :src="scope.row.href" style="max-width:180px;max-height:80px;" /></template>
 			</el-table-column>
-			<el-table-column label="操作" align="center">
+			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button type="danger" size="mini" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>

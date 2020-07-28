@@ -44,12 +44,12 @@
 				</el-form>
 			</div>
 		</el-dialog>
-
-		<el-table :data="tableDate">
-			<el-table-column prop="id" label="ID" align="center"></el-table-column>
-			<el-table-column prop="danger.name" label="姓名" align="center"></el-table-column>
-			<el-table-column prop="danger.number" label="身份证号" align="center"></el-table-column>
-			<el-table-column prop="danger.href" label="照片" align="center">
+ 
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table-column prop="id" label="ID"></el-table-column>
+			<el-table-column prop="danger.name" label="姓名"></el-table-column>
+			<el-table-column prop="danger.number" label="身份证号"></el-table-column>
+			<el-table-column prop="danger.href" label="照片">
 				<template slot-scope="scope">
 					<el-popover placement="top-start" title="" trigger="click">
 						<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
@@ -57,7 +57,7 @@
 					</el-popover>
 				</template>
 			</el-table-column>
-			<el-table-column prop="log.image" label="抓拍照片" align="center">
+			<el-table-column prop="log.image" label="抓拍照片">
 				<template slot-scope="scope">
 					<el-popover placement="top-start" title="" trigger="click">
 						<img :src="scope.row.log.image" style="max-width:800px;max-height:800px;" />
@@ -65,14 +65,14 @@
 					</el-popover>
 				</template>
 			</el-table-column>
-			<el-table-column prop="score" label="相似度" align="center">
+			<el-table-column prop="score" label="相似度">
 			</el-table-column>
-			<el-table-column prop="address" label="抓拍地点" align="center">
+			<el-table-column prop="address" label="抓拍地点">
 			</el-table-column>
-			<el-table-column prop="log.timestamp" label="抓拍时间" align="center">
+			<el-table-column prop="log.timestamp" label="抓拍时间">
 			</el-table-column>
 			
-			<el-table-column label="操作" align="center">
+			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button type="danger" size="mini" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
