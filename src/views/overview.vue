@@ -96,8 +96,8 @@
 				// 再再绘制一条路径
 				ctx.beginPath();
 				ctx.moveTo(90, 53);
-				ctx.lineTo(100, 100);
-				ctx.lineTo(360, 100);
+				ctx.lineTo(90, 100);
+				ctx.lineTo(370, 100);
 				ctx.lineTo(370, 53);
 				ctx.stroke();
 			}
@@ -127,6 +127,7 @@
 		margin-top: 20px;
 		padding-left: 20px;
 		border-bottom: 1px solid #2A9F93;
+		box-shadow: 5px 5px 5px #2A9F93;
 		color: #fff;
 		font-size: 20px;
 		
@@ -151,6 +152,7 @@
 	.button {
 		position: absolute;
 		top: 43%;
+		
 	}
 
 	.show-map {
