@@ -78,6 +78,10 @@
 								<i class="el-icon-search" style="color: #fff;"></i>
 							</div>
 						</div>
+						<div style="display: flex;justify-content: space-between;">
+							<div id="people-summary"></div>
+							<div id="one-people-summary"></div>
+						</div>
 					</div>
 				</div>
 				<div class="data-2">
@@ -153,12 +157,15 @@
 	export default {
 		data() {
 			return {
-				username: localStorage.getItem('username')
+				username: localStorage.getItem('username'),
+				rent: '总',
 			}
 		},
 		mounted() {
 			this.initCanvas();
 			this.init();
+			// 人数统计
+			this.peopleSummary()
 		},
 		methods: {
 			// 进入后台管理系统
@@ -181,6 +188,78 @@
 					})
 					.addTo(map)
 					.setData(dotData); //设置数据
+			},
+
+			// 人数统计
+			peopleSummary() {
+				var self = this;
+				self.$nextTick(function() {
+					let people = self.$echarts.init(document.getElementById('people-summary'));
+					let onePeople = self.$echarts.init(document.getElementById('one-people-summary'));
+					var option = {
+						// 标题
+						title: {
+							text: self.rent + '出租屋男女比例',
+							textStyle: {
+								fontSize: 14,
+								color: "#fff"
+							}
+						},
+						tooltip: {
+							trigger: 'item',
+							formatter: '{a} <br/>{b}: {c} ({d}%)'
+						},
+						legend: {
+							orient: 'vertical',
+							bottom: 0,
+							right: 40,
+							data: [{
+								name: '男',
+								textStyle: {
+									color: '#fff', // 图例项文本样式
+								}
+							}, {
+								name: '女',
+								textStyle: {
+									color: '#fff'
+								}
+							}]
+						},
+						series: [{
+							name: '男女比例',
+							type: 'pie',
+							radius: ['50%', '70%'], // 控制圆心
+							avoidLabelOverlap: false,
+							label: {
+								show: false,
+								position: 'outside'
+							},
+							labelLine: {
+								show: false
+							},
+							itemStyle: {
+
+							},
+							data: [{
+									value: 1000,
+									name: '男',
+									itemStyle: {
+										color: '#2A9F93' // 设置颜色
+									}
+								},
+								{
+									value: 310,
+									name: '女',
+									itemStyle: {
+										color: '#ddd',
+									}
+								},
+							]
+						}]
+					};
+					people.setOption(option);
+					onePeople.setOption(option);
+				})
 			},
 
 			// 绘制图形
@@ -378,6 +457,14 @@
 				.number {
 					padding: 0 10px 10px;
 					font-size: 35px;
+				}
+
+				#people-summary, #one-people-summary {
+					width: 300px;
+					height: 230px;
+					margin-top: 10px;
+					margin-left: 10px;
+					// border: solid 1px #2A9F93;
 				}
 			}
 

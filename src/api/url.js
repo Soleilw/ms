@@ -43,6 +43,7 @@ const url = {
 	"DeviceTypes": '/device/types', // 查看日志
 	"DeviceHeartbeat": '/device/heartbeat', // 查看心跳
 	"DeviceCommands": '/device/commands', // 获取指令
+	"DeviceUserList": '/device/user/list', // 查看用户列表
 	
 	// apk管理
 	'Apk': '/apk', // 创建apk

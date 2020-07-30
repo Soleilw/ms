@@ -98,7 +98,7 @@
 			<el-table-column prop="id" label="ID" width="80px"></el-table-column>
 			<el-table-column prop="address.address" label="地址" width="200px"></el-table-column>
 			<el-table-column prop="uuid" label="uuid" width="300px"></el-table-column>
-			<el-table-column prop="type" label="类型" width="100px"></el-table-column>
+			<el-table-column prop="type_string" label="类型" width="100px"></el-table-column>
 			<el-table-column prop="direction" label="方向"></el-table-column>
 			<el-table-column prop="version" label="版本" width="80px"></el-table-column>
 			<el-table-column prop="remark" label="备注" width="400px"></el-table-column>
@@ -112,6 +112,9 @@
 						<el-dropdown-menu slot="dropdown">
 							<el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
+							</el-dropdown-item>
+							<el-dropdown-item>
+								<el-button v-if="scope.row.type == 4" size="mini" type="primary" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
 							</el-dropdown-item>
 							<el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
@@ -241,6 +244,28 @@
 				</el-pagination>
 			</div>
 		</el-dialog>
+		
+		<!-- 查看用户-->
+		<el-dialog title="查看用户" :visible.sync="dialogUserList">
+			<el-table :data="userListData">
+				<el-table-column prop="name" label="姓名" align="center"></el-table-column>
+				<el-table-column prop="face_id" label="FACE_ID" align="center"></el-table-column>
+				<el-table-column prop="href" label="照片" align="center">
+					<template slot-scope="scope">
+						<el-popover placement="top-start" title="" trigger="click">
+							<img :src="scope.row.href" style="max-width:800px;max-height:800px;" />
+							<img slot="reference" :src="scope.row.href" style="max-width:180px;max-height:80px;">
+						</el-popover>
+					</template>
+				</el-table-column>
+			</el-table>
+			<div class="block">
+				<el-pagination @current-change="handleCurrentUserListChange" :current-page.sync="currentUserListPage" :page-sizes="[10, 20, 30, 40, 50]"
+				 :page-size="pageUserListSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeUserListChange"
+				 :total="totalUserListPage">
+				</el-pagination>
+			</div>
+		</el-dialog>
 
 		<div class="block">
 			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
@@ -307,6 +332,12 @@
 				dialogCommands: false, // 查看指令
 				commandsData: [],
 				command_uuid: '',
+				dialogUserList: false, // 查看用户列表
+				userListData: [],
+				user_list_uuid: '',
+				currentUserListPage: 1,
+				pageUserListSize: 10,
+				totalUserListPage: 0,
 				currentCommandsPage: 1,
 				pageCommandsSize: 10,
 				totalCommandsPage: 0,
@@ -640,6 +671,17 @@
 					self.totalCommandsPage = res.total;
 				})
 			},
+			
+			// 查看用户列表
+			handleUserList(index, row) {
+				var self = this;
+				self.dialogUserList = true;
+				self.user_list_uuid = row.uuid;
+				API.deviceUserList(1, 10, row.uuid).then(res => {
+					self.userListData = res;
+					// self.totalUserListPage = res.total;
+				})
+			},
 
 			handleCurrentChange(val) {
 				var self = this;
@@ -684,7 +726,25 @@
 					self.totalCommandsPage = res.total;
 				})
 			},
-
+			
+			// 每页显示条数
+			// handleSizeUserListChange(val) {
+			// 	var self = this;
+			// 	self.pageUserListSize = val;
+			// 	API.deviceUserList(self.currentUserListPage, val, self.user_list_uuid).then(res => {
+			// 		self.userListData = res;
+			// 		self.totalUserListPage = res.total;
+			// 	})
+			// },
+			
+			// handleCurrentUserListChange(val) {
+			// 	var self = this;
+			// 	self.currentUserListPage = val;
+			// 	API.deviceUserList(val, self.pageUserListSize, self.user_list_uuid).then(res => {
+			// 		self.userListData = res;
+			// 		self.totalUserListPage = res.total;
+			// 	})
+			// },
 
 		},
 
