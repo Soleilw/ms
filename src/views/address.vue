@@ -19,6 +19,24 @@
 							<el-option v-for="(value, name) in typeList" :label="value" :value="name" :key="name"></el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="选择社区">
+						<el-select v-model="pro_id" placeholder="请选择省份" @change="proChange" style="margin-right: 10px;">
+							<el-option v-for="item in proList" :key="item.id" :label="item.title" :value="item.id">
+							</el-option>
+						</el-select>
+						<el-select v-model="city_id" placeholder="请选择市级" @change="cityChange" style="margin-right: 10px;">
+							<el-option v-for="item in cityList" :key="item.id" :label="item.title" :value="item.id">
+							</el-option>
+						</el-select>
+						<el-select v-model="community_id" placeholder="请选择区级" @change="areasChange" style="margin-right: 10px;">
+							<el-option v-for="item in areaList" :key="item.id" :label="item.title" :value="item.id">
+							</el-option>
+						</el-select>
+						<el-select v-model="areas_id" placeholder="请选择社区" @change="communityChange" style="margin-right: 10px;">
+							<el-option v-for="item in communityList" :key="item.id" :label="item.title" :value="item.id">
+							</el-option>
+						</el-select>
+					</el-form-item>
 					<el-form-item label="地址">
 						<div class="address-info">
 							<el-input v-model="form.address" placeholder="地址显示"></el-input>
@@ -36,7 +54,7 @@
 					</el-form-item>
 					<div v-for="(item,index) in form.face_groups" :key="index">
 					<el-form-item label="人脸分组姓名">
-						<el-input v-model="item.group_name"></el-input>
+						<el-input v-model="item.name"></el-input>
 					</el-form-item>
 						<el-form-item label="是否默认分组">
 							<el-radio-group v-model="item.is_default">
@@ -107,8 +125,19 @@
 					contact: '',
 					face_groups: [],
 					lng: '',
-					lat: ''
+					lat: '',
+					area_id: ''
 				},
+				
+				proList: [], // 省级列表
+				pro_id: '',
+				cityList: [], // 市级列表
+				city_id: '',
+				communityList: [], // 区级列表
+				community_id: '',
+				areaList: [], //  社区列表
+				areas_id: '',
+				
 				tableDate: [],
 				currentPage: 1,
 				pageSize: 10,
@@ -120,9 +149,9 @@
 			this.getAddress();
 			this.getProject();
 			this.getAddressType();
+			this.getPro();
 		},
 		methods: {
-			
 			getProject() {
 				var self = this;
 				API.projects(self.currentPage).then(res => {
@@ -145,7 +174,9 @@
 			addProject() {
 				var self = this;
 				self.dialogProject = true;
-				self.mapAddress = '中山市';
+				self.pro_id = '';
+				self.city_id = '';
+				self.community_id = '';
 				self.form = {
 					project_id: '',
 					type: '',
@@ -153,7 +184,8 @@
 					contact: '',
 					face_groups: [],
 					lng: '',
-					lat: ''
+					lat: '',
+					area_id: ''
 				}
 			},
 			// 添加人脸分组名称
@@ -175,7 +207,7 @@
 			getLoc(mapData) {
 				this.form.lng = mapData.latlng.lng;
 				this.form.lat = mapData.latlng.lat;
-				this.form.address = mapData.poiname;
+				// this.form.address = mapData.poiname;
 				this.showMap = false;
 			},
 			newProject() {
@@ -192,20 +224,68 @@
 			handleEdit(index, row) {
 				var self = this;
 				self.dialogProject = true;
+				self.pro_id = '';
+				self.city_id = '';
+				self.community_id = '';
 				API.getaddress(row.id).then(res => {
-					debugger
 					self.form = {
+						id: row.id,
 						project_id: res.project_id,
 						type: res.type,
 						address: res.address,
 						contact: res.contact,
-						face_groups: res.groups,
+						face_groups: res.face_groups,
 						lng: res.lng,
-						lat: res.lat
+						lat: res.lat,
 					}
 				})
 			},
 			handleDel() {},
+			
+			
+			// 获取社区列表（省市区选中）
+			getPro() {
+				var self = this;
+				API.areas(self.currentPage, 100, 0).then(res => {
+					self.proList = res.data;
+				})
+			},
+			proChange(val) {
+				this.getCity(val)
+			},
+			getCity(val) {
+				var self = this;
+				API.areas(self.currentPage, 100, val).then(res => {
+					self.cityList = res.data;
+				})
+			},
+			cityChange(val) {
+				this.getAreas(val)
+			},
+			
+			getAreas(val) {
+				var self = this;
+				API.areas(self.currentPage, 100, val).then(res => {
+					self.areaList = res.data;
+				})
+			},
+			
+			areasChange(val) {
+				this.getCommunity(val)
+			},
+			
+			
+			getCommunity(val) {
+				var self = this;
+				API.areas(self.currentPage, 100, val).then(res => {
+					self.communityList = res.data;
+				})
+			},
+			
+			communityChange(val) {
+				console.log(val)
+				this.form.area_id = val;
+			},
 
 			// 分页
 			handleCurrentChange(val) {

@@ -22,7 +22,9 @@ const url = {
 	'Addresses': '/addresses', // 获取地址列表
 	'Address': '/address', // 删除地址,方式‘delete’
 	'RestoreAddress': '/restore/address', // 恢复地址
+	'AddressTypes': '/address/types', // 地址类型
 	'AddressTypes': '/address/types', // 恢复地址
+	'Areas': '/areas', // 获取社区
 	
 	// 人脸管理
 	'Face': '/face', // 新增人脸

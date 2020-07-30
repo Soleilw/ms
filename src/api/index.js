@@ -80,6 +80,15 @@ API.faces = function(page,limit) {
 	return axios.get(url.Faces, {page: page, limit: limit})
 }
 
+// 获取社区列表（省市区选中）
+API.areas = function(page, limit, parent_id) {
+	return axios.get(url.Areas, {
+		page: page,
+		limit: limit,
+		parent_id: parent_id
+	})
+}
+
 
 
 // 设备管理
