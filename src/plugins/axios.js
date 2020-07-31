@@ -16,8 +16,8 @@ const http = {}
 const instance = axios.create({
 	timeout: 200000,
 	withCredentials: true,
-	// baseURL: 'https://api.fengniaotuangou.cn',
-	baseURL: 'http://192.168.0.112/FaceCore/public',
+	baseURL: 'https://api.fengniaotuangou.cn',
+	// baseURL: 'http://192.168.0.112/FaceCore/public',
 	headers: {
 		'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 	},
