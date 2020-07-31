@@ -44,6 +44,8 @@ const url = {
 	"DeviceHeartbeat": '/device/heartbeat', // 查看心跳
 	"DeviceCommands": '/device/commands', // 获取指令
 	"DeviceUserList": '/device/user/list', // 查看用户列表
+	"Commands": '/commands', // 查看指令列表
+	"SendDeviceCommand": 'send/device/command', // 发送指令
 	
 	// apk管理
 	'Apk': '/apk', // 创建apk

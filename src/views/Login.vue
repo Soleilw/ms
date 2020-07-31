@@ -49,7 +49,7 @@
 				var self = this;
 				localStorage.setItem("username", self.adminForm.username);
 				localStorage.setItem("password", self.adminForm.password);
-				// var arr = ['overview','address'];
+				// var arr = ['baiduaip', 'overview','address','device'];
 				// localStorage.setItem("permissions", arr);
 				self.$router.replace("/overview");
 			}

@@ -126,6 +126,16 @@ API.deviceCommands = function(page, limit, uuid) {
 	return axios.get(url.DeviceCommands, {page:page, limit:limit,uuid: uuid})
 }
 
+// 获取指令类型
+API.commandsType = function(type) {
+	return axios.get(url.Commands, {type: type})
+}
+
+// 发送指令
+API.sendDeviceCommand = function(data) {
+	return axios.post(url.SendDeviceCommand, data)
+}
+
 // 查看用户列表
 API.deviceUserList = function(page, limit, uuid) {
 	return axios.get(url.DeviceUserList, {page:page, limit:limit,uuid: uuid})
