@@ -41,3 +41,11 @@
 .inner .el-divider {
 	background-color: #006cff;
 }
+
+
+// 进入页面的按钮
+.operation .el-button {
+	background-color: rgba(255, 255, 255, 0.05) !important;
+	color: #fff;
+	border: 1px #006cff solid;
+}
