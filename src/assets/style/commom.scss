@@ -29,3 +29,15 @@
 		margin-top: 1vw;
 		text-align: right;
 	}
+	
+.summary .el-input__inner {
+	background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.summary .el-input-group__append {
+	background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.inner .el-divider {
+	background-color: #006cff;
+}

@@ -1,133 +1,86 @@
 <template>
 	<div id="wrap">
-		<div style="display: flex; justify-content: space-between;">
-			<div class="weather">
-				<div class="item">
-					广州市[选择城市]
-				</div>
-				<div class="item">
-					温度 38°C
-				</div>
-				<div class="item">
-					多云
-				</div>
-			</div>
-			<div class="canvas">
-				<!-- 获取天气 -->
-				<canvas id="myCanvas" width="450px" height="150px" style="border:0">
-				</canvas>
-				<div class="head">
-					<div class="title">图巴诺安全总控系统</div>
-				</div>
-				<div class="button">
-					<el-button size="mini" type="primary">学校</el-button>
-					<el-button size="mini" type="primary">出租屋</el-button>
-					<el-button size="mini" type="primary" @click="toManage">进入后台管理</el-button>
-				</div>
-			</div>
-			<div class="user">
-				<div class="item">
-					2020-07-28 00:00:00 星期六
-				</div>
-				<div class="item">
-					管理员：{{username}}
-				</div>
-				<div class="item">
-					<img src="../assets/image/admin.png" alt="">
-				</div>
-			</div>
-		</div>
-		<div class="summary">
-			<!-- 地图分布数据显示 -->
-			<div class="show-map">
-				<div class="title"><i class="el-icon-d-arrow-right" style="color: #4c9bfd;padding-right: 5px;font-weight: 1000;"><span
-						 style="color: #4c9bfd;">出租屋分布</span></i></div>
-				<div id="container"></div>
-			</div>
-			<div class="data">
-				<div class="data-1">
-					<div style="width: 12%;display: flex; flex-wrap: wrap;">
-						<div class="card">
-							出租屋数 <span class="number">10</span>(间)
+		<div class="viewport">
+			<div class="column">
+				<div class="overview panel">
+					<div class="inner">
+						<div class="item">
+							<h4>11111</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								出租屋数
+							</span>
 						</div>
-						<div class="card">
-							设备个数 <span class="number">100</span>(个)
+						<div class="item">
+							<h4>11111</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								设备总数
+							</span>
 						</div>
-						<div class="card">
-							户主个数 <span class="number">100000</span>(人)
+						<div class="item">
+							<h4>11111</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								户主总数
+							</span>
 						</div>
-						<div class="card">
-							租客个数 <span class="number">10</span>(人)
-						</div>
-					</div>
-					<div style="width: 30%;border: 1px solid #2A9F93;margin: 10px 0;">
-						<div class="title">
-							<i class="el-icon-d-arrow-right" style="color: #2A9F93;padding-right: 5px;font-weight: 1000;"><span style="color: #4c9bfd;">实时出租屋预览</span></i>
-							<div class="search-input">
-								<input type="text" style="color: #fff;padding-right: 5px;font-weight: 1000;" placeholder="请输入查询的出租屋">
-								<i class="el-icon-search" style="color: #fff;"></i>
-							</div>
-
-						</div>
-					</div>
-					<div style="width: 50%;border: 1px solid #2A9F93;margin: 10px;">
-						<div class="title">
-							<i class="el-icon-d-arrow-right" style="color: #2A9F93;padding-right: 5px;font-weight: 1000;"><span style="color: #4c9bfd;">人数统计</span></i>
-							<div class="search-input">
-								<input type="text" style="color: #fff;padding-right: 5px;font-weight: 1000;" placeholder="请输入查询的出租屋">
-								<i class="el-icon-search" style="color: #fff;"></i>
-							</div>
-						</div>
-						<div style="display: flex;justify-content: space-between;">
-							<div id="people-summary"></div>
-							<div id="one-people-summary"></div>
+						<div class="item">
+							<h4>11111</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								租客总数
+							</span>
 						</div>
 					</div>
 				</div>
-				<div class="data-2">
-					<div style="width: 100%;display: flex; justify-content: space-between;">
-						<div style="width: 50%;border: 1px solid #2A9F93;margin: 0 10px;">
-							<div class="title">
-								<i class="el-icon-d-arrow-right" style="color: #2A9F93;padding-right: 5px;font-weight: 1000;"><span style="color: #4c9bfd;">实时出租屋预览</span></i>
+			</div>
+			<div class="column">
+				<!-- 地图 -->
+				<div class="map">
+					<h3>出租屋地图分布</h3>
+					<div class="chart">
+						<div id="geo"></div>
+					</div>
+				</div>
+				<!-- 出租屋人数统计 -->
+				<div class="people panel">
+					<div class="inner">
+						<h3>人数统计</h3>
+						<div style="display: flex; flex-wrap: wrap;">
+							<div class="summary">
+								<!-- 总出租屋男女比例 -->
+								<div id="total-rent-sex"></div>
+							</div>
+							<!-- 分割线 -->
+							<el-divider></el-divider>
+							<div class="summary">
 								<div class="search-input">
-									<input type="text" style="color: #fff;padding-right: 5px;font-weight: 1000;" placeholder="请输入查询的出租屋">
-									<i class="el-icon-search" style="color: #fff;"></i>
+									<el-input placeholder="请输入要查询的出租屋">
+										<el-button slot="append" plain icon="el-icon-search"></el-button>
+									</el-input>
 								</div>
+								<!-- 单个出租屋男女比例 -->
+								<div id="single-rent-sex"></div>
 							</div>
 						</div>
-						<div style="width: 50%;border: 1px solid #2A9F93;margin: 0 10px;">
-							<div class="title">
-								<i class="el-icon-d-arrow-right" style="color: #2A9F93;padding-right: 5px;font-weight: 1000;"><span style="color: #4c9bfd;">实时出租屋预览</span></i>
-								<div class="search-input">
-									<input type="text" style="color: #fff;padding-right: 5px;font-weight: 1000;" placeholder="请输入查询的出租屋">
-									<i class="el-icon-search" style="color: #fff;"></i>
-								</div>
-							</div>
+					</div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="manage panel">
+					<!-- 用户列表 -->
+					<div class="user">
+						<div>
+							<el-button size="mini" type="primary" @click="toManage">进入后台管理</el-button>
 						</div>
-						<div style="width: 50%;border: 1px solid #2A9F93;margin: 0 10px;">
-							<div class="title">
-								<i class="el-icon-d-arrow-right" style="color: #2A9F93;padding-right: 5px;font-weight: 1000;"><span style="color: #4c9bfd;">实时出租屋预览</span></i>
-								<div class="search-input">
-									<input type="text" style="color: #fff;padding-right: 5px;font-weight: 1000;" placeholder="请输入查询的出租屋">
-									<i class="el-icon-search" style="color: #fff;"></i>
-								</div>
-							</div>
+						<div class="image">
+							<img src="../assets/image/admin.png" alt="">
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<!-- 地图分布数据显示 -->
-		<!-- <div class="show-map">
-			<span style="color: #fff;">地图分布</span>
-		</div>
-
-		<div class="summary">
-			<div style="width: 70%; height: 400px;border: 1px solid #2A9F93;box-shadow: 1px 3px 3px #2A9F93;"><span style="color: #fff;">数据</span></div>
-			<div style="width: 29%;height: 400px;	border: 1px solid #2A9F93;box-shadow: 1px 3px 3px #2A9F93;"><span style="color: #fff;">数据</span></div>
-		</div> -->
-
 
 	</div>
 </template>
@@ -157,18 +110,14 @@
 	export default {
 		data() {
 			return {
-				username: localStorage.getItem('username'),
-				rent: '总',
+				rent: '总'
 			}
 		},
 		mounted() {
-			this.initCanvas();
 			this.init();
-			// 人数统计
-			this.peopleSummary()
+			this.renterSummary();
 		},
 		methods: {
-			// 进入后台管理系统
 			toManage() {
 				this.$router.replace("/");
 			},
@@ -176,7 +125,7 @@
 			init() {
 				var center = new TMap.LatLng(22.51595, 113.3926);
 				//初始化地图
-				var map = new TMap.Map("container", {
+				var map = new TMap.Map("geo", {
 					zoom: 10, //设置地图缩放级别
 					center: center, //设置地图中心点坐标
 					mapStyleId: "style1" //个性化样式
@@ -189,13 +138,12 @@
 					.addTo(map)
 					.setData(dotData); //设置数据
 			},
-
-			// 人数统计
-			peopleSummary() {
+			// 出租屋人数比例
+			renterSummary() {
 				var self = this;
 				self.$nextTick(function() {
-					let people = self.$echarts.init(document.getElementById('people-summary'));
-					let onePeople = self.$echarts.init(document.getElementById('one-people-summary'));
+					let people = self.$echarts.init(document.getElementById('total-rent-sex'));
+					let onePeople = self.$echarts.init(document.getElementById('single-rent-sex'));
 					var option = {
 						// 标题
 						title: {
@@ -244,7 +192,7 @@
 									value: 1000,
 									name: '男',
 									itemStyle: {
-										color: '#2A9F93' // 设置颜色
+										color: '#006cff' // 设置颜色
 									}
 								},
 								{
@@ -260,47 +208,6 @@
 					people.setOption(option);
 					onePeople.setOption(option);
 				})
-			},
-
-			// 绘制图形
-			initCanvas() {
-				let canvas = document.getElementById('myCanvas');
-				let ctx = canvas.getContext('2d');
-				// 开始一条路径
-				ctx.beginPath();
-				ctx.moveTo(3, 0);
-				ctx.lineTo(70, 60);
-				ctx.lineTo(70, 60);
-				ctx.lineTo(80, 60);
-				ctx.lineTo(90, 50);
-				ctx.lineTo(370, 50);
-				ctx.lineTo(380, 60);
-				ctx.lineTo(390, 60);
-				ctx.lineTo(447, 0);
-				ctx.strokeStyle = "#2a9f93";
-				ctx.stroke();
-
-				// 再绘制一条路径
-				ctx.beginPath();
-				ctx.moveTo(0, 0);
-				ctx.lineTo(70, 63);
-				ctx.lineTo(70, 63);
-				ctx.lineTo(80, 63);
-				ctx.lineTo(90, 53);
-				ctx.lineTo(370, 53);
-				ctx.lineTo(380, 63);
-				ctx.lineTo(390, 63);
-				ctx.lineTo(450, 0);
-				ctx.strokeStyle = "#2a9f93";
-				ctx.stroke();
-
-				// 再再绘制一条路径
-				ctx.beginPath();
-				ctx.moveTo(90, 53);
-				ctx.lineTo(90, 100);
-				ctx.lineTo(370, 100);
-				ctx.lineTo(370, 53);
-				ctx.stroke();
 			}
 		}
 	}
@@ -313,169 +220,116 @@
 		background-color: #101129;
 	}
 
-	.canvas {
-		width: 33%;
-		height: 120px;
+	.viewport {
+		/* 限定大小 */
 		display: flex;
-		justify-content: space-around;
+		min-width: 1024px;
+		max-width: 1920px;
+		min-height: 780px;
+		margin: 0 auto;
+		padding: 3.667rem 0.833rem 0;
+		background: url(../assets/image/bg-img.png) no-repeat 0 0 / contain;
+		background-color: #101129;
+	}
+
+	// 概览区域
+	.overview {
+		height: 4.583rem;
+
+		.inner {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		h4 {
+			font-size: 1.167rem;
+			padding-left: 0.2rem;
+			color: #fff;
+			margin-bottom: 0.333rem
+		}
+	}
+
+	.column {
+		flex: 3;
 		position: relative;
 	}
 
-	.weather {
-		width: 33%;
-		height: 40px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		margin-top: 20px;
-		padding-left: 20px;
-		border-bottom: 1px solid #4c9bfd;
-		box-shadow: 1px 3px 3px #4c9bfd;
-		color: #fff;
-		font-size: 20px;
-
-		.item {
-			padding-left: 10px;
-		}
+	.column:nth-child(2) {
+		flex: 4;
+		margin: 1.333rem 0.833rem 0;
 	}
 
-	.user {
-		width: 33%;
-		height: 40px;
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-		margin-top: 20px;
-		padding-right: 20px;
-		border-bottom: 1px solid #4c9bfd;
-		color: #fff;
-		font-size: 20px;
-
-		.item {
-			padding-right: 10px;
-
-			img {
-				width: 30px;
-				height: 30px;
-				border-radius: 50%;
-				border: 2px #fff solid;
-			}
-		}
+	.panel {
+		/* 边框 */
+		box-sizing: border-box;
+		border: 2px solid red;
+		border-image: url(../assets/image/border.png) 51 38 21 132;
+		border-width: 2.125rem 1.583rem 0.875rem 5.5rem;
+		position: relative;
+		margin-bottom: 0.833rem;
 	}
 
-	.head {
+	.panel .inner {
+		/* 装内容 */
+		/* height: 60px; */
 		position: absolute;
-		top: 5px;
-		font-size: 30px;
-		color: #4c9bfd;
+		top: -2.125rem;
+		right: -1.583rem;
+		bottom: -0.875rem;
+		left: -5.5rem;
+		padding: 1rem 1.5rem;
 	}
 
-	.button {
-		position: absolute;
-		top: 39%;
+
+	// 地图
+	.map .chart {
+		flex: 1;
+		background-color: rgba(255, 255, 255, 0.05);
+
+		#geo {
+			width: 100%;
+			height: 100%;
+		}
+
 	}
 
-	.summary {
-		display: flex;
-		justify-content: space-between;
-		color: #fff;
+	// 人数统计
+	.people {
+		height: 35rem;
 
-		.title {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			height: 30px;
-			line-height: 30px;
-			padding-left: 10px;
-			background-color: rgba(0, 0, 0, .2);
-			border-bottom: solid 1px #2A9F93;
-			font-weight: 1000;
+		.summary {
+			width: 100%;
+			// height: 15rem;
+			margin-bottom: 0.833rem;
 
 			.search-input {
-				position: relative;
-				margin-right: 30px;
-
-				input {
-					height: 20px;
-					line-height: 20px;
-					padding: 0 40px 0 5px;
-					border: solid 1px #4c9bfd;
-					background-color: rgba(0, 0, 0, .2);
-				}
-
-				.el-icon-search {
-					position: absolute;
-					top: 4px;
-					height: 20px;
-					line-height: 20px;
-					padding: 0 5px;
-					border: solid 1px #4c9bfd;
-				}
+				padding: .5rem 8rem .5rem .5rem;
 			}
-		}
 
-		.show-map {
-			width: 35%;
-			height: 750px;
-			border: solid 1px #2A9F93;
-			// box-shadow: 1px 3px 3px #2A9F93;
-			border-radius: 10px;
-
-			#container {
-				// width: 100%;
-				height: 710px;
-				margin: 3px;
-				// border-radius: 0 0 10px 10px;
-				border: solid 1px #2A9F93;
+			#total-rent-sex,
+			#single-rent-sex {
+				width: 300px;
+				height: 10rem;
+				margin-top: 10px;
+				margin-left: 10px;
 			}
-		}
 
-		.data {
-			width: 64.5%;
-			height: 750px;
+		}
+	}
+
+	// 进入后台管理
+	.manage {
+		.user {
 			display: flex;
-			flex-wrap: wrap;
+			justify-content: flex-end;
+			justify-items: center;
 
-			.data-1 {
-				width: 100%;
-				height: 300px;
-				display: flex;
-				justify-content: space-around;
-				// border: 1px solid #2A9F93;
-				// box-shadow: 1px 3px 3px #2A9F93;
-				border-radius: 10px;
-				margin-bottom: 10px;
-
-				.card {
-					width: 160px;
-					margin: 5px;
-					padding: 5px;
-					// border: 1px solid #bdc3c7;
-					border-radius: 5px;
-				}
-
-				.number {
-					padding: 0 10px 10px;
-					font-size: 35px;
-				}
-
-				#people-summary, #one-people-summary {
-					width: 300px;
-					height: 230px;
-					margin-top: 10px;
-					margin-left: 10px;
-					// border: solid 1px #2A9F93;
-				}
-			}
-
-			.data-2 {
-				width: 100%;
-				height: 440px;
-				display: flex;
-				justify-content: space-between;
+			img {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				border: 2px #006cff solid;
 			}
 		}
-
-
 	}
 </style>

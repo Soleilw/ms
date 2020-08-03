@@ -13,6 +13,7 @@ Vue.prototype.$axios = axios
 
 import '@/assets/style/reset.css'
 import '@/assets/style/commom.scss'
+import '@/assets/fonts/icomoon.css'
 
 Vue.config.productionTip = false
 

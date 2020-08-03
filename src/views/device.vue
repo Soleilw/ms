@@ -355,6 +355,14 @@
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="command" label="指令"></el-table-column>
 				<el-table-column prop="command_title" label="指令名字"></el-table-column>
+				<el-table-column prop="state" label="状态">
+					<template slot-scope="scope">
+						<span v-if="scope.row.state == '1'">已创建</span>
+						<span v-if="scope.row.state == '2'">已下发</span>
+						<span v-if="scope.row.state == '3'">成功</span>
+						<span v-if="scope.row.state == '4'">失败</span>
+					</template>
+				</el-table-column>
 				<el-table-column prop="updated_at" label="更新时间"></el-table-column>
 			</el-table>
 			<div class="block">
@@ -837,6 +845,12 @@
 							uuid: self.command_uuid,
 							command: 'getSoftVersion',
 						}
+						break;
+					case 'restart':
+						self.commandform = {
+							uuid: self.command_uuid,
+							command: 'restart',
+						}
 				}
 			},
 			// 发送指令
@@ -859,6 +873,11 @@
 						})
 						break;
 					case 'getSoftVersion':
+						API.sendDeviceCommand(self.commandform).then(res => {
+							self.$message.success("发送成功");
+						})
+						break;
+					case 'restart':
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
 						})
