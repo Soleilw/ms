@@ -96,8 +96,8 @@ API.device = function(data) {
 	return axios.post(url.Device, data)
 }
 
-API.devices = function(page,limit,id) {
-	return axios.get(url.Devices, {page: page, limit: limit, id: id})
+API.devices = function(page,limit,type) {
+	return axios.get(url.Devices, {page: page, limit: limit, type: type})
 }
 
 API._devices = function(direction,addresses,limit) {

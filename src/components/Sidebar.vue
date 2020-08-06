@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-menu :default-active="onRoutes" :collapse="collapse" class="sidebar-el-menu" background-color="#fff"
-            text-color="#000000" active-text-color="#000" unique-opened router>
+            text-color="#000" active-text-color="#000" unique-opened router>
             <template v-for="item in sidebarMenu">
                 <template v-if="item.children">
                     <el-submenu :index="item.path" :key="item.path">

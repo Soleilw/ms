@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="handle-box">
-		<div class="btn">
-			<el-button type="primary" @click="dialogAPK = true">添加APK</el-button>
-		</div>
+			<div class="btn">
+				<el-button type="primary" @click="dialogAPK = true">添加APK</el-button>
+			</div>
 		</div>
 
 
@@ -42,8 +42,10 @@
 
 		<el-dialog title="查看版本" :visible.sync="dialogShowVersion" :modal="false" width="80%" :close-on-click-modal="false">
 			<div>
-				<div class="btn">
-					<el-button type="primary" @click="addVersion">添加版本</el-button>
+				<div class="handle-box">
+					<div class="btn">
+						<el-button type="primary" @click="addVersion">添加版本</el-button>
+					</div>
 				</div>
 
 				<el-dialog title="添加版本" :visible.sync="dialogVersion" :close-on-click-modal="false" :modal="false">
@@ -80,7 +82,7 @@
 					</div>
 				</el-dialog>
 
-				<el-table :data="versionTableData">
+				<el-table :data="versionTableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 					<el-table-column prop="id" label="ID" align="center"></el-table-column>
 					<el-table-column prop="apk_id" label="APKID" align="center"></el-table-column>
 					<el-table-column prop="version" label="版本" align="center"></el-table-column>
@@ -184,7 +186,7 @@
 		</el-dialog>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]""
 			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
 			</el-pagination>
 		</div>

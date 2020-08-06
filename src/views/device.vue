@@ -5,10 +5,9 @@
 				<el-button type="primary" @click="dialogDevice = true">添加设备</el-button>
 			</div>
 			<div class="btn">
-				<el-input v-model="uuid" placeholder="输入设备号" class="search" @keyup.enter.native="search(uuid)"></el-input>
-			</div>
-			<div class="btn">
-				<el-button type="primary" @click="search(uuid)">搜索</el-button>
+				<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
+				    <el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
+				  </el-input>
 			</div>
 			<div class="btn">
 				<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
@@ -59,6 +58,9 @@
 							<el-option v-for="item in uuidList" :key="item.id" :label="item.uuid" :value="item.uuid">
 							</el-option>
 						</el-select>
+						<span style="margin-left: 10px;">
+							<el-button size="medium" type="primary" @click="referUUID">刷新UUID</el-button>
+						</span>
 					</el-form-item>
 					<el-form-item label="选择安装包">
 						<el-select v-model="form.apk" placeholder="请选择安装包" @change="apkChange">
@@ -94,7 +96,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="id" label="ID" width="80px"></el-table-column>
 			<el-table-column prop="address.address" label="地址" width="200px"></el-table-column>
 			<el-table-column prop="uuid" label="uuid" width="300px"></el-table-column>
@@ -178,7 +180,7 @@
 
 		<!-- 查看进出记录 -->
 		<el-dialog title="查看进出记录" :visible.sync="dialogShowRecord" width="80%">
-			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}"  max-height="620">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="face.name" label="名称"></el-table-column>
@@ -350,7 +352,7 @@
 
 			</div>
 
-			<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" :max-height="480">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="command" label="指令"></el-table-column>
@@ -366,7 +368,7 @@
 				<el-table-column prop="updated_at" label="更新时间"></el-table-column>
 			</el-table>
 			<div class="block">
-				<el-pagination @current-change="handleCurrentCommandsChange" :current-page.sync="currentCommandsPage" :page-sizes="[10, 20, 30, 40, 50]"
+				<el-pagination @current-change="handleCurrentCommandsChange" :current-page.sync="currentCommandsPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
 				 :page-size="pageCommandsSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeCommandsChange"
 				 :total="totalCommandsPage">
 				</el-pagination>
@@ -374,8 +376,8 @@
 		</el-dialog>
 
 		<!-- 查看用户-->
-		<el-dialog title="查看用户" :visible.sync="dialogUserList">
-			<el-table :data="userListData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+		<el-dialog title="查看用户" :visible.sync="dialogUserList" width="80%">
+			<el-table :data="userListData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" :max-height="600">
 				<el-table-column prop="name" label="姓名"></el-table-column>
 				<el-table-column prop="face_id" label="FACE_ID"></el-table-column>
 				<el-table-column prop="href" label="照片">
@@ -388,7 +390,7 @@
 				</el-table-column>
 			</el-table>
 			<div class="block">
-				<el-pagination @current-change="handleCurrentUserListChange" :current-page.sync="currentUserListPage" :page-sizes="[10, 20, 30, 40, 50]"
+				<el-pagination @current-change="handleCurrentUserListChange" :current-page.sync="currentUserListPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
 				 :page-size="pageUserListSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeUserListChange"
 				 :total="totalUserListPage">
 				</el-pagination>
@@ -396,7 +398,7 @@
 		</el-dialog>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
 			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
 			</el-pagination>
 		</div>
@@ -573,6 +575,13 @@
 			},
 			// 获取uuid
 			getUuid() {
+				var self = this;
+				API.uuid(self.currentPage, 1000).then(res => {
+					self.uuidList = res.data;
+				})
+			},
+			// 刷新UUID
+			referUUID() {
 				var self = this;
 				API.uuid(self.currentPage, 1000).then(res => {
 					self.uuidList = res.data;
@@ -898,7 +907,7 @@
 			handleCurrentChange(val) {
 				var self = this;
 				self.currentPage = val;
-				API.devices(val, self.pageSize).then(res => {
+				API.devices(val, self.pageSize, self.type).then(res => {
 					self.tableDate = res.data;
 					self.totalPage = res.total;
 				})
@@ -907,7 +916,7 @@
 			handleSizeChange(val) {
 				var self = this;
 				self.pageSize = val;
-				API.devices(self.currentPage, val).then(res => {
+				API.devices(self.currentPage, val, self.type).then(res => {
 					self.tableDate = res.data;
 					self.totalPage = res.total;
 				})

@@ -45,7 +45,7 @@
 					<div class="rent-people panel">
 						<div class="inner">
 							<div class="search-input">
-								<el-input placeholder="请输入要查询的出租屋">
+								<el-input placeholder="请输入要查询的出租屋" size="mini">
 									<el-button slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</div>
@@ -57,12 +57,11 @@
 				<div class="record panel">
 					<div class="inner">
 						<div class="table">
-							<el-table :data="recordData" max-height="350" border :row-style="getRowClass" :header-row-style="getRowClass"
-							 :header-cell-style="getRowClass">
+							<el-table :data="recordData" max-height="350" border :cell-style="getCellClass" :header-cell-style="getRowClass">
 								<el-table-column prop="id" label="ID"></el-table-column>
-								<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
-								<el-table-column prop="time" label="时间"></el-table-column>
-								<el-table-column prop="updated_at" label="更新时间"></el-table-column>
+								<el-table-column prop="id" label="ID"></el-table-column>
+								<el-table-column prop="id" label="ID"></el-table-column>
+								<el-table-column prop="id" label="ID"></el-table-column>
 							</el-table>
 						</div>
 
@@ -90,7 +89,7 @@
 					<div class="rent-people panel">
 						<div class="inner">
 							<div class="search-input">
-								<el-input placeholder="请输入要查询的出租屋">
+								<el-input placeholder="请输入要查询的出租屋"  size="mini">
 									<el-button slot="append" icon="el-icon-search"></el-button>
 								</el-input>
 							</div>
@@ -134,12 +133,11 @@
 				<div class="police panel">
 					<div class="inner">
 						<div class="table">
-							<el-table :data="callData" max-height="610" border :row-style="getRowClass" :header-row-style="getRowClass"
-							 :header-cell-style="getRowClass">
+							<el-table :data="callData" max-height="610" border :cell-style="getCellClass" :header-cell-style="getRowClass">
 								<el-table-column prop="id" label="ID"></el-table-column>
-								<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
-								<el-table-column prop="time" label="时间"></el-table-column>
-								<el-table-column prop="updated_at" label="更新时间"></el-table-column>
+								<el-table-column prop="id" label="ID"></el-table-column>
+								<el-table-column prop="id" label="ID"></el-table-column>
+								<el-table-column prop="id" label="ID"></el-table-column>
 							</el-table>
 						</div>
 					</div>
@@ -175,10 +173,20 @@
 	export default {
 		data() {
 			return {
-				recordData: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-				callData: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
-					{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
-				],
+				recordData: [{
+					id: 1
+				}, {
+					id: 1
+				}, {
+					id: 1
+				}],
+				callData: [{
+					id: 1
+				}, {
+					id: 1
+				}, {
+					id: 1
+				}],
 				username: localStorage.getItem('username'),
 				rent: '总',
 			}
@@ -200,6 +208,14 @@
 				columnIndex
 			}) {
 				return "background-color: rgba(255, 255, 255, 0.05); color: #006cff";
+			},
+			getCellClass({
+				row,
+				column,
+				rowIndex,
+				columnIndex
+			}) {
+				return "background-color: rgba(255, 255, 255, 0.05); color: #fff";
 			},
 			// 地图
 			init() {
@@ -481,7 +497,7 @@
 				width: 100%;
 				height: 15rem;
 			}
-			
+
 			// 人员进出流量
 			#out-in {
 				width: 100%;

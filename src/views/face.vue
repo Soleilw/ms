@@ -52,12 +52,12 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="name" label="名字"></el-table-column>
 			<el-table-column prop="face_id" label="人脸ID"></el-table-column>
 			<el-table-column prop="group" label="人脸组" width="200px"></el-table-column>
-			<el-table-column prop="number" label="学号"></el-table-column>
+			<el-table-column prop="number" label="学号/身份证号"></el-table-column>
 			<el-table-column prop="href" label="人脸图片">
 				<template slot-scope="scope">
 					<el-popover placement="top-start" title="" trigger="click">
@@ -67,7 +67,7 @@
 				</template>
 			</el-table-column>
 			<el-table-column prop="type" label="类型"></el-table-column>
-			<el-table-column label="操作"">
+			<el-table-column label="操作">
 				<template slot-scope=" scope">
 				<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 </template>
@@ -75,7 +75,7 @@
 </el-table>
 
 <div class="block">
-	<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 30, 40, 50]"
+	<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
 	 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
 	</el-pagination>
 </div>
