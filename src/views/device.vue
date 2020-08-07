@@ -6,8 +6,8 @@
 			</div>
 			<div class="btn">
 				<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
-				    <el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
-				  </el-input>
+					<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
+				</el-input>
 			</div>
 			<div class="btn">
 				<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
@@ -180,7 +180,7 @@
 
 		<!-- 查看进出记录 -->
 		<el-dialog title="查看进出记录" :visible.sync="dialogShowRecord" width="80%">
-			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}"  max-height="620">
+			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="face.name" label="名称"></el-table-column>
@@ -231,7 +231,7 @@
 		</el-dialog>
 
 		<!-- 查看指令-->
-		<el-dialog title="查看指令" :visible.sync="dialogCommands" width="90%">
+		<el-dialog title="查看指令" :visible.sync="dialogCommands" width="90%" @close="closeCommands">
 			<div class="handle-box">
 				<div class="btn">
 					<el-form :model="commandform" label-width="100px">
@@ -812,6 +812,7 @@
 				var self = this;
 				self.dialogCommands = true;
 				self.command_uuid = row.uuid;
+				console.log('uuid', self.command_uuid)
 				API.deviceCommands(1, 10, row.uuid).then(res => {
 					self.commandsData = res.data;
 					self.totalCommandsPage = res.total;
@@ -869,28 +870,40 @@
 					case "setPassword":
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
+							self.command = '';
 						})
 						break;
 					case 'deleteUser':
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
+							self.command = '';
 						})
 						break;
 					case "addUser":
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
+							self.command = '';
 						})
 						break;
 					case 'getSoftVersion':
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
+							self.command = '';
 						})
 						break;
 					case 'restart':
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
+							self.command = '';
 						})
 				}
+			},
+			// 关闭指令uuid
+			closeCommands() {
+				var self = this;
+				self.command_uuid = '';
+				self.command = '';
+				console.log('111uuid', self.command_uuid)
 			},
 
 			// 查看用户列表
