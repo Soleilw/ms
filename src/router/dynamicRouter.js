@@ -27,11 +27,30 @@ const dynamicRouter = [{
 	{
 		path: '/address',
 		name: 'address',
-		component: () => import('@/views/address'),
+		component: () => import('@/views/address/index'),
 		meta: {
 			title: '地址管理',
 			icon: 'el-icon-location'
-		}
+		},
+		children: [{
+				path: '/address-list',
+				name: 'addressList',
+				component: () => import('@/views/address/address-list'),
+				meta: {
+					title: '地址列表',
+					icon: 'el-icon-warning'
+				}
+			},
+			{
+				path: '/areas',
+				name: 'areas',
+				component: () => import('@/views/address/areas'),
+				meta: {
+					title: '地区管理',
+					icon: 'el-icon-s-release'
+				},
+			}
+		]
 	},
 	{
 		path: '/face',
@@ -45,11 +64,30 @@ const dynamicRouter = [{
 	{
 		path: '/device',
 		name: 'device',
-		component: () => import('@/views/device'),
+		component: () => import('@/views/device/index'),
 		meta: {
 			title: '设备管理',
 			icon: 'el-icon-video-camera'
-		}
+		},
+		children: [{
+				path: '/device-list',
+				name: 'deviceList',
+				component: () => import('@/views/device/device-list'),
+				meta: {
+					title: '设备列表',
+					icon: 'el-icon-warning'
+				}
+			},
+			{
+				path: '/command',
+				name: 'command',
+				component: () => import('@/views/device/command'),
+				meta: {
+					title: '指令管理',
+					icon: 'el-icon-s-release'
+				},
+			}
+		]
 	},
 	{
 		path: '/package',
@@ -94,6 +132,16 @@ const dynamicRouter = [{
 	    component: () => import('@/views/permission/permission.vue'),
 	    meta: {
 	        title: '权限管理',
+	        icon: 'el-icon-setting'
+	    }
+	},
+	
+	{
+	    path: '/outInLogs',
+	    name: 'outInLogs',
+	    component: () => import('@/views/outInLogs'),
+	    meta: {
+	        title: '进出记录管理',
 	        icon: 'el-icon-setting'
 	    }
 	}

@@ -47,10 +47,7 @@
 		methods: {
 			submitForm() {
 				var self = this;
-				localStorage.setItem("username", self.adminForm.username);
-				localStorage.setItem("password", self.adminForm.password);
-				// var arr = ['baiduaip', 'overview','address','device'];
-				// localStorage.setItem("permissions", arr);
+				localStorage.setItem('username', self.adminForm.username)
 				self.$router.replace("/overview");
 			}
 		}

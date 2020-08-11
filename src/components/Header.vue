@@ -108,7 +108,7 @@
 			},
 			ChangePassword() {
 				var self = this;
-				if(self.pwdForm.new_password === self.pwdForm.confirm_password) {
+				if (self.pwdForm.new_password === self.pwdForm.confirm_password) {
 					API.resetPassword(self.pwdForm).then(res => {
 						self.dialogResetPassWord = false;
 						self.$message.success('修改成功');
@@ -123,20 +123,9 @@
 			},
 			logout() {
 				var self = this;
-				localStorage.removeItem('username')
-				localStorage.removeItem('token')
-				localStorage.removeItem('role')
-				localStorage.removeItem('permissions')
 				window.location.reload()
+				localStorage.removeItem('username')
 				self.$router.replace('/login')
-				// API.logout().then(res => {
-				// 	localStorage.removeItem('username')
-				// 	localStorage.removeItem('token')
-				// 	localStorage.removeItem('role')
-				// 	localStorage.removeItem('permissions')
-				// 	window.location.reload()
-				// 	self.$router.replace('/login')
-				// })
 			}
 		}
 	}
@@ -155,13 +144,13 @@
 		color: #fff;
 		z-index: 100;
 	}
-	
+
 	.logo {
 		position: absolute;
 		top: 15px;
 		left: 15px;
 	}
-	
+
 	.logo img {
 		width: 20px;
 		height: 20px;

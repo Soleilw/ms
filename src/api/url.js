@@ -3,6 +3,7 @@ const url = {
 	'Login': '/login', // 登录
 	'Password': '/password', // 重置密码
 	'Token': '/token', // 重置密码
+	'Permissions': '/permissions', // 重置密码
 
 	
 	// 百度配置
@@ -25,6 +26,7 @@ const url = {
 	'AddressTypes': '/address/types', // 地址类型
 	'AddressTypes': '/address/types', // 恢复地址
 	'Areas': '/areas', // 获取社区
+	'Area': '/area', // 新增地区
 	
 	// 人脸管理
 	'Face': '/face', // 新增人脸

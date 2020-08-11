@@ -89,6 +89,11 @@ API.areas = function(page, limit, parent_id) {
 	})
 }
 
+// 新增地区
+API.area = function(data) {
+	return axios.post(url.Area, data)
+}
+
 
 
 // 设备管理
@@ -124,6 +129,11 @@ API.deviceHeart = function(uuid) {
 // 查看指令
 API.deviceCommands = function(page, limit, uuid) {
 	return axios.get(url.DeviceCommands, {page:page, limit:limit,uuid: uuid})
+}
+
+// 搜索指令
+API.searchCommand = function(uuid) {
+	return axios.get(url.DeviceCommands, {uuid:uuid})
 }
 
 // 获取指令类型

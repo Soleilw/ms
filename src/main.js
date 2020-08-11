@@ -43,10 +43,6 @@ router.beforeEach((to, from, next) => {
 			})
 		}
 	} else {
-		window.addEventListener('storage', function() {
-			localStorage.clear();
-			window.location.replace("/login");
-		});
 		if (!store.state.permission.permissionList) {
 			store.dispatch('permission/FETCH_PERMISSION').then(() => {
 				next({

@@ -74,6 +74,8 @@
 								<el-checkbox class="permission-span" label="address" @change="oneChange" border>
 									<span style="font-weight: bold;">地址管理页</span>
 								</el-checkbox>
+								<el-checkbox label="addressList" @change="oneChange">地址列表子页</el-checkbox>
+								<el-checkbox label="areas" @change="oneChange">地区管理子页</el-checkbox>
 								<el-checkbox label="addressAdd" @change="oneChange">添加地址</el-checkbox>
 								<el-checkbox label="addressGet" @change="oneChange">获取地址</el-checkbox>
 								<el-checkbox label="addressDel" @change="oneChange">删除地址</el-checkbox>
@@ -94,6 +96,8 @@
 								<el-checkbox class="permission-span" label="device" @change="oneChange" border>
 									<span style="font-weight: bold;">设备管理页</span>
 								</el-checkbox>
+								<el-checkbox label="deviceList" @change="oneChange">设备列表子页</el-checkbox>
+								<el-checkbox label="command" @change="oneChange">指令管理子页</el-checkbox>
 								<el-checkbox label="deviceAdd" @change="oneChange">添加设备</el-checkbox>
 								<el-checkbox label="deviceGet" @change="oneChange">获取设备</el-checkbox>
 								<el-checkbox label="deviceDel" @change="oneChange">删除设备</el-checkbox>
@@ -151,6 +155,13 @@
 								<el-checkbox label="manageDel" @change="oneChange">删除管理员</el-checkbox>
 							</el-checkbox-group>
 						</div>
+					<div class="permission">
+						<el-checkbox-group v-model="form.permissions" class="permission-item">
+							<el-checkbox class="permission-span" label="outInLogs" @change="oneChange" border>
+								<span style="font-weight: bold;">进出记录管理页</span>
+							</el-checkbox>
+						</el-checkbox-group>
+					</div>
 
 					</el-form-item>
 
@@ -203,6 +214,8 @@
 					"projectDel", // 删除项目
 
 					"address", // 地址管理页
+					"addressList", // 地址列表
+					"areas", // 地区管理
 					"addressAdd", // 添加地址
 					"addressGet", // 获取地址
 					"addressDel", // 删除地址
@@ -213,6 +226,8 @@
 					"faceDel", // 删除人脸
 
 					"device", // 设备管理页
+					"deviceList", // 设备列表
+					"command", // 指令管理
 					"deviceAdd", // 添加设备
 					"deviceGet", // 获取设备
 					"deviceDel", // 删除设备
@@ -244,7 +259,9 @@
 					"manageAdd",
 					"manageEdit",
 					"manageDel",
-					"manageResetPwd" // 重置密码
+					"manageResetPwd", // 重置密码
+					
+					"outInLogs" // 进出记录管理页
 				],
 				// permissionList: [
 				// 	{
