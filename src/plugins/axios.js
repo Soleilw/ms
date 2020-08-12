@@ -31,8 +31,9 @@ const instance = axios.create({
 					message: '授权失败，请重新登录'
 				})
 				setTimeout(() => {
-					localStorage.removeItem('role');
-					localStorage.removeItem('token');
+					window.location.reload()
+					localStorage.removeItem('username')
+					self.$router.replace('/login')
 				}, 1000)
 				return
 			case 403:
