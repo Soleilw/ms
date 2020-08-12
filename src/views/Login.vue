@@ -31,8 +31,6 @@
 
 <script>
 	import API from "@/api/login.js";
-	import cookies from "@/utils/cookies.js";
-	var Qs = require("qs");
 
 	export default {
 		name: "login",
@@ -47,8 +45,10 @@
 		methods: {
 			submitForm() {
 				var self = this;
-				localStorage.setItem('username', self.adminForm.username)
-				self.$router.replace("/overview");
+				API.login(self.adminForm).then(res => {
+					localStorage.setItem('username', self.adminForm.username)
+					self.$router.replace("/overview");
+				})
 			}
 		}
 	};

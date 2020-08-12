@@ -99,11 +99,11 @@
 		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="id" label="ID" width="80px"></el-table-column>
 			<el-table-column prop="address.address" label="地址" width="200px"></el-table-column>
-			<el-table-column prop="uuid" label="uuid" width="300px"></el-table-column>
+			<el-table-column prop="uuid" label="uuid" width="200px"></el-table-column>
 			<el-table-column prop="type_string" label="类型" width="100px"></el-table-column>
-			<el-table-column prop="direction" label="方向"></el-table-column>
-			<el-table-column prop="version" label="版本" width="80px"></el-table-column>
-			<el-table-column prop="remark" label="备注" width="400px"></el-table-column>
+			<el-table-column prop="direction" label="方向" width="80px"></el-table-column>
+			<el-table-column prop="version" label="版本"></el-table-column>
+			<el-table-column prop="remark" label="备注" width="300px"></el-table-column>
 			<el-table-column prop="last_login" label="最后登录时间" width="200px"></el-table-column>
 			<el-table-column label="操作" width="200px">
 				<template slot-scope="scope">
@@ -119,13 +119,13 @@
 								<el-button v-if="scope.row.type == 4" size="mini" type="primary" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
 							</el-dropdown-item>
 							<el-dropdown-item>
-								<el-button size="mini" type="primary" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
+								<!-- <el-button size="mini" type="primary" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button> -->
 							</el-dropdown-item>
 							<el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
 							</el-dropdown-item>
 							<el-dropdown-item>
-								<el-button size="mini" type="primary" @click="handleShowCommands (scope.$index, scope.row)">查看指令</el-button>
+								<!-- <el-button size="mini" type="primary" @click="handleShowCommands (scope.$index, scope.row)">查看指令</el-button> -->
 							</el-dropdown-item>
 							<el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
