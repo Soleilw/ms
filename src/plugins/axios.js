@@ -33,7 +33,7 @@ const instance = axios.create({
 				setTimeout(() => {
 					window.location.reload()
 					localStorage.removeItem('username')
-					self.$router.replace('/login')
+					this.$router.replace('/login')
 				}, 1000)
 				return
 			case 403:
@@ -72,6 +72,14 @@ instance.interceptors.response.use(res => {
 		return res.data
 	}
 }, err => {
+	if (err.response.data.msg === 'need login') {
+		Message.warning({
+			message: '请重新登录'
+		})
+		window.location.reload()
+		localStorage.removeItem('username')
+		this.$router.replace('/login')
+	}
 	return Promise.reject(err)
 })
 
