@@ -48,7 +48,9 @@
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">
+						<el-button slot="reference" size="mini" type="danger">删除</el-button>
+					</el-popconfirm>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -93,9 +95,17 @@
 			}
 		},
 		mounted() {
-			this.getPro();
+			this.getProvice();
 		},
 		methods: {
+			// 获取社区列表（省市区选中）
+			getProvice() {
+				var self = this;
+				API.areas(self.currentPage, 10).then(res => {
+					self.proList = res.data;
+					self.tableDate = res.data;
+				})
+			},
 			getAddressType() {
 				var self = this;
 				API.addressTypes(self.currentPage).then(res => {

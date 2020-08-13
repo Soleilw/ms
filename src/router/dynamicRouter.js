@@ -1,7 +1,7 @@
 const dynamicRouter = [{
 	    path: '/overview',
 	    name: 'overview',
-	    component: () => import('@/views/overview'),
+	    component: () => import('@/views/overview/overview'),
 	    meta: {
 	        title: '数据总览',
 	        icon: 'el-icon-menu'
@@ -9,7 +9,7 @@ const dynamicRouter = [{
 	},{
 		path: '/baiduaip',
 		name: 'baiduaip',
-		component: () => import('@/views/baiduAip'),
+		component: () => import('@/views/baiduAip/baiduAip'),
 		meta: {
 			title: '百度接口',
 			icon: 'el-icon-document'
@@ -18,7 +18,7 @@ const dynamicRouter = [{
 	{
 		path: '/project',
 		name: 'project',
-		component: () => import('@/views/project'),
+		component: () => import('@/views/project/project'),
 		meta: {
 			title: '项目管理',
 			icon: 'el-icon-folder'
@@ -55,7 +55,7 @@ const dynamicRouter = [{
 	{
 		path: '/face',
 		name: 'face',
-		component: () => import('@/views/face'),
+		component: () => import('@/views/face/face'),
 		meta: {
 			title: '人脸管理',
 			icon: 'el-icon-picture'
@@ -92,7 +92,7 @@ const dynamicRouter = [{
 	{
 		path: '/package',
 		name: 'package',
-		component: () => import('@/views/package'),
+		component: () => import('@/views/package/package'),
 		meta: {
 			title: '安装包管理',
 			icon: 'el-icon-shopping-bag-2'
@@ -129,17 +129,36 @@ const dynamicRouter = [{
 	{
 	    path: '/permission',
 	    name: 'permission',
-	    component: () => import('@/views/permission/permission.vue'),
+	    component: () => import('@/views/permission/index'),
 	    meta: {
 	        title: '权限管理',
 	        icon: 'el-icon-setting'
-	    }
+	    },
+		children: [{
+				path: '/roles',
+				name: 'roles',
+				component: () => import('@/views/permission/roles'),
+				meta: {
+					title: '角色管理',
+					icon: 'el-icon-warning'
+				}
+			},
+			{
+				path: '/user',
+				name: 'user',
+				component: () => import('@/views/permission/user'),
+				meta: {
+					title: '用户管理',
+					icon: 'el-icon-s-release'
+				},
+			}
+		]
 	},
 	
 	{
 	    path: '/outInLogs',
 	    name: 'outInLogs',
-	    component: () => import('@/views/outInLogs'),
+	    component: () => import('@/views/outInLogs/outInLogs'),
 	    meta: {
 	        title: '进出记录管理',
 	        icon: 'el-icon-setting'

@@ -18,7 +18,7 @@ export default new Router({
 		{
 			path: '/overview',
 			name: 'overview',
-			component: () => import('@/views/overview'),
+			component: () => import('@/views/overview/overview'),
 			meta: {
 				title: '数据总览',
 				icon: 'el-icon-menu'
@@ -30,7 +30,7 @@ export default new Router({
 /* 准备动态添加的路由 */
 export const DynamicRoutes = [{
 		path: '',
-		component: () => import('@/components/Home.vue'),
+		component: () => import('@/components/layout/Home.vue'),
 		name: 'container',
 		redirect: 'baiduaip',
 		meta: {

@@ -4,11 +4,11 @@
 			<div class="btn">
 				<el-button type="primary" @click="dialogCommand = true">发送指令</el-button>
 			</div>
-			<el-dialog title="发送指令" :visible.sync="dialogCommand">
+			<el-dialog title="发送指令" :visible.sync="dialogCommand" @close="closeCommands">
 				<div class="btn">
 					<el-form :model="commandform" label-width="100px">
 						<el-form-item label="设备uuid">
-							<el-input v-model="uuid" placeholder="请输入uuid"></el-input>
+							<el-input v-model="command_uuid" placeholder="请输入uuid"></el-input>
 						</el-form-item>
 						<el-form-item label="指令">
 							<el-select v-model="command" @change="changeCommand">
@@ -89,6 +89,7 @@
 			return {
 				dialogCommand: false,
 				uuid: '',
+				command_uuid: '',
 				command: '',
 				commandform: {},
 				commandsData: [],
@@ -135,34 +136,34 @@
 				switch (self.command) {
 					case "setPassword":
 						self.commandform = {
-							uuid: self.uuid,
+							uuid: self.command_uuid,
 							command: 'setPassword',
 							new_password: ''
 						}
 						break;
 					case 'deleteUser':
 						self.commandform = {
-							uuid: self.uuid,
+							uuid: self.command_uuid,
 							command: 'deleteUser',
 							face_id: ''
 						}
 						break;
 					case "addUser":
 						self.commandform = {
-							uuid: self.uuid,
+							uuid: self.command_uuid,
 							command: 'addUser',
 							face_id: ''
 						}
 						break;
 					case 'getSoftVersion':
 						self.commandform = {
-							uuid: self.uuid,
+							uuid: self.command_uuid,
 							command: 'getSoftVersion',
 						}
 						break;
 					case 'restart':
 						self.commandform = {
-							uuid: self.uuid,
+							uuid: self.command_uuid,
 							command: 'restart',
 						}
 				}
@@ -174,7 +175,7 @@
 					case "setPassword":
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
-							self.uuid = '';
+							self.command_uuid = '';
 							self.command = '';
 							self.dialogCommand = false
 						})
@@ -182,7 +183,7 @@
 					case 'deleteUser':
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
-							self.uuid = '';
+							self.command_uuid = '';
 							self.command = '';
 							self.dialogCommand = false
 						})
@@ -190,7 +191,7 @@
 					case "addUser":
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
-							self.uuid = '';
+							self.command_uuid = '';
 							self.command = '';
 							self.dialogCommand = false
 						})
@@ -198,7 +199,7 @@
 					case 'getSoftVersion':
 						API.sendDeviceCommand(self.commandform).then(res => {
 							self.$message.success("发送成功");
-							self.uuid = '';
+							self.command_uuid = '';
 							self.command = '';
 							self.dialogCommand = false
 						})
@@ -215,9 +216,9 @@
 			// 关闭指令uuid
 			closeCommands() {
 				var self = this;
+				console.log('111uuid', self.command_uuid)
 				self.command_uuid = '';
 				self.command = '';
-				console.log('111uuid', self.command_uuid)
 			},
 
 			// 查看用户列表

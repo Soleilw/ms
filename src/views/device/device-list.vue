@@ -131,7 +131,9 @@
 								<el-button size="mini" type="primary" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
 							</el-dropdown-item>
 							<el-dropdown-item>
-								<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+								<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+									<el-button slot="reference" size="mini" type="danger">删除</el-button>
+								</el-popconfirm>
 							</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>

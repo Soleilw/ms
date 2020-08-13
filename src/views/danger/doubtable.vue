@@ -63,18 +63,12 @@
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<el-button type="danger" size="mini" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+						<el-button slot="reference" size="mini" type="danger">删除</el-button>
+					</el-popconfirm>
 				</template>
 			</el-table-column>
 		</el-table>
-		
-		<el-dialog :visible.sync="dialogDel" title="删除年级" width="20%" align="center" :close-on-click-modal="false">
-			<div style="font-size: 20px; margin-bottom: 30px;">是否删除该可疑人员</div>
-			<span>
-				<el-button type="primary" @click="toDel">删除</el-button>
-				<el-button type="danger" @click="dialogDel = false">取消</el-button>
-			</span>
-		</el-dialog>
 		
 		<div class="block">
 			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
@@ -213,18 +207,12 @@
 			// 操作
 			handleDel(index, row) {
 				var self = this;
-				self.id = row.id;
-				self.dialogDel = true;
-			},
-			
-			toDel() {
-				var self = this;
-				API.delDangerFace(self.id).then(res => {
-					self.$message.success('删除成功')
-					self.dialogDel = false;
-					self.getDangerFaces();
-					self.currentPage = 1;
-				})
+				// API.delDangerFace(self.id).then(res => {
+				// 	self.$message.success('删除成功')
+				// 	self.dialogDel = false;
+				// 	self.getDangerFaces();
+				// 	self.currentPage = 1;
+				// })
 			},
 			
 			getQiniuToken() {

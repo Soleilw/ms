@@ -17,7 +17,7 @@ const instance = axios.create({
 	timeout: 200000,
 	withCredentials: true,
 	baseURL: 'https://api.fengniaotuangou.cn',
-	// baseURL: 'http://192.168.0.106/FaceCore/public',
+	// baseURL: 'http://192.168.0.111/FaceCore/public',
 	headers: {
 		'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 	},
@@ -35,6 +35,11 @@ const instance = axios.create({
 					localStorage.removeItem('username')
 					this.$router.replace('/login')
 				}, 1000)
+				return
+			case 422:
+				Message.warning({
+					message: '参数错误'
+				})
 				return
 			case 403:
 				Message.warning({
@@ -66,7 +71,7 @@ instance.interceptors.request.use(config => {
 
 // 响应拦截
 instance.interceptors.response.use(res => {
-	if(res.status === 200 && res.config.url === "/login") {
+	if (res.status === 200 && res.config.url === "/login") {
 		return res
 	} else if (res.status === 200) {
 		return res.data
@@ -89,9 +94,9 @@ http.get = function(url, data = {}) {
 			params: data
 		}).then(res => {
 			resolve(res.data)
+		}).catch(err => {
+			reject(err);
 		})
-	}).catch(err => {
-		reject(err);
 	})
 }
 
@@ -111,9 +116,9 @@ http.post = function(url, data) {
 	return new Promise((resolve, reject) => {
 		instance.post(url, Qs.stringify(data)).then(res => {
 			resolve(res.data)
+		}).catch(err => {
+			reject(err);
 		})
-	}).catch(err => {
-		reject(err);
 	})
 }
 
