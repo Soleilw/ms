@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading="loading" element-loading-text="加载中">
 		<div class="handle-box">
 			<div class="btn">
 				<el-button type="primary" @click="dialogDevice = true">添加设备</el-button>
@@ -390,6 +390,13 @@
 						</el-popover>
 					</template>
 				</el-table-column>
+				<el-table-column label="操作">
+					<template slot-scope="scope">
+						<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDelUser(scope.$index, scope.row)" cancelButtonType="primary">
+							<el-button slot="reference" size="mini" type="danger">删除</el-button>
+						</el-popconfirm>
+					</template>
+				</el-table-column>
 			</el-table>
 			<div class="block">
 				<el-pagination @current-change="handleCurrentUserListChange" :current-page.sync="currentUserListPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
@@ -414,6 +421,7 @@
 		name: 'gradems',
 		data() {
 			return {
+				loading: true,
 				dialogLogcat: false,
 				logCat: '',
 				dialogDevice: false,
@@ -506,11 +514,15 @@
 			// 搜索
 			search() {
 				var self = this;
+				self.loading = true;
 				API.search(self.uuid).then(res => {
+					self.loading = false;
 					self.tableDate = res.data;
 					self.totalPage = res.total;
 					self.uuid = '';
 					self.$message.success('搜索成功！');
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			typeChange(val) {
@@ -524,8 +536,11 @@
 			getDevice() {
 				var self = this;
 				API.devices(this.currentPage).then(res => {
-					this.tableDate = res.data;
+					self.loading = false;
+					self.tableDate = res.data;
 					self.totalPage = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 获取设备类型
@@ -540,7 +555,7 @@
 			},
 			getProject() {
 				var self = this;
-				API.projects(self.currentPage).then(res => {
+				API.projects(1).then(res => {
 					self.projectList = res.data;
 				})
 			},
@@ -553,7 +568,7 @@
 			// 获取地址
 			getAddress(val) {
 				var self = this;
-				API.addresses(self.currentPage, 1000, val).then(res => {
+				API.addresses(1, 1000, val).then(res => {
 					self.addressList = res.data;
 				})
 			},
@@ -578,21 +593,21 @@
 			// 获取uuid
 			getUuid() {
 				var self = this;
-				API.uuid(self.currentPage, 1000).then(res => {
+				API.uuid(1, 1000).then(res => {
 					self.uuidList = res.data;
 				})
 			},
 			// 刷新UUID
 			referUUID() {
 				var self = this;
-				API.uuid(self.currentPage, 1000).then(res => {
+				API.uuid(1, 1000).then(res => {
 					self.uuidList = res.data;
 				})
 			},
 			// 获取安装包
 			getApk() {
 				var self = this;
-				API.apks(self.currentPage).then(res => {
+				API.apks(1).then(res => {
 					self.apkList = res.data;
 				})
 			},
@@ -915,32 +930,55 @@
 				self.user_list_uuid = row.uuid;
 				API.deviceUserList(1, 10, row.uuid).then(res => {
 					self.userListData = res;
-					// self.totalUserListPage = res.total;
+					self.totalUserListPage = res.total;
 				})
 			},
-
+			// 删除用户
+			handleDelUser(index, row) {
+				var self = this;
+				var delUser = {
+					uuid: self.user_list_uuid,
+					command: 'deleteUser',
+					face_id: row.face_id
+				}
+				API.sendDeviceCommand(delUser).then(res => {
+					self.$message.success("删除成功");
+					API.deviceUserList(1, 10, self.user_list_uuid).then(res => {
+						self.userListData = res;
+						// self.totalUserListPage = res.total;
+					})
+				})
+			},
 			handleCurrentChange(val) {
 				var self = this;
 				self.currentPage = val;
+				self.loading = true;
 				API.devices(val, self.pageSize, self.type).then(res => {
+					self.loading = false;
 					self.tableDate = res.data;
 					self.totalPage = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 每页显示条数
 			handleSizeChange(val) {
 				var self = this;
+				self.loading = true;
 				self.pageSize = val;
 				API.devices(self.currentPage, val, self.type).then(res => {
+					self.loading = false;
 					self.tableDate = res.data;
 					self.totalPage = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 
 			handleCurrentFaceLogsChange(val) {
 				API.deviceFaceLogs(val, 10, this.uuid, this.address_id).then(res => {
 					this.faceLogsTable = res.data;
-					this.totalFaceLogsPage = res.total;
+					// this.totalFaceLogsPage = res.total;
 				})
 			},
 

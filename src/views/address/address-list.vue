@@ -248,7 +248,7 @@
 			// 获取社区列表（省市区选中）
 			getPro() {
 				var self = this;
-				API.areas(self.currentPage, 100, 0).then(res => {
+				API.areas(1, 100, 0).then(res => {
 					self.proList = res.data;
 				})
 			},
@@ -257,7 +257,7 @@
 			},
 			getCity(val) {
 				var self = this;
-				API.areas(self.currentPage, 100, val).then(res => {
+				API.areas(1, 100, val).then(res => {
 					self.cityList = res.data;
 				})
 			},
@@ -267,7 +267,7 @@
 			
 			getAreas(val) {
 				var self = this;
-				API.areas(self.currentPage, 100, val).then(res => {
+				API.areas(1, 100, val).then(res => {
 					self.areaList = res.data;
 				})
 			},
@@ -279,7 +279,7 @@
 			
 			getCommunity(val) {
 				var self = this;
-				API.areas(self.currentPage, 100, val).then(res => {
+				API.areas(1, 100, val).then(res => {
 					self.communityList = res.data;
 				})
 			},

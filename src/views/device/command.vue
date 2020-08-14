@@ -111,7 +111,6 @@
 				API.searchCommand(self.uuid).then(res => {
 					self.commandsData = res.data;
 					self.totalCommandsPage = res.total;
-					self.uuid = '';
 					self.$message.success('搜索成功！');
 				})
 			},
@@ -261,7 +260,7 @@
 			handleSizeCommandsChange(val) {
 				var self = this;
 				self.pageCommandsSize = val;
-				API.deviceCommands(self.currentCommandsPage, val, self.command_uuid).then(res => {
+				API.deviceCommands(self.currentCommandsPage, val, self.uuid).then(res => {
 					self.commandsData = res.data;
 					self.totalCommandsPage = res.total;
 				})
@@ -270,7 +269,7 @@
 			handleCurrentCommandsChange(val) {
 				var self = this;
 				self.currentCommandsPage = val;
-				API.deviceCommands(val, self.pageCommandsSize, self.command_uuid).then(res => {
+				API.deviceCommands(val, self.pageCommandsSize, self.uuid).then(res => {
 					self.commandsData = res.data;
 					self.totalCommandsPage = res.total;
 				})
