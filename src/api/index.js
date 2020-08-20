@@ -13,6 +13,7 @@ API.delAip = function(id) {
 	return axios.del(url.Aip, {id:id})
 }
 
+// 获取
 API.aips = function(page,limit) {
 	return axios.get(url.Aips, {page: page,limit: limit})
 }
@@ -101,8 +102,10 @@ API.device = function(data) {
 	return axios.post(url.Device, data)
 }
 
-API.devices = function(page,limit,type) {
-	return axios.get(url.Devices, {page: page, limit: limit, type: type})
+// 获取人脸组
+// 获取人脸组
+API.devices = function(page,limit,type,uuid) {
+	return axios.get(url.Devices, {page: page, limit: limit, type: type, uuid: uuid})
 }
 
 API._devices = function(direction,addresses,limit) {
@@ -131,10 +134,6 @@ API.deviceCommands = function(page, limit, uuid) {
 	return axios.get(url.DeviceCommands, {page:page, limit:limit,uuid: uuid})
 }
 
-// 搜索指令
-API.searchCommand = function(uuid) {
-	return axios.get(url.DeviceCommands, {uuid:uuid})
-}
 
 // 获取指令类型
 API.commandsType = function(type) {
@@ -152,14 +151,9 @@ API.deviceUserList = function(page, limit, uuid) {
 }
 
 // 搜索设备号
-API.search = function(uuid) {
-	return axios.get(url.Devices, {uuid:uuid})
-}
-
-// 搜索人脸组
-API.searchType = function(type) {
-	return axios.get(url.Devices, {type:type})
-}
+// API.search = function(page,limit,uuid) {
+// 	return axios.get(url.Devices, {page:page, limit:limit,uuid:uuid})
+// }
 
 // 获取人脸组
 API.faceGroup = function(address_id) {

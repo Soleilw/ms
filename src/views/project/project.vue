@@ -1,8 +1,8 @@
 <template>
-	<div>
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
-				<el-button type="primary" @click="dialogProject = true">添加项目</el-button>
+				<el-button type="primary" @click="addProject">添加项目</el-button>
 			</div>
 		</div>
 		
@@ -43,8 +43,8 @@
 		</el-table>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
+			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange" @next-click="nextChange">
 			</el-pagination>
 		</div>
 	</div>
@@ -57,6 +57,7 @@
 		name: 'gradems',
 		data() {
 			return {
+				loading: true,
 				dialogProject: false,
 				apiList: [],
 				form: {
@@ -64,9 +65,9 @@
 					name: ''
 				},
 				tableData: [],
-				currentPage: 1,
-				pageSize: 10,
-				totalPage: 0
+				currente: 1,
+				size: 10,
+				total: 0
 			}
 		},
 		mounted() {
@@ -76,16 +77,27 @@
 		methods: {
 			getAip() {
 				var self = this;
-				API.aips(self.currentPage).then(res => {
+				API.aips(self.current).then(res => {
+					self.loading = false;
 					self.apiList = res.data;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			getProject() {
 				var self = this;
-				API.projects(self.currentPage).then(res => {
+				API.projects(self.current).then(res => {
 					self.tableData = res.data;
-					self.totalPage = res.total;
+					self.total = res.total;
 				})
+			},
+			addProject() {
+				var self = this;
+				self.dialogProject = true;
+				self.form = {
+					aip_id: '',
+					name: ''
+				}
 			},
 			// 添加新的AIP
 			newProject() {
@@ -94,7 +106,7 @@
 					self.dialogProject = false;
 					self.$message.success("提交成功");
 					self.getProject();
-					self.currentPage = 1
+					self.current = 1
 					self.form = {}
 				})
 			},
@@ -102,21 +114,55 @@
 			handleDel() {},
 
 			// 分页
-			handleCurrentChange(val) {
+			currentChange(val) {
 				var self = this;
-				self.currentPage = val;
-				API.projects(val, self.pageSize).then(res => {
+				self.loading = true;
+				self.current = val;
+				API.projects(val, self.size).then(res => {
+					self.loading = false;
 					self.tableData = res.data;
-					self.totalPage = res.total;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 每页显示条数
-			handleSizeChange(val) {
+			sizeChange(val) {
 				var self = this;
-				self.pageSize = val;
-				API.projects(self.currentPage, val).then(res => {
+				self.loading = true;
+				self.size = val;
+				API.projects(self.current, val).then(res => {
+					self.loading = false;
 					self.tableData = res.data;
-					self.totalPage = res.total;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 上一页
+			prevChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.projects(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 下一页
+			nextChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.projects(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			}
 		}

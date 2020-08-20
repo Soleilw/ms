@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
 				<el-button type="primary" @click="addRole">添加角色</el-button>
@@ -27,8 +27,9 @@
 		</el-dialog>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="10" layout="sizes, prev, pager, next, jumper" :total="totalPage" @size-change="handleSizeChange"></el-pagination>
+			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange" @next-click="nextChange">
+			</el-pagination>
 		</div>
 
 		<el-dialog title="添加角色" :visible.sync="dialogRole" width="90%" :close-on-click-modal="false">
@@ -162,9 +163,7 @@
 							</el-checkbox>
 						</el-checkbox-group>
 					</div>
-
 					</el-form-item>
-
 					<div class="submit">
 						<el-form-item>
 							<el-button type="primary" @click="newRole">提交</el-button>
@@ -183,6 +182,7 @@
 	export default {
 		data() {
 			return {
+				loading: true,
 				dialogRole: false,
 				form: {
 					name: '',
@@ -331,8 +331,9 @@
 				id: "", // 删除id
 				disabledRole: false,
 				// 分页
-				currentPage: 1,
-				totalPage: 0,
+				current: 1, // 当前页
+				size: 10, // 每页出现几条
+				total: 0 // 总页数
 			};
 		},
 		mounted() {
@@ -354,10 +355,13 @@
 			},
 			getRoles() {
 				var self = this;
-				API.roles(self.currentPage).then(res => {
+				API.roles(self.current).then(res => {
+					self.loading = false;
 					self.tableData = res.data;
-					self.totalPage = res.total;
-				});
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
 			},
 			newRole() {
 				var self = this;
@@ -406,17 +410,56 @@
 			},
 
 			// 分页
-			handleCurrentChange(val) {
+			currentChange(val) {
 				var self = this;
-				self.getRoles();
+				self.loading = true;
+				self.current = val;
+				API.roles(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
 			},
-			// 每页多少条
-			handleSizeChange(val) {
+			// 每页显示条数
+			sizeChange(val) {
 				var self = this;
-				// API.roles(self.currentPage, val).then(res => {
-				// 	self.tableData = res.data;
-				// 	self.totalPage = res.total;
-				// });
+				self.loading = true;
+				self.size = val;
+				API.roles(self.current, val).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 上一页
+			prevChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.roles(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 下一页
+			nextChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.roles(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
 			}
 		}
 	};

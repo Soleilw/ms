@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
 				<el-button type="primary" @click="addArea">添加地区</el-button>
@@ -42,7 +42,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="title" label="名称"></el-table-column>
 			<el-table-column label="操作">
@@ -56,8 +56,8 @@
 		</el-table>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
+			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange" @next-click="nextChange">
 			</el-pagination>
 		</div>
 	</div>
@@ -69,9 +69,8 @@
 	export default {
 		data() {
 			return {
+				loading: true,
 				dialogArea: false,
-				projectList: [],
-				typeList: [],
 				form: {
 					title: '',
 					parent_id: '',
@@ -87,11 +86,10 @@
 				areaList: [], //  社区列表
 				areas_id: '',
 
-				tableDate: [],
-				currentPage: 1,
-				pageSize: 10,
-				totalPage: 0,
-				showMap: '' // 地图显示
+				tableData: [],
+				current: 1,
+				size: 10,
+				total: 0,
 			}
 		},
 		mounted() {
@@ -101,22 +99,12 @@
 			// 获取社区列表（省市区选中）
 			getProvice() {
 				var self = this;
-				API.areas(self.currentPage, 10).then(res => {
-					self.proList = res.data;
-					self.tableDate = res.data;
-				})
-			},
-			getAddressType() {
-				var self = this;
-				API.addressTypes(self.currentPage).then(res => {
-					self.typeList = res;
-				})
-			},
-			getAddress() {
-				var self = this;
-				API.addresses(self.currentPage).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
+				API.areas(self.current, 10).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.count;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			addArea() {
@@ -130,36 +118,15 @@
 					parent_id: '',
 					is_community: 1
 				}
-			},
-			// 添加人脸分组名称
-			addFace() {
-				var self = this;
-				self.form.face_groups.push({})
-			},
-			delFace() {
-				var self = this;
-				self.form.face_groups.pop({})
-			},
-			// 添加新的AIP
-			openMap() {
-				this.showMap = true;
-			},
-			closeMap() {
-				this.showMap = false;
-			},
-			getLoc(mapData) {
-				this.form.lng = mapData.latlng.lng;
-				this.form.lat = mapData.latlng.lat;
-				// this.form.address = mapData.poiname;
-				this.showMap = false;
+				self.getPro();
 			},
 			newArea() {
 				var self = this;
 				API.area(self.form).then(res => {
 					self.dialogArea = false;
 					self.$message.success("提交成功");
-					self.getPro();
-					self.currentPage = 1
+					self.getProvice();
+					self.current = 1
 					self.form = {}
 				})
 			},
@@ -173,9 +140,8 @@
 			// 获取社区列表（省市区选中）
 			getPro() {
 				var self = this;
-				API.areas(self.currentPage, 100).then(res => {
+				API.areas(1, 100, 0).then(res => {
 					self.proList = res.data;
-					self.tableDate = res.data;
 				})
 			},
 			proChange(val) {
@@ -184,7 +150,7 @@
 			},
 			getCity(val) {
 				var self = this;
-				API.areas(self.currentPage, 100, val).then(res => {
+				API.areas(1, 100, val).then(res => {
 					self.cityList = res.data;
 				})
 			},
@@ -195,7 +161,7 @@
 
 			getAreas(val) {
 				var self = this;
-				API.areas(self.currentPage, 100, val).then(res => {
+				API.areas(1, 100, val).then(res => {
 					self.areaList = res.data;
 				})
 			},
@@ -208,32 +174,65 @@
 
 			getCommunity(val) {
 				var self = this;
-				API.areas(self.currentPage, 100, val).then(res => {
+				API.areas(1, 100, val).then(res => {
 					self.communityList = res.data;
 				})
 			},
 
 			communityChange(val) {
-				console.log(val)
 				this.form.parent_id = val;
 			},
 
 			// 分页
-			handleCurrentChange(val) {
+			currentChange(val) {
 				var self = this;
-				self.currentPage = val;
-				API.addresses(val, self.pageSize).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
+				self.loading = true;
+				self.current = val;
+				API.areas(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.count;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 每页显示条数
-			handleSizeChange(val) {
+			sizeChange(val) {
 				var self = this;
-				self.pageSize = val;
-				API.addresses(self.currentPage, val).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
+				self.loading = true;
+				self.size = val;
+				API.areas(self.current, val).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.count;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 上一页
+			prevChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.areas(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.count;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 下一页
+			nextChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.areas(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.count;
+				}).catch(err => {
+					self.loading = false;
 				})
 			}
 		}

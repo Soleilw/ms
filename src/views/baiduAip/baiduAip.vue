@@ -1,5 +1,5 @@
 <template>
-	<div v-loading="loading" element-loading-text="加载中">
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
 				<el-button type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="addAip">添加AIP</el-button>
@@ -23,7 +23,7 @@
 					</el-form-item>
 					<div class="submit">
 						<el-form-item>
-							<el-button type="primary" @click="newAip" v-loading="addLoading" element-loading-text="提交中">提交</el-button>
+							<el-button type="primary" @click="newAip">提交</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -48,8 +48,8 @@
 		</el-table>
 
 		<div class="block">
-			<el-pagination @current-change="currentPage" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizePage" :total="total">
+			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange" @next-click="nextChange">
 			</el-pagination>
 		</div>
 	</div>
@@ -63,7 +63,6 @@
 		data() {
 			return {
 				loading: true,
-				addLoading: false, // 提交
 				dialogAip: false,
 				form: {
 					name: '',
@@ -107,34 +106,31 @@
 
 			newAip() {
 				var self = this;
-				self.addloading = true;
 				API.aip(self.form).then(res => {
-					self.addloading = false;
-					self.dialogApk = false;
+					self.dialogAip = false;
 					self.$message.success("提交成功");
 					self.getAip();
 					self.current = 1;
 					self.form = {};
 				}).catch(err => {
-					this.addloading = false;
 				})
 			},
 			// 操作
 			handleDel(index, row) {
-				// var self = this;
-				// console.log(row)
-				// var id = row.id
-				// API.delAip(id).then(res => {
-				// 	self.$message.success('删除成功');
-				// 	self.getAip();
-				// 	self.current = 1;
-				// }).catch(err => {
-				// 	this.loading = false;
-				// })
+				var self = this;
+				console.log(row)
+				var id = row.id
+				API.delAip(id).then(res => {
+					self.$message.success('删除成功');
+					self.getAip();
+					self.current = 1;
+				}).catch(err => {
+					self.loading = false;
+				})
 			},
 
 			// 分页
-			currentPage(val) {
+			currentChange(val) {
 				var self = this;
 				self.loading = true;
 				self.current = val;
@@ -143,11 +139,11 @@
 					self.tableData = res.data;
 					self.total = res.total;
 				}).catch(err => {
-					this.loading = false;
+					self.loading = false;
 				})
 			},
 			// 每页显示条数
-			sizePage(val) {
+			sizeChange(val) {
 				var self = this;
 				self.loading = true;
 				self.size = val;
@@ -156,7 +152,33 @@
 					self.tableData = res.data;
 					self.total = res.total;
 				}).catch(err => {
-					this.loading = false;
+					self.loading = false;
+				})
+			},
+			// 上一页
+			prevChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.aips(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 下一页
+			nextChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.aips(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			}
 		}

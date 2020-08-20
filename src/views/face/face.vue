@@ -1,17 +1,16 @@
 <template>
-	<div>
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
-				<el-button type="primary" @click="dialogFace = true">添加人脸</el-button>
+				<el-button type="primary" @click="addFace">添加人脸</el-button>
 			</div>
 		</div>
-
 
 		<el-dialog title="添加人脸" :visible.sync="dialogFace">
 			<div class="box">
 				<el-form :model="form" label-width="100px">
 					<el-form-item label="选择地址">
-						<el-select v-model="form.address_id" @change="addressChange">
+						<el-select v-model="form.address_id" filterable @change="addressChange">
 							<el-option v-for="(item, index) in addressList" :label="item.address" :value="item.id" :key="index"></el-option>
 						</el-select>
 					</el-form-item>
@@ -52,7 +51,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="name" label="名字"></el-table-column>
 			<el-table-column prop="face_id" label="人脸ID"></el-table-column>
@@ -77,8 +76,9 @@
 		</el-table>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
+			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 300, 500, 700, 900]"
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange"
+			 @next-click="nextChange">
 			</el-pagination>
 		</div>
 	</div>
@@ -91,6 +91,7 @@
 		name: 'gradems',
 		data() {
 			return {
+				loading: true,
 				dialogFace: false,
 				addressList: [],
 				faceGroupList: [],
@@ -102,10 +103,10 @@
 					number: '',
 					href: ''
 				},
-				tableDate: [],
-				currentPage: 1,
-				pageSize: 10,
-				totalPage: 0
+				tableData: [],
+				current: 1,
+				size: 10,
+				total: 0
 			}
 		},
 		mounted() {
@@ -115,14 +116,17 @@
 		methods: {
 			getFace() {
 				var self = this;
-				API.faces(self.currentPage).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
+				API.faces(self.current).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			getAddress() {
 				var self = this;
-				API.addresses(self.currentPage).then(res => {
+				API.addresses(1, 10000).then(res => {
 					self.addressList = res.data;
 				})
 			},
@@ -137,6 +141,17 @@
 				})
 
 			},
+			addFace() {
+				var self = this;
+				self.dialogFace = true;
+				self.form = {
+					address_id: '',
+					group_id: '',
+					name: '',
+					number: '',
+					href: ''
+				}
+			},
 			// 添加新的AIP
 			newFace() {
 				var self = this;
@@ -145,7 +160,7 @@
 					self.dialogFace = false;
 					self.$message.success("提交成功");
 					self.getAddress();
-					self.currentPage = 1
+					self.current = 1
 					self.form = {}
 				})
 			},
@@ -175,21 +190,55 @@
 				this.$message.error('上传图片不能超过1张!');
 			},
 			// 分页
-			handleCurrentChange(val) {
+			currentChange(val) {
 				var self = this;
-				self.currentPage = val;
-				API.faces(val, self.pageSize).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
+				self.loading = true;
+				self.current = val;
+				API.faces(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 每页显示条数
-			handleSizeChange(val) {
+			sizeChange(val) {
 				var self = this;
-				self.pageSize = val;
-				API.faces(self.currentPage, val).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
+				self.loading = true;
+				self.size = val;
+				API.faces(self.current, val).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 上一页
+			prevChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.faces(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 下一页
+			nextChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.faces(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			}
 		}

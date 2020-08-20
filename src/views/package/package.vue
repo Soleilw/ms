@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
 				<el-button type="primary" @click="dialogAPK = true">添加APK</el-button>
@@ -84,7 +84,8 @@
 					</div>
 				</el-dialog>
 
-				<el-table :data="versionTableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+				<el-table :data="versionTableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620"
+				 v-loading="versionLoading" element-loading-text="获取数据中">
 					<el-table-column prop="id" label="ID" align="center"></el-table-column>
 					<el-table-column prop="apk_id" label="APKID" align="center"></el-table-column>
 					<el-table-column prop="version" label="版本" align="center"></el-table-column>
@@ -180,16 +181,18 @@
 				</el-dialog>
 
 				<div class="block">
-					<el-pagination @current-change="handleCurrentVersionChange" :current-page.sync="currentVersionPage" :page-size="10"
-					 layout="prev, pager, next, jumper" :total="totalVersionPage">
+					<el-pagination @current-change="versionCurrentChange" :current-page.sync="currentVersion" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+					 :page-size="sizeVersion" layout="sizes, prev, pager, next, jumper" @size-change="versionSizeChange" :total="totalVersion"
+					 @prev-click="prevVersion" @next-click="nextVersion">
 					</el-pagination>
 				</div>
 			</div>
 		</el-dialog>
 
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
+			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange"
+			 @next-click="nextChange">
 			</el-pagination>
 		</div>
 	</div>
@@ -205,6 +208,7 @@
 		name: 'gradems',
 		data() {
 			return {
+				loading: true,
 				dialogAPK: false,
 				form: {
 					name: '',
@@ -212,9 +216,10 @@
 				},
 				dialogVersion: false,
 				tableDate: [],
-				currentPage: 1,
-				pageSize: 10,
-				totalPage: 0,
+				// 分页
+				current: 1, // 当前页
+				size: 10, // 每页出现几条
+				total: 0, // 总页数
 
 				dialogShowVersion: false,
 				apkList: [],
@@ -254,6 +259,7 @@
 					name: '进'
 				}],
 				versionTableData: [],
+				versionLoading: true,
 				// 发布
 				sendForm: {
 					type: '',
@@ -268,8 +274,10 @@
 				checkAll: false,
 				hasType: false,
 				deviceList: [],
-				currentVersionPage: 1,
-				totalVersionPage: 0
+				// 分页
+				currentVersion: 1, // 当前页
+				sizeVersion: 10, // 每页出现几条
+				totalVersion: 0, // 总页数
 			}
 		},
 		mounted() {
@@ -279,17 +287,14 @@
 			this.getQiniuToken();
 		},
 		methods: {
-			getAip() {
-				var self = this;
-				API.aips(self.currentPage).then(res => {
-					self.apiList = res.data;
-				})
-			},
 			getApk() {
 				var self = this;
-				API.apks(self.currentPage).then(res => {
+				API.apks(self.current).then(res => {
+					self.loading = false;
 					self.tableDate = res.data;
-					self.totalPage = res.total;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 添加新的AIP
@@ -299,7 +304,7 @@
 					self.$message.success("提交成功");
 					this.getApk();
 					self.ApkForm = false;
-					self.currentPage = 1;
+					self.current = 1;
 					self.form = {};
 				})
 			},
@@ -309,28 +314,65 @@
 				var self = this;
 				self.dialogShowVersion = true;
 				self.versionForm.apk_id = row.id
-				API.apkVersions(self.currentPage, 10, self.versionForm.apk_id).then(res => {
+				API.apkVersions(self.current, 10, self.versionForm.apk_id).then(res => {
+					self.versionLoading = false;
 					self.versionTableData = res.data;
 					self.totalVersionPage = res.total;
+				}).catch(err => {
+					self.versionLoading = false;
 				})
 			},
 
 			// 分页
-			handleCurrentChange(val) {
+			currentChange(val) {
 				var self = this;
-				self.currentPage = val;
-				API.apks(val, self.pageSize).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
+				self.loading = true;
+				self.current = val;
+				API.apks(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 每页显示条数
-			handleSizeChange(val) {
+			sizeChange(val) {
 				var self = this;
-				self.pageSize = val;
-				API.apks(self.currentPage, val).then(res => {
+				self.loading = true;
+				self.size = val;
+				API.apks(self.current, val).then(res => {
+					self.loading = false;
 					self.tableDate = res.data;
-					self.totalPage = res.total;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 上一页
+			prevChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.apks(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 下一页
+			nextChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.apks(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 
@@ -535,13 +577,58 @@
 				})
 			},
 
-			handleCurrentVersionChange(val) {
+			// 分页
+			versionCurrentChange(val) {
 				var self = this;
-				API.apkVersions(val, 10, self.versionForm.apk_id).then(res => {
+				self.versionLoading = true;
+				self.currentVersion = val;
+				API.apkVersions(val, self.sizeVersion, self.versionForm.apk_id).then(res => {
+					self.versionLoading = false;
 					self.versionTableData = res.data;
-					self.totalVersionPage = res.total;
+					self.totalVersion = res.total;
+				}).catch(err => {
+					self.versionLoading = false;
 				})
-			}
+			},
+			// 每页显示条数
+			versionSizeChange(val) {
+				var self = this;
+				self.versionLoading = true;
+				self.sizeVersion = val;
+				API.apkVersions(self.currentVersion, val, self.versionForm.apk_id).then(res => {
+					self.versionLoading = false;
+					self.versionTableData = res.data;
+					self.totalVersion = res.total;
+				}).catch(err => {
+					self.versionLoading = false;
+				})
+			},
+			// 上一页
+			prevVersion(val) {
+				var self = this;
+				self.versionLoading = true;
+				self.currentVersion = val;
+				API.apkVersions(val, self.sizeVersion, self.versionForm.apk_id).then(res => {
+					self.versionLoading = false;
+					self.versionTableData = res.data;
+					self.totalVersion = res.total;
+				}).catch(err => {
+					self.versionLoading = false;
+				})
+			},
+			// 下一页
+			nextVersion(val) {
+				var self = this;
+				self.versionLoading = true;
+				self.currentVersion = val;
+				API.apkVersions(val, self.sizeVersion, self.versionForm.apk_id).then(res => {
+					self.versionLoading = false;
+					self.versionTableData = res.data;
+					self.totalVersion = res.total;
+				}).catch(err => {
+					self.versionLoading = false;
+				})
+			},
 		}
 	}
 </script>

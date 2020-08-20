@@ -1,11 +1,11 @@
 <template>
-	<div>
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
 				<el-button type="primary" @click="addDoubtable">添加可疑人脸</el-button>
 			</div>
 		</div>
-		
+
 
 		<el-dialog title="添加可疑人脸" :visible.sync="dialogDoubtable" :close-on-click-modal="false">
 			<div class="box">
@@ -53,7 +53,7 @@
 				</el-form>
 			</div>
 		</el-dialog>
- 
+
 		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="name" label="姓名"></el-table-column>
@@ -69,10 +69,11 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		
+
 		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
+			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange"
+			 @next-click="nextChange">
 			</el-pagination>
 		</div>
 	</div>
@@ -87,6 +88,7 @@
 		name: 'gradems',
 		data() {
 			return {
+				loading: true,
 				dialogDoubtable: false,
 				// 上传人脸
 				imgData: {
@@ -106,13 +108,14 @@
 				old_href: '', // 原人脸图片
 				change_href: '',
 				hasNewImage: false,
-				
+
 				tableDate: [],
 				id: '',
 				dialogDel: false,
-				currentPage: 1,
-				pageSize: 10,
-				totalPage: 0
+				// 分页
+				current: 1, // 当前页
+				size: 10, // 每页出现几条
+				total: 0 // 总页数
 			}
 		},
 		mounted() {
@@ -122,9 +125,12 @@
 		methods: {
 			getDangerFaces() {
 				var self = this;
-				API.dangerFaces(self.currentPage).then(res => {
+				API.dangerFaces(self.current).then(res => {
+					self.loading = false;
 					self.tableDate = res.data;
-					self.totalPage = res.total;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 更换人脸
@@ -140,7 +146,7 @@
 				};
 				self.change_href = '';
 			},
-			
+
 			// 人脸信息
 			handleChange(file) {
 				var self = this;
@@ -165,12 +171,12 @@
 					self.form.href = self.old_href;
 					API.dangerFace(self.form).then(res => {
 						self.$message.success('上传成功');
-						self.currentPage = 1;
+						self.current = 1;
 						self.form.href = '';
 						self.dialogDoubtable = false;
-						API.dangerFaces(self.currentPage).then(res => {
+						API.dangerFaces(self.current).then(res => {
 							self.tableDate = res.data;
-							self.totalPage = res.total;
+							self.total = res.total;
 						})
 					})
 				} else {
@@ -183,11 +189,11 @@
 				self.form.href = file.url;
 				API.dangerFace(self.form).then(res => {
 					self.$message.success('上传成功');
-					self.currentPage = 1;
+					self.current = 1;
 					self.dialogStudent = true;
-					API.dangerFaces(self.currentPage).then(res => {
+					API.dangerFaces(self.current).then(res => {
 						self.tableDate = res.data;
-						self.totalPage = res.total;
+						self.total = res.total;
 					})
 					self.$refs.upload.clearFiles()
 					self.form.href = '';
@@ -214,7 +220,7 @@
 				// 	self.currentPage = 1;
 				// })
 			},
-			
+
 			getQiniuToken() {
 				var self = this;
 				axios.get('https://api.fengniaotuangou.cn/api/upload/token').then(res => {
@@ -222,24 +228,59 @@
 				})
 			},
 
+
 			// 分页
-			handleCurrentChange(val) {
+			currentChange(val) {
 				var self = this;
-				self.currentPage = val;
-				API.dangerFaces(val, self.pageSize).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
+				self.loading = true;
+				self.current = val;
+				API.dangerFaces(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 每页显示条数
-			handleSizeChange(val) {
+			sizeChange(val) {
 				var self = this;
-				self.pageSize = val;
-				API.dangerFaces(self.currentPage, val).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
+				self.loading = true;
+				self.size = val;
+				API.dangerFaces(self.current, val).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
+			// 上一页
+			prevChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.dangerFaces(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 下一页
+			nextChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.dangerFaces(val, self.size).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			}
 		}
 	}
 </script>

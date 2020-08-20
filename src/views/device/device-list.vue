@@ -1,8 +1,8 @@
 <template>
-	<div v-loading="loading" element-loading-text="加载中">
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
-				<el-button type="primary" @click="dialogDevice = true">添加设备</el-button>
+				<el-button type="primary" @click="addDevice">添加设备</el-button>
 			</div>
 			<div class="btn">
 				<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
@@ -14,6 +14,10 @@
 					<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
 					</el-option>
 				</el-select>
+			</div>
+			<div class="btn">
+				<el-cascader v-model="selectedOptions" placeholder="请选择省市区" :options="cascaderData" @active-item-change="handleItemChange"
+				 :props="props"></el-cascader>
 			</div>
 		</div>
 
@@ -104,6 +108,12 @@
 			<el-table-column prop="direction" label="方向" width="80px"></el-table-column>
 			<el-table-column prop="version" label="版本"></el-table-column>
 			<el-table-column prop="remark" label="备注" width="300px"></el-table-column>
+			<el-table-column prop="state" label="状态">
+				<template slot-scope="scope">
+					<span v-if="scope.row.state == 1">在线</span>
+					<span v-if="scope.row.state == 2">离线</span>
+				</template>
+			</el-table-column>
 			<el-table-column prop="last_login" label="最后登录时间" width="200px"></el-table-column>
 			<el-table-column label="操作" width="200px">
 				<template slot-scope="scope">
@@ -140,10 +150,17 @@
 				</template>
 			</el-table-column>
 		</el-table>
+		<div class="block">
+			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange"
+			 @next-click="nextChange">
+			</el-pagination>
+		</div>
 
 		<!-- 查看日志 -->
 		<el-dialog title="查看日志" :visible.sync="dialogLogs" width="80%">
-			<el-table :data="logstable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table :data="logstable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" v-loading="logLoading"
+			 element-loading-text="获取数据中">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="time" label="时间"></el-table-column>
@@ -170,8 +187,9 @@
 				</el-table-column> -->
 			</el-table>
 			<div class="block">
-				<el-pagination @current-change="handleCurrentLogsChange" :current-page.sync="currentLogsPage" :page-size="10"
-				 layout="prev, pager, next, jumper" :total="totalLogsPage">
+				<el-pagination @current-change="logCurrentChange" :current-page.sync="currentLog" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+				 :page-size="sizeLog" layout="sizes, prev, pager, next, jumper" @size-change="logSizeChange" :total="totalLog"
+				 @prev-click="prevLog" @next-click="nextLog">
 				</el-pagination>
 			</div>
 		</el-dialog>
@@ -182,7 +200,8 @@
 
 		<!-- 查看进出记录 -->
 		<el-dialog title="查看进出记录" :visible.sync="dialogShowRecord" width="80%">
-			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620"
+			 v-loading="faceLoading" element-loading-text="获取数据中">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="face.name" label="名称"></el-table-column>
@@ -199,8 +218,9 @@
 				</el-table-column>
 			</el-table>
 			<div class="block">
-				<el-pagination @current-change="handleCurrentFaceLogsChange" :current-page.sync="currentFaceLogsPage" :page-size="10"
-				 layout="prev, pager, next, jumper" :total="totalFaceLogsPage">
+				<el-pagination @current-change="faceCurrentChange" :current-page.sync="currentFace" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+				 :page-size="sizeFace" layout="sizes, prev, pager, next, jumper" @size-change="faceSizeChange" :total="totalFace"
+				 @prev-click="prevFace" @next-click="nextFace">
 				</el-pagination>
 			</div>
 		</el-dialog>
@@ -369,12 +389,6 @@
 				</el-table-column>
 				<el-table-column prop="updated_at" label="更新时间"></el-table-column>
 			</el-table>
-			<div class="block">
-				<el-pagination @current-change="handleCurrentCommandsChange" :current-page.sync="currentCommandsPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-				 :page-size="pageCommandsSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeCommandsChange"
-				 :total="totalCommandsPage">
-				</el-pagination>
-			</div>
 		</el-dialog>
 
 		<!-- 查看用户-->
@@ -398,19 +412,8 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<div class="block">
-				<el-pagination @current-change="handleCurrentUserListChange" :current-page.sync="currentUserListPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-				 :page-size="pageUserListSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeUserListChange"
-				 :total="totalUserListPage">
-				</el-pagination>
-			</div>
 		</el-dialog>
 
-		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="pageSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeChange" :total="totalPage">
-			</el-pagination>
-		</div>
 	</div>
 </template>
 
@@ -460,9 +463,11 @@
 				dialogFaceGroup: false,
 				facetable: [], // 人脸组表格
 				dialogLogs: false, // 查看日志
+				logLoading: true,
 				logstable: [],
 				dialogShowRecord: false, // 查看进出记录
 				faceLogsTable: [],
+				faceLoading: false,
 				uuid: '',
 				address_id: '',
 				dialogHeart: false, // 查看心跳
@@ -483,25 +488,31 @@
 				dialogUserList: false, // 查看用户列表
 				userListData: [],
 				user_list_uuid: '',
-				currentUserListPage: 1,
-				pageUserListSize: 10,
-				totalUserListPage: 0,
-				currentCommandsPage: 1,
-				pageCommandsSize: 10,
-				totalCommandsPage: 0,
-				currentFaceLogsPage: 1,
-				totalFaceLogsPage: 0,
-				currentLogsPage: 1,
-				totalLogsPage: 0,
-				currentPage: 1,
-				pageSize: 10,
-				totalPage: 0,
 
 				timer: '',
-				langtime: 10
-			}
-		},
-		mounted() {
+				langtime: 10,
+
+				// 分页
+				current: 1, // 当前页
+				size: 10, // 每页出现几条
+				total: 0, // 总页数
+				// 日志分页
+				log_uuid: '',
+				currentLog: 1, // 当前页
+				sizeLog: 10, // 每页出现几条
+				totalLog: 0, // 总页数
+				// 进出记录分页
+				face_uuid: '',
+				currentFace: 1, // 当前页
+				sizeFace: 10, // 每页出现几条
+				totalFace: 0, // 总页数
+				
+				cascaderData: [],
+				props: {}
+
+		}
+	},
+	mounted() {
 			this.getDevice();
 			this.getAddress();
 			this.getUuid();
@@ -511,34 +522,49 @@
 			this.getCommandType();
 		},
 		methods: {
+			// 获取社区列表（省市区选中）
+			getPro() {
+				var self = this;
+				API.areas(1, 100, 0).then(res => {
+					self.cascaderData = res.data;
+				})
+			},
+			
+			
+			
 			// 搜索
 			search() {
 				var self = this;
 				self.loading = true;
-				API.search(self.uuid).then(res => {
+				API.devices(1, 10, self.type, self.uuid).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
-					self.totalPage = res.total;
-					self.uuid = '';
-					self.$message.success('搜索成功！');
+					self.total = res.total;
+					self.$message.success('搜索成功!');
 				}).catch(err => {
 					self.loading = false;
 				})
 			},
 			typeChange(val) {
 				var self = this;
-				API.searchType(val).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
-					self.$message.success('搜索成功！');
-				})
-			},
-			getDevice() {
-				var self = this;
-				API.devices(this.currentPage).then(res => {
+				self.loading = true;
+				API.devices(1, self.size, val, self.uuid).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
-					self.totalPage = res.total;
+					self.total = res.total;
+					self.current = 1;
+					self.$message.success('搜索成功！');
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 获取设备列表
+			getDevice() {
+				var self = this;
+				API.devices(this.current).then(res => {
+					self.loading = false;
+					self.tableDate = res.data;
+					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
 				})
@@ -621,6 +647,23 @@
 					self.versionList = res.data;
 				})
 			},
+			addDevice() {
+				var self = this;
+				self.dialogDevice = true;
+				self.form = {
+					name: '',
+					address_id: '',
+					project_id: '',
+					type: '人脸机',
+					uuid: '',
+					remark: '',
+					configs: [],
+					apk: '',
+					apk_version: '',
+					face_groups: [],
+					direction: ''
+				}
+			},
 			// 添加新的AIP
 			newDevice() {
 				var self = this;
@@ -662,18 +705,68 @@
 				})
 			},
 			// 操作
+			// 查看日志
 			handleShowLog(index, row) {
 				this.dialogLogs = true;
-				this.uuid = row.uuid;
+				this.log_uuid = row.uuid;
 				API.deviceLogs(1, 10, row.uuid).then(res => {
+					this.logLoading = false;
 					this.logstable = res.data;
-					this.totalLogsPage = res.total;
+					this.totalLog = res.total;
+				}).catch(err => {
+					this.logLoading = false;
 				})
 			},
-			handleCurrentLogsChange(val) {
-				API.deviceLogs(val, 10, this.uuid).then(res => {
-					this.logstable = res.data;
-					this.totalLogsPage = res.total;
+			// 查看日志的分页
+			logCurrentChange(val) {
+				var self = this;
+				self.currentLog = val;
+				self.logLoading = true;
+				API.deviceLogs(val, self.sizeLog, self.log_uuid).then(res => {
+					self.logLoading = false;
+					self.logstable = res.data;
+					self.totalLog = res.total;
+				}).catch(err => {
+					self.logLoading = false;
+				})
+			},
+			// 每页显示条数
+			logSizeChange(val) {
+				var self = this;
+				self.logLoading = true;
+				self.sizeLog = val;
+				API.deviceLogs(self.currentLog, val, self.log_uuid).then(res => {
+					self.logLoading = false;
+					self.logstable = res.data;
+					self.totalLog = res.total;
+				}).catch(err => {
+					self.logLoading = false;
+				})
+			},
+			// 上一页
+			prevLog(val) {
+				var self = this;
+				self.currentLog = val;
+				self.logLoading = true;
+				API.deviceLogs(val, self.sizeLog, self.log_uuid).then(res => {
+					self.logLoading = false;
+					self.logstable = res.data;
+					self.totalLog = res.total;
+				}).catch(err => {
+					self.logLoading = false;
+				})
+			},
+			// 下一页
+			nextLog(val) {
+				var self = this;
+				self.currentLog = val;
+				self.logLoading = true;
+				API.deviceLogs(val, self.sizeLog, self.log_uuid).then(res => {
+					self.logLoading = false;
+					self.logstable = res.data;
+					self.totalLog = res.total;
+				}).catch(err => {
+					self.logLoading = false;
 				})
 			},
 			handleShowFace(index, row) {
@@ -683,14 +776,66 @@
 			},
 			handleShowRecord(index, row) {
 				this.dialogShowRecord = true;
-				this.uuid = row.uuid;
+				this.face_uuid = row.uuid;
 				this.address_id = row.address_id;
 				API.deviceFaceLogs(1, 10, row.uuid, row.address_id).then(res => {
 					this.faceLogsTable = res.data;
-					this.totalFaceLogsPage = res.total;
+					this.totalFace = res.total;
 					// this.faceLogsTable.forEach(item => {
 					// 	item.timestamp = DATE.formatTime(item.timestamp, 'Y-M-D h:m:s')
 					// })
+				})
+			},
+			// 查看进出记录的分页
+			faceCurrentChange(val) {
+				var self = this;
+				self.currentFace = val;
+				self.FaceLoading = true;
+				API.deviceFaceLogs(val, self.sizeFace, self.face_uuid).then(res => {
+					self.faceLoading = false;
+					self.faceLogsTable = res.data;
+					self.totalFace = res.total;
+				}).catch(err => {
+					self.faceLoading = false;
+				})
+			},
+			// 每页显示条数
+			faceSizeChange(val) {
+				var self = this;
+				self.faceLoading = true;
+				self.sizeFace = val;
+				API.deviceFaceLogs(self.currentFace, val, self.face_uuid).then(res => {
+					self.faceLoading = false;
+					self.faceLogsTable = res.data;
+					self.totalFace = res.total;
+				}).catch(err => {
+					self.faceLoading = false;
+				})
+			},
+			// 上一页
+			prevFace(val) {
+				var self = this;
+				self.currentFace = val;
+				self.faceLoading = true;
+				API.deviceFaceLogs(val, self.sizeFace, self.face_uuid).then(res => {
+					self.faceLoading = false;
+					self.faceLogsTable = res.data;
+					self.totalFace = res.total;
+				}).catch(err => {
+					self.faceLoading = false;
+				})
+			},
+			// 下一页
+			nextFace(val) {
+				var self = this;
+				self.currentFace = val;
+				self.faceLoading = true;
+				API.deviceFaceLogs(val, self.sizeFace, self.face_uuid).then(res => {
+					self.faceLoading = false;
+					self.faceLogsTable = res.data;
+					self.totalFace = res.total;
+				}).catch(err => {
+					self.faceLoading = false;
 				})
 			},
 			handleDel() {},
@@ -949,76 +1094,58 @@
 					})
 				})
 			},
-			handleCurrentChange(val) {
+			// 设备列表的分页
+			currentChange(val) {
 				var self = this;
-				self.currentPage = val;
+				self.current = val;
 				self.loading = true;
-				API.devices(val, self.pageSize, self.type).then(res => {
+				API.devices(val, self.size, self.type, self.uuid).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
-					self.totalPage = res.total;
+					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
 				})
 			},
 			// 每页显示条数
-			handleSizeChange(val) {
+			sizeChange(val) {
 				var self = this;
 				self.loading = true;
-				self.pageSize = val;
-				API.devices(self.currentPage, val, self.type).then(res => {
+				self.size = val;
+				API.devices(self.current, val, self.type, self.uuid).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
-					self.totalPage = res.total;
+					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
 				})
 			},
-
-			handleCurrentFaceLogsChange(val) {
-				API.deviceFaceLogs(val, 10, this.uuid, this.address_id).then(res => {
-					this.faceLogsTable = res.data;
-					// this.totalFaceLogsPage = res.total;
-				})
-			},
-
-			// 每页显示条数
-			handleSizeCommandsChange(val) {
+			// 上一页
+			prevChange(val) {
 				var self = this;
-				self.pageCommandsSize = val;
-				API.deviceCommands(self.currentCommandsPage, val, self.command_uuid).then(res => {
-					self.commandsData = res.data;
-					self.totalCommandsPage = res.total;
+				self.current = val;
+				self.loading = true;
+				API.devices(val, self.size, self.type, self.uuid).then(res => {
+					self.loading = false;
+					self.tableDate = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
-
-			handleCurrentCommandsChange(val) {
+			// 下一页
+			nextChange(val) {
 				var self = this;
-				self.currentCommandsPage = val;
-				API.deviceCommands(val, self.pageCommandsSize, self.command_uuid).then(res => {
-					self.commandsData = res.data;
-					self.totalCommandsPage = res.total;
+				self.current = val;
+				self.loading = true;
+				API.devices(val, self.current, self.type, self.uuid).then(res => {
+					self.loading = false;
+					self.tableDate = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
-
-			// 每页显示条数
-			// handleSizeUserListChange(val) {
-			// 	var self = this;
-			// 	self.pageUserListSize = val;
-			// 	API.deviceUserList(self.currentUserListPage, val, self.user_list_uuid).then(res => {
-			// 		self.userListData = res;
-			// 		self.totalUserListPage = res.total;
-			// 	})
-			// },
-
-			// handleCurrentUserListChange(val) {
-			// 	var self = this;
-			// 	self.currentUserListPage = val;
-			// 	API.deviceUserList(val, self.pageUserListSize, self.user_list_uuid).then(res => {
-			// 		self.userListData = res;
-			// 		self.totalUserListPage = res.total;
-			// 	})
-			// },
 
 		},
 

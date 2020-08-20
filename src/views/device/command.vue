@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
 				<el-button type="primary" @click="dialogCommand = true">发送指令</el-button>
@@ -73,9 +73,9 @@
 			</el-table-column>
 		</el-table>
 		<div class="block">
-			<el-pagination @current-change="handleCurrentCommandsChange" :current-page.sync="currentCommandsPage" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="pageCommandsSize" layout="sizes, prev, pager, next, jumper" @size-change="handleSizeCommandsChange"
-			 :total="totalCommandsPage">
+			<el-pagination @current-change="currentPage" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizePage" :total="total" @prev-click="prevChange"
+			 @next-click="nextChange">
 			</el-pagination>
 		</div>
 	</div>
@@ -87,6 +87,7 @@
 		name: 'gradems',
 		data() {
 			return {
+				loading: true,
 				dialogCommand: false,
 				uuid: '',
 				command_uuid: '',
@@ -95,31 +96,38 @@
 				commandsData: [],
 				more_data: '', // 查看更多内容的数据
 				commandList: [],
-				currentCommandsPage: 1,
-				pageCommandsSize: 10,
-				totalCommandsPage: 0
+				// 分页
+				current: 1, // 当前页
+				size: 10, // 每页出现几条
+				total: 0 // 总页数
 			}
 		},
 		mounted() {
-			this.handleShowCommands()
+			this.getCommands()
 			this.getCommandType()
 		},
 		methods: {
 			// 搜索
 			search() {
 				var self = this;
-				API.searchCommand(self.uuid).then(res => {
+				API.deviceCommands(1, self.size, self.uuid).then(res => {
+					self.loading = false;
 					self.commandsData = res.data;
-					self.totalCommandsPage = res.total;
+					self.total = res.total;
 					self.$message.success('搜索成功！');
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 查看指令
-			handleShowCommands() {
+			getCommands() {
 				var self = this;
 				API.deviceCommands(1, 10).then(res => {
+					self.loading = false;
 					self.commandsData = res.data;
-					self.totalCommandsPage = res.total;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 获取指令类型
@@ -220,80 +228,58 @@
 				self.command = '';
 			},
 
-			// 查看用户列表
-			handleUserList(index, row) {
+			// 分页
+			currentPage(val) {
 				var self = this;
-				self.dialogUserList = true;
-				self.user_list_uuid = row.uuid;
-				API.deviceUserList(1, 10, row.uuid).then(res => {
-					self.userListData = res;
-					// self.totalUserListPage = res.total;
-				})
-			},
-
-			handleCurrentChange(val) {
-				var self = this;
-				self.currentPage = val;
-				API.devices(val, self.pageSize, self.type).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
-				})
-			},
-			// 每页显示条数
-			handleSizeChange(val) {
-				var self = this;
-				self.pageSize = val;
-				API.devices(self.currentPage, val, self.type).then(res => {
-					self.tableDate = res.data;
-					self.totalPage = res.total;
-				})
-			},
-
-			handleCurrentFaceLogsChange(val) {
-				API.deviceFaceLogs(val, 10, this.uuid, this.address_id).then(res => {
-					this.faceLogsTable = res.data;
-					this.totalFaceLogsPage = res.total;
-				})
-			},
-
-			// 每页显示条数
-			handleSizeCommandsChange(val) {
-				var self = this;
-				self.pageCommandsSize = val;
-				API.deviceCommands(self.currentCommandsPage, val, self.uuid).then(res => {
+				self.loading = true;
+				self.current = val;
+				API.deviceCommands(val, self.size, self.uuid).then(res => {
+					self.loading = false;
 					self.commandsData = res.data;
-					self.totalCommandsPage = res.total;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
-
-			handleCurrentCommandsChange(val) {
-				var self = this;
-				self.currentCommandsPage = val;
-				API.deviceCommands(val, self.pageCommandsSize, self.uuid).then(res => {
-					self.commandsData = res.data;
-					self.totalCommandsPage = res.total;
-				})
-			},
-
 			// 每页显示条数
-			// handleSizeUserListChange(val) {
-			// 	var self = this;
-			// 	self.pageUserListSize = val;
-			// 	API.deviceUserList(self.currentUserListPage, val, self.user_list_uuid).then(res => {
-			// 		self.userListData = res;
-			// 		self.totalUserListPage = res.total;
-			// 	})
-			// },
-
-			// handleCurrentUserListChange(val) {
-			// 	var self = this;
-			// 	self.currentUserListPage = val;
-			// 	API.deviceUserList(val, self.pageUserListSize, self.user_list_uuid).then(res => {
-			// 		self.userListData = res;
-			// 		self.totalUserListPage = res.total;
-			// 	})
-			// },
-
+			sizePage(val) {
+				var self = this;
+				self.loading = true;
+				self.size = val;
+				API.deviceCommands(self.current, val, self.uuid).then(res => {
+					self.loading = false;
+					self.commandsData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 上一页
+			prevChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.deviceCommands(val, self.size, self.uuid).then(res => {
+					self.loading = false;
+					self.commandsData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 下一页
+			nextChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.deviceCommands(val, self.size, self.uuid).then(res => {
+					self.loading = false;
+					self.commandsData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			}
 		},
 
 		beforeDestroy() {

@@ -1,5 +1,5 @@
 <template>
-	<div v-loading="loading"  element-loading-text="加载中">
+	<div v-loading="loading" element-loading-text="加载中">
 		<div class="handle-box">
 			<div class="btn">
 				<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
@@ -25,7 +25,8 @@
 		</el-table>
 		<div class="block">
 			<el-pagination @current-change="currentPage" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizePage" :total="total">
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizePage" :total="total" @prev-click="prevChange"
+			 @next-click="nextChange">
 			</el-pagination>
 		</div>
 	</div>
@@ -54,13 +55,13 @@
 			search() {
 				var self = this;
 				self.loading = true;
-				API.deviceFaceLogs(1,10,self.uuid).then(res => {
+				API.deviceFaceLogs(1, 10, self.uuid).then(res => {
 					self.loading = false;
 					self.faceLogsTable = res.data;
 					self.total = res.total;
 					self.$message.success('搜索成功！');
 				}).catch(err => {
-					this.loading = false;
+					self.loading = false;
 				})
 			},
 			getLogs() {
@@ -77,12 +78,12 @@
 				var self = this;
 				self.loading = true;
 				self.current = val;
-				API.deviceFaceLogs(val, self.size,self.uuid).then(res => {
+				API.deviceFaceLogs(val, self.size, self.uuid).then(res => {
 					self.loading = false;
 					self.faceLogsTable = res.data;
 					self.total = res.total;
 				}).catch(err => {
-					this.loading = false;
+					self.loading = false;
 				})
 			},
 			// 每页显示条数
@@ -90,12 +91,38 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.deviceFaceLogs(self.current, val,self.uuid).then(res => {
+				API.deviceFaceLogs(self.current, val, self.uuid).then(res => {
 					self.loading = false;
 					self.faceLogsTable = res.data;
 					self.total = res.total;
 				}).catch(err => {
-					this.loading = false;
+					self.loading = false;
+				})
+			},
+			// 上一页
+			prevChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.deviceFaceLogs(val, self.size, self.uuid).then(res => {
+					self.loading = false;
+					self.faceLogsTable = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 下一页
+			nextChange(val) {
+				var self = this;
+				self.loading = true;
+				self.current = val;
+				API.deviceFaceLogs(val, self.size, self.uuid).then(res => {
+					self.loading = false;
+					self.faceLogsTable = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
 				})
 			}
 		},
