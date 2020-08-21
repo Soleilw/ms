@@ -102,10 +102,11 @@ API.device = function(data) {
 	return axios.post(url.Device, data)
 }
 
+// 获取设备
 // 获取人脸组
-// 获取人脸组
-API.devices = function(page,limit,type,uuid) {
-	return axios.get(url.Devices, {page: page, limit: limit, type: type, uuid: uuid})
+// 地址搜索
+API.devices = function(page,limit,type,uuid, address_id) {
+	return axios.get(url.Devices, {page: page, limit: limit, type: type, uuid: uuid, address_id: address_id})
 }
 
 API._devices = function(direction,addresses,limit) {

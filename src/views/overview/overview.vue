@@ -229,7 +229,6 @@
 				//初始化散点图并添加至map图层
 				new TMap.visualization.Dot({
 						faceTo: "screen", //散点固定的朝向
-
 					})
 					.addTo(map)
 					.setData(dotData); //设置数据

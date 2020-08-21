@@ -83,8 +83,7 @@
 
 		<div class="block">
 			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange"
-			 @next-click="nextChange">
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
 			</el-pagination>
 		</div>
 	</div>
@@ -271,38 +270,6 @@
 					self.loading = false;
 				})
 			},
-			// 上一页
-			prevChange(val) {
-				var self = this;
-				self.loading = true;
-				self.current = val;
-				API.dangerLogs(val, self.size).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-					self.tableDate.forEach(item => {
-						item.log.timestamp = DATE.formatTime(item.log.timestamp, 'Y-M-D h:m:s');
-					})
-				}).catch(err => {
-					self.loading = false;
-				})
-			},
-			// 下一页
-			nextChange(val) {
-				var self = this;
-				self.loading = true;
-				self.current = val;
-				API.dangerLogs(val, self.size).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-					self.tableDate.forEach(item => {
-						item.log.timestamp = DATE.formatTime(item.log.timestamp, 'Y-M-D h:m:s');
-					})
-				}).catch(err => {
-					self.loading = false;
-				})
-			}
 		}
 	}
 </script>

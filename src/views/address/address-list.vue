@@ -103,8 +103,7 @@
 
 		<div class="block">
 			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange"
-			 @next-click="nextChange">
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
 			</el-pagination>
 		</div>
 	</div>
@@ -313,32 +312,6 @@
 					self.loading = false;
 				})
 			},
-			// 上一页
-			prevChange(val) {
-				var self = this;
-				self.loading = true;
-				self.current = val;
-				API.addresses(val, self.size).then(res => {
-					self.loading = false;
-					self.tableData = res.data;
-					self.total = res.total;
-				}).catch(err => {
-					self.loading = false;
-				})
-			},
-			// 下一页
-			nextChange(val) {
-				var self = this;
-				self.loading = true;
-				self.current = val;
-				API.addresses(val, self.size).then(res => {
-					self.loading = false;
-					self.tableData = res.data;
-					self.total = res.total;
-				}).catch(err => {
-					self.loading = false;
-				})
-			}
 		}
 	}
 </script>

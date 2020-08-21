@@ -16,8 +16,7 @@
 				</el-select>
 			</div>
 			<div class="btn">
-				<el-cascader v-model="selectedOptions" placeholder="请选择省市区" :options="cascaderData" @active-item-change="handleItemChange"
-				 :props="props"></el-cascader>
+				<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
 			</div>
 		</div>
 
@@ -152,8 +151,7 @@
 		</el-table>
 		<div class="block">
 			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange"
-			 @next-click="nextChange">
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
 			</el-pagination>
 		</div>
 
@@ -189,7 +187,7 @@
 			<div class="block">
 				<el-pagination @current-change="logCurrentChange" :current-page.sync="currentLog" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
 				 :page-size="sizeLog" layout="sizes, prev, pager, next, jumper" @size-change="logSizeChange" :total="totalLog"
-				 @prev-click="prevLog" @next-click="nextLog">
+				>
 				</el-pagination>
 			</div>
 		</el-dialog>
@@ -219,8 +217,7 @@
 			</el-table>
 			<div class="block">
 				<el-pagination @current-change="faceCurrentChange" :current-page.sync="currentFace" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-				 :page-size="sizeFace" layout="sizes, prev, pager, next, jumper" @size-change="faceSizeChange" :total="totalFace"
-				 @prev-click="prevFace" @next-click="nextFace">
+				 :page-size="sizeFace" layout="sizes, prev, pager, next, jumper" @size-change="faceSizeChange" :total="totalFace">
 				</el-pagination>
 			</div>
 		</el-dialog>
@@ -413,13 +410,13 @@
 				</el-table-column>
 			</el-table>
 		</el-dialog>
-
 	</div>
 </template>
 
 <script>
 	import API from '@/api/index.js'
 	import DATE from '@/utils/date.js'
+	let id = 0;
 	export default {
 		name: 'gradems',
 		data() {
@@ -430,6 +427,8 @@
 				dialogDevice: false,
 				typeList: [], // 设备类型
 				type: '', // 搜索作用
+				pro_city_area: [], // 根据省市区搜索
+				pro_city_area_id: '', // 根据社区id搜索
 				label: '',
 				projectList: [],
 				addressList: [],
@@ -474,6 +473,7 @@
 				x_formatData: [],
 				x_formatData_value: [],
 				arr: [],
+				heart_uuid: '',
 				dialogCommands: false, // 查看指令
 				commandsData: [],
 				command_uuid: '',
@@ -506,13 +506,50 @@
 				currentFace: 1, // 当前页
 				sizeFace: 10, // 每页出现几条
 				totalFace: 0, // 总页数
-				
-				cascaderData: [],
-				props: {}
 
-		}
-	},
-	mounted() {
+				cascaderData: [],
+				props: {
+					label: 'title',
+					value: 'id',
+					lazy: true,
+					lazyLoad(node, resolve) {
+						var level = node.level
+						if (level == 1) {
+							var city_id = node.data.id
+							API.areas(1, 100, city_id).then(res => {
+								var city_node = res.data
+								city_node.forEach(item => {
+									item.leaf = level >= 3
+								})
+								resolve(city_node)
+							})
+						}
+						if (level == 2) {
+							var community_id = node.data.id
+							API.areas(1, 100, community_id).then(res => {
+								var community_node = res.data
+								community_node.forEach(item => {
+									item.leaf = level >= 3
+								})
+								resolve(community_node)
+							})
+						}
+						if (level == 3) {
+							var area_id = node.data.id
+							API.areas(1, 100, area_id).then(res => {
+								var area_node = res.data
+								area_node.forEach(item => {
+									item.leaf = level >= 3
+								})
+								resolve(area_node)
+							})
+						}
+					}
+				}
+
+			}
+		},
+		mounted() {
 			this.getDevice();
 			this.getAddress();
 			this.getUuid();
@@ -520,6 +557,8 @@
 			this.getTypes();
 			this.getProject();
 			this.getCommandType();
+			// 省市区数据
+			this.getPro();
 		},
 		methods: {
 			// 获取社区列表（省市区选中）
@@ -529,14 +568,25 @@
 					self.cascaderData = res.data;
 				})
 			},
-			
-			
-			
+			proChange(val) {
+				var self = this;
+				self.pro_city_area_id = val[3]
+				self.loading = true;
+				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id).then(res => {
+					self.loading = false;
+					self.tableDate = res.data;
+					self.total = res.total;
+					self.$message.success('搜索成功!');
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+
 			// 搜索
 			search() {
 				var self = this;
 				self.loading = true;
-				API.devices(1, 10, self.type, self.uuid).then(res => {
+				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -548,7 +598,7 @@
 			typeChange(val) {
 				var self = this;
 				self.loading = true;
-				API.devices(1, self.size, val, self.uuid).then(res => {
+				API.devices(1, self.size, val, self.uuid, self.pro_city_area_id).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -743,32 +793,6 @@
 					self.logLoading = false;
 				})
 			},
-			// 上一页
-			prevLog(val) {
-				var self = this;
-				self.currentLog = val;
-				self.logLoading = true;
-				API.deviceLogs(val, self.sizeLog, self.log_uuid).then(res => {
-					self.logLoading = false;
-					self.logstable = res.data;
-					self.totalLog = res.total;
-				}).catch(err => {
-					self.logLoading = false;
-				})
-			},
-			// 下一页
-			nextLog(val) {
-				var self = this;
-				self.currentLog = val;
-				self.logLoading = true;
-				API.deviceLogs(val, self.sizeLog, self.log_uuid).then(res => {
-					self.logLoading = false;
-					self.logstable = res.data;
-					self.totalLog = res.total;
-				}).catch(err => {
-					self.logLoading = false;
-				})
-			},
 			handleShowFace(index, row) {
 				console.log(row.groups)
 				this.dialogFaceGroup = true;
@@ -812,32 +836,6 @@
 					self.faceLoading = false;
 				})
 			},
-			// 上一页
-			prevFace(val) {
-				var self = this;
-				self.currentFace = val;
-				self.faceLoading = true;
-				API.deviceFaceLogs(val, self.sizeFace, self.face_uuid).then(res => {
-					self.faceLoading = false;
-					self.faceLogsTable = res.data;
-					self.totalFace = res.total;
-				}).catch(err => {
-					self.faceLoading = false;
-				})
-			},
-			// 下一页
-			nextFace(val) {
-				var self = this;
-				self.currentFace = val;
-				self.faceLoading = true;
-				API.deviceFaceLogs(val, self.sizeFace, self.face_uuid).then(res => {
-					self.faceLoading = false;
-					self.faceLogsTable = res.data;
-					self.totalFace = res.total;
-				}).catch(err => {
-					self.faceLoading = false;
-				})
-			},
 			handleDel() {},
 			showlogcat(index, row) {
 				this.dialogLogcat = true;
@@ -848,7 +846,7 @@
 				console.log(row)
 				var self = this;
 				self.dialogHeart = true;
-				self.uuid = row.uuid;
+				self.heart_uuid = row.uuid;
 				self.x_formatData = [];
 				clearInterval(self.timer)
 				self.langtime = 10;
@@ -857,7 +855,7 @@
 				// 	self.drawLine()
 				// })
 
-				API.deviceHeart(self.uuid).then(res => {
+				API.deviceHeart(self.heart_uuid).then(res => {
 					self.arr = res.originData;
 					self.arr.forEach(item => {
 						item.time = DATE.formatTime(item.time, 'Y-M-D h:m:s')
@@ -867,7 +865,6 @@
 					// 	self.x_formatData_value.push(res.formatData[i]);
 					// }
 				});
-
 			},
 			drawLine() {
 				var self = this;
@@ -894,7 +891,7 @@
 						}]
 					});
 					heartChart.showLoading();
-					API.deviceHeart(self.uuid).then(res => {
+					API.deviceHeart(self.heart_uuid).then(res => {
 						heartChart.hideLoading();
 						x_formatData_value = [];
 						for (var i = 0; i < res.formatData.length; i++) {
@@ -936,7 +933,11 @@
 								}]
 							});
 							heartChart.showLoading();
-							API.deviceHeart(self.uuid).then(res => {
+							API.deviceHeart(self.heart_uuid).then(res => {
+								self.arr = res.originData;
+								self.arr.forEach(item => {
+									item.time = DATE.formatTime(item.time, 'Y-M-D h:m:s')
+								})
 								heartChart.hideLoading();
 								for (var i = 0; i < res.formatData.length; i++) {
 									self.x_formatData.push(i);
@@ -1099,7 +1100,7 @@
 				var self = this;
 				self.current = val;
 				self.loading = true;
-				API.devices(val, self.size, self.type, self.uuid).then(res => {
+				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -1112,41 +1113,14 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.devices(self.current, val, self.type, self.uuid).then(res => {
+				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
 				})
-			},
-			// 上一页
-			prevChange(val) {
-				var self = this;
-				self.current = val;
-				self.loading = true;
-				API.devices(val, self.size, self.type, self.uuid).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-				}).catch(err => {
-					self.loading = false;
-				})
-			},
-			// 下一页
-			nextChange(val) {
-				var self = this;
-				self.current = val;
-				self.loading = true;
-				API.devices(val, self.current, self.type, self.uuid).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-				}).catch(err => {
-					self.loading = false;
-				})
-			},
-
+			}
 		},
 
 		beforeDestroy() {

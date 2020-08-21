@@ -183,7 +183,7 @@
 				<div class="block">
 					<el-pagination @current-change="versionCurrentChange" :current-page.sync="currentVersion" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
 					 :page-size="sizeVersion" layout="sizes, prev, pager, next, jumper" @size-change="versionSizeChange" :total="totalVersion"
-					 @prev-click="prevVersion" @next-click="nextVersion">
+					>
 					</el-pagination>
 				</div>
 			</div>
@@ -191,8 +191,7 @@
 
 		<div class="block">
 			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total" @prev-click="prevChange"
-			 @next-click="nextChange">
+			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
 			</el-pagination>
 		</div>
 	</div>
@@ -344,32 +343,6 @@
 				API.apks(self.current, val).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
-					self.total = res.total;
-				}).catch(err => {
-					self.loading = false;
-				})
-			},
-			// 上一页
-			prevChange(val) {
-				var self = this;
-				self.loading = true;
-				self.current = val;
-				API.apks(val, self.size).then(res => {
-					self.loading = false;
-					self.tableData = res.data;
-					self.total = res.total;
-				}).catch(err => {
-					self.loading = false;
-				})
-			},
-			// 下一页
-			nextChange(val) {
-				var self = this;
-				self.loading = true;
-				self.current = val;
-				API.apks(val, self.size).then(res => {
-					self.loading = false;
-					self.tableData = res.data;
 					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
@@ -602,33 +575,7 @@
 				}).catch(err => {
 					self.versionLoading = false;
 				})
-			},
-			// 上一页
-			prevVersion(val) {
-				var self = this;
-				self.versionLoading = true;
-				self.currentVersion = val;
-				API.apkVersions(val, self.sizeVersion, self.versionForm.apk_id).then(res => {
-					self.versionLoading = false;
-					self.versionTableData = res.data;
-					self.totalVersion = res.total;
-				}).catch(err => {
-					self.versionLoading = false;
-				})
-			},
-			// 下一页
-			nextVersion(val) {
-				var self = this;
-				self.versionLoading = true;
-				self.currentVersion = val;
-				API.apkVersions(val, self.sizeVersion, self.versionForm.apk_id).then(res => {
-					self.versionLoading = false;
-					self.versionTableData = res.data;
-					self.totalVersion = res.total;
-				}).catch(err => {
-					self.versionLoading = false;
-				})
-			},
+			}
 		}
 	}
 </script>
