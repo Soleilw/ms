@@ -2,13 +2,25 @@
 	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
-				<el-button type="primary" @click="dialogCommand = true">发送指令</el-button>
+				<el-button type="primary" @click="addCommand">发送指令</el-button>
 			</div>
 			<el-dialog title="发送指令" :visible.sync="dialogCommand" @close="closeCommands">
 				<div class="btn">
 					<el-form :model="commandform" label-width="100px">
+						<el-form-item label="请选择类型">
+							<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
+								<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="请选择省市区">
+							<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
+						</el-form-item>
 						<el-form-item label="设备uuid">
-							<el-input v-model="command_uuid" placeholder="请输入uuid"></el-input>
+							<el-select v-model="command_uuid" placeholder="请选择uuid" filterable @change="uuidChange">
+								<el-option v-for="(item,index) in uuidList" :key="index" :label="item.uuid" :value="item.uuid">
+								</el-option>
+							</el-select>
 						</el-form-item>
 						<el-form-item label="指令">
 							<el-select v-model="command" @change="changeCommand">
@@ -33,8 +45,19 @@
 								<el-input v-model="commandform.face_id" placeholder="请输入FACE_ID"></el-input>
 							</el-form-item>
 						</div>
+						<!-- 人脸生效时间 -->
+						<div v-if="command === 'setUserAuthTime' ">
+							<el-form-item label="人脸生效时间">
+								<el-date-picker v-model="userAuthTime" type="datetimerange" range-separator="至" start-placeholder="开始日期"
+								 end-placeholder="结束日期" @change="chooseTime" :value-format="valueFormatTime">
+								</el-date-picker>
+							</el-form-item>
+							<el-form-item label="FACE_ID">
+								<el-input v-model="commandform.face_id" placeholder="请输入FACE_ID"></el-input>
+							</el-form-item>
+						</div>
 						<div style="margin-left: 100px;">
-							<el-button type="primary" @click="sendCommand">发送指令</el-button>
+							<el-button type="primary" @click="sendCommand">发送</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -88,13 +111,60 @@
 			return {
 				loading: true,
 				dialogCommand: false,
+				uuidList: [], // uuid列表
+				typeList: [],
+				type: '',
 				uuid: '',
 				command_uuid: '',
 				command: '',
 				commandform: {},
 				commandsData: [],
+				userAuthTime: [], // 选择时间
+				valueFormatTime: 'yyyy-MM-dd HH:mm:ss',
 				more_data: '', // 查看更多内容的数据
 				commandList: [],
+
+				pro_city_area: [], // 根据省市区搜索
+				pro_city_area_id: '', // 根据社区id搜索
+				cascaderData: [],
+				props: {
+					label: 'title',
+					value: 'id',
+					lazy: true,
+					lazyLoad(node, resolve) {
+						var level = node.level
+						if (level == 1) {
+							var city_id = node.data.id
+							API.areas(1, 100, city_id).then(res => {
+								var city_node = res.data
+								city_node.forEach(item => {
+									item.leaf = level >= 3
+								})
+								resolve(city_node)
+							})
+						}
+						if (level == 2) {
+							var community_id = node.data.id
+							API.areas(1, 100, community_id).then(res => {
+								var community_node = res.data
+								community_node.forEach(item => {
+									item.leaf = level >= 3
+								})
+								resolve(community_node)
+							})
+						}
+						if (level == 3) {
+							var area_id = node.data.id
+							API.areas(1, 100, area_id).then(res => {
+								var area_node = res.data
+								area_node.forEach(item => {
+									item.leaf = level >= 3
+								})
+								resolve(area_node)
+							})
+						}
+					}
+				},
 				// 分页
 				current: 1, // 当前页
 				size: 10, // 每页出现几条
@@ -103,9 +173,69 @@
 		},
 		mounted() {
 			this.getCommands()
-			this.getCommandType()
+			// this.getCommandType()
+			this.getPro();
 		},
 		methods: {
+			// 查看指令
+			getCommands() {
+				var self = this;
+				API.deviceCommands(1, 10).then(res => {
+					self.loading = false;
+					self.commandsData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 发送指令
+			addCommand() {
+				var self = this;
+				self.dialogCommand = true;
+				API.deviceTypes().then(res => {
+					self.typeList = res;
+				})
+			},
+			// 设备类型
+			typeChange(val) {
+				var self = this;
+				self.getUUIDlist(val, self.pro_city_area_id)
+			},
+			getPro() {
+				var self = this;
+				API.areas(1, 100, 0).then(res => {
+					self.cascaderData = res.data;
+				})
+			},
+			proChange(val) {
+				var self = this;
+				self.pro_city_area_id = val[3]
+				self.getUUIDlist(self.type, self.pro_city_area_id)
+			},
+			getUUIDlist(type, pro_city_area_id) {
+				var self = this;
+				API.devices(1, 1000, type, 0, pro_city_area_id).then(res => {
+					self.uuidList = res.data;
+				})
+			},
+			uuidChange(val) {
+				var self = this;
+				let obj = {};
+				obj = self.uuidList.find((item) => { //这里的userRoleList就是上面遍历的数据源
+					if (item.uuid === val) {
+						API.commandsType(item.type).then(res => {
+							self.commandList = res
+						})
+					}
+				});
+			},
+			// 获取指令类型
+			getCommandType(val) {
+				// var self = this;
+				// API.commandsType(val).then(res => {
+				// 	self.commandList = res
+				// })
+			},
 			// 搜索
 			search() {
 				var self = this;
@@ -118,24 +248,12 @@
 					self.loading = false;
 				})
 			},
-			// 查看指令
-			getCommands() {
-				var self = this;
-				API.deviceCommands(1, 10).then(res => {
-					self.loading = false;
-					self.commandsData = res.data;
-					self.total = res.total;
-				}).catch(err => {
-					self.loading = false;
-				})
+
+			// 选中时间
+			chooseTime(val) {
+				console.log(this.userAuthTime)
 			},
-			// 获取指令类型
-			getCommandType() {
-				var self = this;
-				API.commandsType(4).then(res => {
-					self.commandList = res
-				})
-			},
+
 			changeCommand(val) {
 				var self = this;
 				self.commandform = {};
@@ -167,6 +285,21 @@
 							command: 'getSoftVersion',
 						}
 						break;
+					case 'openDoor':
+						self.commandform = {
+							uuid: self.command_uuid,
+							command: 'openDoor',
+						}
+						break;
+					case 'setUserAuthTime':
+						self.commandform = {
+							uuid: self.command_uuid,
+							command: 'setUserAuthTime',
+							auth_start_time: '',
+							auth_end_time: '',
+							face_id: ''
+						}
+						break;
 					case 'restart':
 						self.commandform = {
 							uuid: self.command_uuid,
@@ -177,47 +310,73 @@
 			// 发送指令
 			sendCommand() {
 				var self = this;
-				switch (self.command) {
-					case "setPassword":
-						API.sendDeviceCommand(self.commandform).then(res => {
-							self.$message.success("发送成功");
-							self.command_uuid = '';
-							self.command = '';
-							self.dialogCommand = false
-						})
-						break;
-					case 'deleteUser':
-						API.sendDeviceCommand(self.commandform).then(res => {
-							self.$message.success("发送成功");
-							self.command_uuid = '';
-							self.command = '';
-							self.dialogCommand = false
-						})
-						break;
-					case "addUser":
-						API.sendDeviceCommand(self.commandform).then(res => {
-							self.$message.success("发送成功");
-							self.command_uuid = '';
-							self.command = '';
-							self.dialogCommand = false
-						})
-						break;
-					case 'getSoftVersion':
-						API.sendDeviceCommand(self.commandform).then(res => {
-							self.$message.success("发送成功");
-							self.command_uuid = '';
-							self.command = '';
-							self.dialogCommand = false
-						})
-						break;
-					case 'restart':
-						API.sendDeviceCommand(self.commandform).then(res => {
-							self.$message.success("发送成功");
-							self.uuid = '';
-							self.command = '';
-							self.dialogCommand = false
-						})
+				if (self.command) {
+					switch (self.command) {
+						case "setPassword":
+							API.sendDeviceCommand(self.commandform).then(res => {
+								self.$message.success("发送成功");
+								self.command_uuid = '';
+								self.command = '';
+								self.dialogCommand = false
+							})
+							break;
+						case 'deleteUser':
+							API.sendDeviceCommand(self.commandform).then(res => {
+								self.$message.success("发送成功");
+								self.command_uuid = '';
+								self.command = '';
+								self.commandform.face_id = '';
+								self.dialogCommand = false
+							})
+							break;
+						case "addUser":
+							API.sendDeviceCommand(self.commandform).then(res => {
+								self.$message.success("发送成功");
+								self.command_uuid = '';
+								self.command = '';
+								self.commandform.face_id = '';
+								self.dialogCommand = false
+							})
+							break;
+						case 'getSoftVersion':
+							API.sendDeviceCommand(self.commandform).then(res => {
+								self.$message.success("发送成功");
+								self.command_uuid = '';
+								self.command = '';
+								self.dialogCommand = false
+							})
+							break;
+						case 'openDoor':
+							API.sendDeviceCommand(self.commandform).then(res => {
+								self.$message.success("发送成功");
+								self.command_uuid = '';
+								self.command = '';
+								self.dialogCommand = false
+							})
+							break;
+						case 'setUserAuthTime':
+							self.commandform.auth_start_time = self.userAuthTime[0];
+							self.commandform.auth_end_time = self.userAuthTime[1];
+							API.sendDeviceCommand(self.commandform).then(res => {
+								self.$message.success("发送成功");
+								self.command_uuid = '';
+								self.command = '';
+								self.commandform.face_id = '';
+								self.dialogCommand = false
+							})
+							break;
+						case 'restart':
+							API.sendDeviceCommand(self.commandform).then(res => {
+								self.$message.success("发送成功");
+								self.uuid = '';
+								self.command = '';
+								self.dialogCommand = false
+							})
+					}
+				} else {
+					self.$message.warning('请选择指令！');
 				}
+
 			},
 			// 关闭指令uuid
 			closeCommands() {
