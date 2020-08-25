@@ -89,7 +89,7 @@
 				var self = this;
 				self.loading = true;
 				self.current = val;
-				API.faces(val, self.size).then(res => {
+				API.pushRecords(val, self.size).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
@@ -102,7 +102,7 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.faces(self.current, val).then(res => {
+				API.pushRecords(self.current, val).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;

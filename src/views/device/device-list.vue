@@ -802,14 +802,17 @@
 				self.dialogDevice = true;
 				self.uuidDisabled = true;
 				API._device(row.uuid).then(res => {
+					face_type: '',
 					self.form = res;
 					self.form.name = res.remark;
-					self.form.project_id = res.project;
+					self.face_project = res.project;
 					self.hotness = res.configs.heatvision;
-					self.form.address_id = res.address_id;
+					self.face_address = res.address_id;
 					self.faceGroup = res.face_group;
 					self.form.face_groups = [];
 					self.form.configs = [];
+					self.face_apk = res.apk;
+					self.face_apk_version = res.apk_version;
 					API.faceGroup(res.address_id).then(res => {
 						self.faceGroupList = res.data;
 					})
