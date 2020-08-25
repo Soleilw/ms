@@ -81,6 +81,21 @@ API.faces = function(page,limit) {
 	return axios.get(url.Faces, {page: page, limit: limit})
 }
 
+// 获取推送记录
+API.pushRecords = function(page, limit) {
+	return axios.get(url.PushRecords, {page: page, limit: limit})
+}
+
+// 获取推送详情
+API.pushRecordCommands = function(id) {
+	return axios.get(url.PushRecordCommands, {id: id})
+}
+
+// 重新推送
+API.againPush = function(data) {
+	return axios.post(url.PushRecord, data)
+}
+
 // 获取社区列表（省市区选中）
 API.areas = function(page, limit, parent_id) {
 	return axios.get(url.Areas, {
@@ -100,6 +115,11 @@ API.area = function(data) {
 // 设备管理
 API.device = function(data) {
 	return axios.post(url.Device, data)
+}
+
+// 编辑查看用
+API._device = function(uuid) {
+	return axios.get(url.Device, {uuid: uuid})
 }
 
 // 获取设备

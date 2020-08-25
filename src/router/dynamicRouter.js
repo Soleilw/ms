@@ -55,11 +55,30 @@ const dynamicRouter = [{
 	{
 		path: '/face',
 		name: 'face',
-		component: () => import('@/views/face/face'),
+		component: () => import('@/views/face/index'),
 		meta: {
 			title: '人脸管理',
 			icon: 'el-icon-picture'
-		}
+		},
+		children: [{
+				path: '/face-list',
+				name: 'faceList',
+				component: () => import('@/views/face/face-list'),
+				meta: {
+					title: '人脸列表',
+					icon: 'el-icon-warning'
+				}
+			},
+			{
+				path: '/push-logs',
+				name: 'pushLogs',
+				component: () => import('@/views/face/push-logs'),
+				meta: {
+					title: '推送记录',
+					icon: 'el-icon-s-release'
+				},
+			}
+		]
 	},
 	{
 		path: '/device',

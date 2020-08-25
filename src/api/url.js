@@ -33,6 +33,9 @@ const url = {
 	'PassFace': '/pass/face', // 人脸通过
 	'Face': '/face', // 删除人脸,方式‘delete’
 	'Faces': '/faces', // 获取人脸列表
+	'PushRecords': '/push/records', // 获取推送记录
+	'PushRecordCommands': '/push/record/commands', // 获取推送详情
+	'PushRecord': '/push/record', // 获取推送详情
 	
 	// 设备管理
 	'Device': '/device', // 新增设备

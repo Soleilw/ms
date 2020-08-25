@@ -87,6 +87,8 @@
 								<el-checkbox class="permission-span" label="face" @change="oneChange" border>
 									<span style="font-weight: bold;">人脸管理页</span>
 								</el-checkbox>
+								<el-checkbox label="faceList" @change="oneChange">人脸列表子页</el-checkbox>
+								<el-checkbox label="pushLogs" @change="oneChange">推送记录子页</el-checkbox>
 								<el-checkbox label="faceAdd" @change="oneChange">添加人脸</el-checkbox>
 								<el-checkbox label="faceGet" @change="oneChange">获取人脸</el-checkbox>
 								<el-checkbox label="faceDel" @change="oneChange">删除人脸</el-checkbox>
@@ -141,6 +143,8 @@
 								<el-checkbox class="permission-span" label="permission" @change="oneChange" border>
 									<span style="font-weight: bold;">权限管理页</span>
 								</el-checkbox>
+								<el-checkbox label="roles" @change="oneChange">角色管理页</el-checkbox>
+								<el-checkbox label="user" @change="oneChange">用户管理页</el-checkbox>
 								<el-checkbox label="roleAdd" @change="oneChange">添加角色</el-checkbox>
 								<el-checkbox label="roleEdit" @change="oneChange">编辑权限</el-checkbox>
 								<el-checkbox label="roleGet" @change="oneChange">获取角色列表</el-checkbox>
@@ -221,6 +225,8 @@
 					"addressDel", // 删除地址
 
 					"face", // 人脸管理页
+					"faceList",
+					"pushLogs", // 推送记录子页
 					"faceAdd", // 添加人脸
 					"faceGet", // 获取人脸
 					"faceDel", // 删除人脸
@@ -251,6 +257,8 @@
 
 
 					"permission", // 角色管理
+					"roles",
+					"user",
 					"roleGet",
 					"roleAdd",
 					"roleEdit",

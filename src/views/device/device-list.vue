@@ -27,37 +27,43 @@
 						<el-input v-model="form.name"></el-input>
 					</el-form-item>
 					<el-form-item label="类型">
-						<el-select v-model="form.type" placeholder="请选择类型">
+						<el-select v-model="face_type" placeholder="请选择类型">
 							<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
 							</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="选择项目">
-						<el-select v-model="form.project_id" placeholder="请选择项目" @change="changeProject">
+						<el-select v-model="face_project" placeholder="请选择项目" @change="changeProject">
 							<el-option v-for="(item,index) in projectList" :key="index" :label="item.name" :value="item.id">
 							</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="选择地址">
-						<el-select v-model="form.address_id" placeholder="请选择地址" @change="addressChange">
+						<el-select v-model="face_address" placeholder="请选择地址" @change="addressChange">
 							<el-option v-for="item in addressList" :key="item.id" :label="item.address" :value="item.id">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<div v-if="form.address_id">
+					<div v-if="uuidDisabled">
+						<el-form-item label="已选的人脸组">
+							<div v-for="(item,index) in faceGroup" :key="index" style="color: #2A9F93;">{{faceGroup[index]}}</div>
+						</el-form-item>
+					</div>
+					<div v-if="face_address">
 						<el-form-item label="选择人脸组">
 							<el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
 							<div class="facebox">
 								<div v-for="(item,index) in faceGroupList" :key="index">
 									<el-checkbox-group v-model="form.face_groups" class="facebox-item">
-										<el-checkbox :label="item.group_name"></el-checkbox>
+										<el-checkbox :label="item.group_name" @change="checkOneChange">{{item.group_name}}</el-checkbox>
 									</el-checkbox-group>
 								</div>
+
 							</div>
 						</el-form-item>
 					</div>
 					<el-form-item label="选择uuid">
-						<el-select v-model="form.uuid" placeholder="请选择uuid">
+						<el-select v-model="form.uuid" placeholder="请选择uuid" :disabled="uuidDisabled">
 							<el-option v-for="item in uuidList" :key="item.id" :label="item.uuid" :value="item.uuid">
 							</el-option>
 						</el-select>
@@ -66,13 +72,13 @@
 						</span>
 					</el-form-item>
 					<el-form-item label="选择安装包">
-						<el-select v-model="form.apk" placeholder="请选择安装包" @change="apkChange">
+						<el-select v-model="face_apk" placeholder="请选择安装包" @change="apkChange">
 							<el-option v-for="item in apkList" :key="item.id" :label="item.name" :value="item.id">
 							</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="安装包版本">
-						<el-select v-model="form.apk_version" placeholder="请选择版本">
+						<el-select v-model="face_apk_version" placeholder="请选择版本">
 							<el-option v-for="item in versionList" :key="item.id" :label="item.version" :value="item.id">
 							</el-option>
 						</el-select>
@@ -121,6 +127,9 @@
 							操作<i class="el-icon-arrow-down el-icon--right"></i>
 						</el-button>
 						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item>
+								<el-button size="mini" type="primary" @click="handleExit(scope.$index, scope.row)">编辑</el-button>
+							</el-dropdown-item>
 							<el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
 							</el-dropdown-item>
@@ -186,8 +195,7 @@
 			</el-table>
 			<div class="block">
 				<el-pagination @current-change="logCurrentChange" :current-page.sync="currentLog" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-				 :page-size="sizeLog" layout="sizes, prev, pager, next, jumper" @size-change="logSizeChange" :total="totalLog"
-				>
+				 :page-size="sizeLog" layout="sizes, prev, pager, next, jumper" @size-change="logSizeChange" :total="totalLog">
 				</el-pagination>
 			</div>
 		</el-dialog>
@@ -417,6 +425,7 @@
 	import API from '@/api/index.js'
 	import DATE from '@/utils/date.js'
 	let id = 0;
+	let facebox = [];
 	export default {
 		name: 'gradems',
 		data() {
@@ -434,7 +443,9 @@
 				addressList: [],
 				faceGroupList: [],
 				checkAll: false, // 全选人脸组
+				faceGroup: [], // 已选择的人脸组，编辑时
 				uuidList: [],
+				uuidDisabled: false,
 				apkList: [],
 				versionList: [],
 				directionList: [{
@@ -458,6 +469,15 @@
 					face_groups: [],
 					direction: ''
 				},
+				// 编辑显示变量
+				face_type: '',
+				face_project: '',
+				face_address: '',
+				face_apk: '',
+				face_apk_version: '',
+				
+				
+				
 				tableDate: [],
 				dialogFaceGroup: false,
 				facetable: [], // 人脸组表格
@@ -649,6 +669,7 @@
 				})
 			},
 			addressChange(val) {
+				this.form.face_groups = []
 				this.getFaceGroup(val)
 			},
 			// 获取人脸组
@@ -660,11 +681,29 @@
 			},
 			// 全选
 			handleCheckAllChange(val) {
-				var facebox = [];
-				this.faceGroupList.forEach(item => {
-					facebox.push(item.group_name)
-				})
-				this.form.face_groups = val ? facebox : [];
+				if (val === true) {
+					facebox = [];
+					this.faceGroupList.forEach(item => {
+						facebox.push(item.group_name)
+					})
+					this.form.face_groups = facebox;
+				} else if (val === false) {
+					API.faceGroup(this.form.address_id).then(res => {
+						this.faceGroupList = res.data;
+					})
+					facebox = [];
+					this.form.face_groups = [];
+				}
+				// console.log(1, facebox)
+				// console.log(2, this.form.face_groups)
+			},
+			// 单选
+			checkOneChange(val) {
+				if (this.form.face_groups.length >= this.faceGroupList.length) {
+					this.checkAll = true;
+				} else {
+					this.checkAll = false;
+				}
 			},
 			// 获取uuid
 			getUuid() {
@@ -699,7 +738,9 @@
 			},
 			addDevice() {
 				var self = this;
+				self.uuidDisabled = false;
 				self.dialogDevice = true;
+				self.checkAll = false;
 				self.form = {
 					name: '',
 					address_id: '',
@@ -755,6 +796,36 @@
 				})
 			},
 			// 操作
+			// 编辑
+			handleExit(index, row) {
+				var self = this;
+				self.dialogDevice = true;
+				self.uuidDisabled = true;
+				API._device(row.uuid).then(res => {
+					self.form = res;
+					self.form.name = res.remark;
+					self.form.project_id = res.project;
+					self.hotness = res.configs.heatvision;
+					self.form.address_id = res.address_id;
+					self.faceGroup = res.face_group;
+					self.form.face_groups = [];
+					self.form.configs = [];
+					API.faceGroup(res.address_id).then(res => {
+						self.faceGroupList = res.data;
+					})
+					switch (res.configs.heatvision) {
+						case 'normal':
+							self.hotness = 1
+							break;
+						case 'strict':
+							self.hotness = 2
+							break;
+						case 'none':
+							self.hotness = 3
+					}
+				})
+
+			},
 			// 查看日志
 			handleShowLog(index, row) {
 				this.dialogLogs = true;
@@ -1136,6 +1207,7 @@
 	}
 
 	.facebox-item {
+		width: 200px;
 		margin: 10px;
 		padding: 0 10px;
 	}
