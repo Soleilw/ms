@@ -370,7 +370,6 @@
 					</el-form>
 				</div>
 
-
 			</div>
 
 			<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" :max-height="480">

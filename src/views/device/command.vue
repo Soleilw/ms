@@ -300,6 +300,12 @@
 							face_id: ''
 						}
 						break;
+					case 'deleteAll':
+						self.commandform = {
+							uuid: self.command_uuid,
+							command: 'deleteAll'
+						}
+						break;
 					case 'restart':
 						self.commandform = {
 							uuid: self.command_uuid,
@@ -367,6 +373,15 @@
 								self.command_uuid = '';
 								self.command = '';
 								self.commandform.face_id = '';
+								self.dialogCommand = false;
+								self.getCommands();
+							})
+							break;
+						case 'deleteAll':
+							API.sendDeviceCommand(self.commandform).then(res => {
+								self.$message.success("发送成功");
+								self.command_uuid = '';
+								self.command = '';
 								self.dialogCommand = false;
 								self.getCommands();
 							})
