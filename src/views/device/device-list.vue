@@ -27,7 +27,7 @@
 						<el-input v-model="form.name"></el-input>
 					</el-form-item>
 					<el-form-item label="类型">
-						<el-select v-model="face_type" placeholder="请选择类型">
+						<el-select v-model="face_type" placeholder="请选择类型" @change="faceTypeChange">
 							<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
 							</el-option>
 						</el-select>
@@ -475,9 +475,9 @@
 				face_address: '',
 				face_apk: '',
 				face_apk_version: '',
-				
-				
-				
+
+
+
 				tableDate: [],
 				dialogFaceGroup: false,
 				facetable: [], // 人脸组表格
@@ -649,6 +649,9 @@
 					// }
 				})
 			},
+			faceTypeChange(val) {
+				this.form.type = val;
+			},
 			getProject() {
 				var self = this;
 				API.projects(1).then(res => {
@@ -658,6 +661,7 @@
 
 			changeProject(val) {
 				var self = this;
+				self.form.project_id = val;
 				self.getAddress(val)
 			},
 
@@ -669,6 +673,7 @@
 				})
 			},
 			addressChange(val) {
+				this.form.address_id = val;
 				this.form.face_groups = []
 				this.getFaceGroup(val)
 			},
@@ -728,6 +733,7 @@
 			},
 			apkChange(value) {
 				console.log(value)
+				this.form.apk = value;
 				this.getApkVersion(value)
 			},
 			getApkVersion(id) {
@@ -735,6 +741,9 @@
 				API._apkVersions(id).then(res => {
 					self.versionList = res.data;
 				})
+			},
+			apkVersionChange(val) {
+				this.form.apk_version = val;
 			},
 			addDevice() {
 				var self = this;
@@ -754,6 +763,12 @@
 					face_groups: [],
 					direction: ''
 				}
+				self.face_project = '';
+				self.face_address = '';
+				self.faceGroup = '';
+				self.face_apk = '';
+				self.face_apk_version = '';
+				self.face_type = '';
 			},
 			// 添加新的AIP
 			newDevice() {
@@ -781,6 +796,7 @@
 					self.getDevice();
 					self.currentPage = 1
 					self.form = {
+						id: '',
 						name: '',
 						address_id: '',
 						project_id: '',
@@ -793,6 +809,12 @@
 						face_groups: [],
 						direction: ''
 					}
+					self.face_project = '';
+					self.face_address = '';
+					self.faceGroup = '';
+					self.face_apk = '';
+					self.face_apk_version = '';
+					self.face_type = '';
 				})
 			},
 			// 操作
@@ -802,17 +824,23 @@
 				self.dialogDevice = true;
 				self.uuidDisabled = true;
 				API._device(row.uuid).then(res => {
-					face_type: '',
-					self.form = res;
+					self.form.id = res.id;
 					self.form.name = res.remark;
-					self.face_project = res.project;
+					self.form.address_id = res.address_id;
+					self.form.project_id = res.project_id;
+					self.form.uuid = res.uuid;
+					self.form.configs = [];
 					self.hotness = res.configs.heatvision;
+					self.form.direction = res.direction;
+					self.form.remark = res.remark;
+					self.form.face_groups = [];
+					
+					self.face_project = res.project;
 					self.face_address = res.address_id;
 					self.faceGroup = res.face_group;
-					self.form.face_groups = [];
-					self.form.configs = [];
 					self.face_apk = res.apk;
 					self.face_apk_version = res.apk_version;
+					self.face_type = res.type_string;
 					API.faceGroup(res.address_id).then(res => {
 						self.faceGroupList = res.data;
 					})
