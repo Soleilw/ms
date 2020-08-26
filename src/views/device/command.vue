@@ -317,7 +317,8 @@
 								self.$message.success("发送成功");
 								self.command_uuid = '';
 								self.command = '';
-								self.dialogCommand = false
+								self.dialogCommand = false;
+								self.getCommands();
 							})
 							break;
 						case 'deleteUser':
@@ -326,7 +327,8 @@
 								self.command_uuid = '';
 								self.command = '';
 								self.commandform.face_id = '';
-								self.dialogCommand = false
+								self.dialogCommand = false;
+								self.getCommands();
 							})
 							break;
 						case "addUser":
@@ -335,7 +337,8 @@
 								self.command_uuid = '';
 								self.command = '';
 								self.commandform.face_id = '';
-								self.dialogCommand = false
+								self.dialogCommand = false;
+								self.getCommands();
 							})
 							break;
 						case 'getSoftVersion':
@@ -343,7 +346,8 @@
 								self.$message.success("发送成功");
 								self.command_uuid = '';
 								self.command = '';
-								self.dialogCommand = false
+								self.dialogCommand = false;
+								self.getCommands();
 							})
 							break;
 						case 'openDoor':
@@ -351,7 +355,8 @@
 								self.$message.success("发送成功");
 								self.command_uuid = '';
 								self.command = '';
-								self.dialogCommand = false
+								self.dialogCommand = false;
+								self.getCommands();
 							})
 							break;
 						case 'setUserAuthTime':
@@ -362,7 +367,8 @@
 								self.command_uuid = '';
 								self.command = '';
 								self.commandform.face_id = '';
-								self.dialogCommand = false
+								self.dialogCommand = false;
+								self.getCommands();
 							})
 							break;
 						case 'restart':
@@ -370,7 +376,8 @@
 								self.$message.success("发送成功");
 								self.uuid = '';
 								self.command = '';
-								self.dialogCommand = false
+								self.dialogCommand = false;
+								self.getCommands();
 							})
 					}
 				} else {

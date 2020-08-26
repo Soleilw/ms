@@ -11,7 +11,7 @@
 			<el-table-column prop="face_id" label="人脸ID"></el-table-column>
 			<el-table-column prop="face.name" label="姓名"></el-table-column>
 			<el-table-column prop="address.address" label="地址"></el-table-column>
-			<el-table-column prop="face.href" label="人脸图片">
+			<el-table-column prop="face.href" label="人脸图片" width="100px">
 				<template slot-scope="scope">
 					<el-popover placement="top-start" title="" trigger="click">
 						<img :src="scope.row.face.href" style="max-width:800px;max-height:800px;" />
@@ -19,7 +19,7 @@
 					</el-popover>
 				</template>
 			</el-table-column>
-			<el-table-column prop="result" label="结果" width="200px"></el-table-column>
+			<el-table-column prop="result" label="结果" width="500px"></el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-popover placement="right" width="800" trigger="click">
@@ -31,7 +31,7 @@
 							<div v-if="item.state == 3">状态：已完成</div>
 							<div v-if="item.state == 4">状态：失败</div>
 						</el-row>
-						<el-button slot="reference" @click="showDetail(scope.$index, scope.row)">查看详情</el-button>
+						<el-button slot="reference" @click="showDetail(scope.$index, scope.row)" style="margin-right: 10px;">查看详情</el-button>
 					</el-popover>
 					<el-button type="primary" @click="againPush(scope.$index, scope.row)">重新推送</el-button>
 				</template>
@@ -104,6 +104,7 @@
 				}
 				API.againPush(again_id).then(res => {
 					self.$message.success("推送成功");
+					self.getPushRecords();
 				})
 			},
 			// 分页
