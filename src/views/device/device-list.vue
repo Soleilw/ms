@@ -58,7 +58,6 @@
 										<el-checkbox :label="item.group_name" @change="checkOneChange">{{item.group_name}}</el-checkbox>
 									</el-checkbox-group>
 								</div>
-
 							</div>
 						</el-form-item>
 					</div>
@@ -828,6 +827,7 @@
 					self.form.name = res.remark;
 					self.form.address_id = res.address_id;
 					self.form.project_id = res.project_id;
+					self.form.type = res.type;
 					self.form.uuid = res.uuid;
 					self.form.configs = [];
 					self.hotness = res.configs.heatvision;
