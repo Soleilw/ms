@@ -44,20 +44,15 @@
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<div v-if="uuidDisabled">
-						<el-form-item label="已选的人脸组">
-							<div v-for="(item,index) in faceGroup" :key="index" style="color: #2A9F93;">{{faceGroup[index]}}</div>
-						</el-form-item>
-					</div>
 					<div v-if="face_address">
 						<el-form-item label="选择人脸组">
 							<el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
 							<div class="facebox">
-								<div v-for="(item,index) in faceGroupList" :key="index">
-									<el-checkbox-group v-model="form.face_groups" class="facebox-item">
+								<el-checkbox-group v-model="form.face_groups" class="facebox-item">
+									<div v-for="(item,index) in faceGroupList" :key="index">
 										<el-checkbox :label="item.group_name" @change="checkOneChange">{{item.group_name}}</el-checkbox>
-									</el-checkbox-group>
-								</div>
+									</div>
+								</el-checkbox-group>
 							</div>
 						</el-form-item>
 					</div>
@@ -692,9 +687,6 @@
 					})
 					this.form.face_groups = facebox;
 				} else if (val === false) {
-					API.faceGroup(this.form.address_id).then(res => {
-						this.faceGroupList = res.data;
-					})
 					facebox = [];
 					this.form.face_groups = [];
 				}
@@ -703,6 +695,7 @@
 			},
 			// 单选
 			checkOneChange(val) {
+				console.log(this.form.face_groups)
 				if (this.form.face_groups.length >= this.faceGroupList.length) {
 					this.checkAll = true;
 				} else {
@@ -833,16 +826,20 @@
 					self.hotness = res.configs.heatvision;
 					self.form.direction = res.direction;
 					self.form.remark = res.remark;
-					self.form.face_groups = [];
+					self.form.face_groups =  res.face_group;
 					
 					self.face_project = res.project;
 					self.face_address = res.address_id;
-					self.faceGroup = res.face_group;
 					self.face_apk = res.apk;
 					self.face_apk_version = res.apk_version;
 					self.face_type = res.type_string;
 					API.faceGroup(res.address_id).then(res => {
 						self.faceGroupList = res.data;
+						if (self.form.face_groups.length >= self.faceGroupList.length) {
+							self.checkAll = true;
+						} else {
+							self.checkAll = false;
+						}
 					})
 					switch (res.configs.heatvision) {
 						case 'normal':

@@ -82,8 +82,8 @@ API.faces = function(page,limit) {
 }
 
 // 获取推送记录
-API.pushRecords = function(page, limit) {
-	return axios.get(url.PushRecords, {page: page, limit: limit})
+API.pushRecords = function(page, limit, name) {
+	return axios.get(url.PushRecords, {page: page, limit: limit, name: name})
 }
 
 // 获取推送详情

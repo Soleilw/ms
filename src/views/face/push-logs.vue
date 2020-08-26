@@ -1,5 +1,12 @@
 <template>
 	<div v-loading="loading" element-loading-text="获取数据中">
+		<div class="handle-box">
+			<div class="btn">
+				<el-input placeholder="请输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
+					<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
+				</el-input>
+			</div>
+		</div>
 		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="face_id" label="人脸ID"></el-table-column>
 			<el-table-column prop="face.name" label="姓名"></el-table-column>
@@ -47,6 +54,7 @@
 		data() {
 			return {
 				loading: true,
+				name: '',
 				tableData: [],
 				detailList: [],
 				current: 1,
@@ -64,6 +72,19 @@
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 搜索
+			search() {
+				var self = this;
+				self.loading = true;
+				API.pushRecords(1, 10, self.name).then(res => {
+					self.loading = false;
+					self.tableDate = res.data;
+					self.total = res.total;
+					self.$message.success('搜索成功!');
 				}).catch(err => {
 					self.loading = false;
 				})
