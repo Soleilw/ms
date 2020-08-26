@@ -107,10 +107,10 @@
 			<el-table-column prop="direction" label="方向" width="80px"></el-table-column>
 			<el-table-column prop="version" label="版本"></el-table-column>
 			<el-table-column prop="remark" label="备注" width="300px"></el-table-column>
-			<el-table-column prop="state" label="状态">
+			<el-table-column prop="online" label="状态">
 				<template slot-scope="scope">
-					<span v-if="scope.row.state == 1">在线</span>
-					<span v-if="scope.row.state == 2">离线</span>
+					<span v-if="scope.row.online == 1">在线</span>
+					<span v-if="scope.row.online == 0">离线</span>
 				</template>
 			</el-table-column>
 			<el-table-column prop="last_login" label="最后登录时间" width="200px"></el-table-column>
