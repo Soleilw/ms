@@ -81,8 +81,9 @@
 				var self = this;
 				self.loading = true;
 				API.pushRecords(1, 10, self.name).then(res => {
+					console.log(res)
 					self.loading = false;
-					self.tableDate = res.data;
+					self.tableData = res.data;
 					self.total = res.total;
 					self.$message.success('搜索成功!');
 				}).catch(err => {
