@@ -675,6 +675,7 @@
 				var self = this;
 				API.faceGroup(address_id).then(res => {
 					self.faceGroupList = res.data;
+					console.log(self.faceGroupList)
 				})
 			},
 			// 全选

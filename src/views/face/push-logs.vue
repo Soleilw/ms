@@ -19,7 +19,8 @@
 					</el-popover>
 				</template>
 			</el-table-column>
-			<el-table-column prop="result" label="结果" width="500px"></el-table-column>
+			<el-table-column prop="result" label="结果" width="400px"></el-table-column>
+			<el-table-column prop="created_at" label="时间"></el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-popover placement="right" width="800" trigger="click">
@@ -31,9 +32,9 @@
 							<div v-if="item.state == 3">状态：已完成</div>
 							<div v-if="item.state == 4">状态：失败</div>
 						</el-row>
-						<el-button slot="reference" @click="showDetail(scope.$index, scope.row)" style="margin-right: 10px;">查看详情</el-button>
+						<el-button size="mini" type="primary" slot="reference" @click="showDetail(scope.$index, scope.row)" style="margin-right: 10px;">查看详情</el-button>
 					</el-popover>
-					<el-button type="primary" @click="againPush(scope.$index, scope.row)">重新推送</el-button>
+					<el-button size="mini" type="primary" @click="againPush(scope.$index, scope.row)">重新推送</el-button>
 				</template>
 			</el-table-column>
 		</el-table>

@@ -56,6 +56,12 @@
 								<el-input v-model="commandform.face_id" placeholder="请输入FACE_ID"></el-input>
 							</el-form-item>
 						</div>
+						<!-- 固件升级 -->
+						<div v-if="command === 'upgrade' ">
+							<el-form-item label="固件地址">
+								<el-input v-model="commandform.url"></el-input>
+							</el-form-item>
+						</div>
 						<div style="margin-left: 100px;">
 							<el-button type="primary" @click="sendCommand">发送</el-button>
 						</div>
@@ -118,6 +124,7 @@
 				command_uuid: '',
 				command: '',
 				commandform: {},
+				def_commandform: {},
 				commandsData: [],
 				userAuthTime: [], // 选择时间
 				valueFormatTime: 'yyyy-MM-dd HH:mm:ss',
@@ -279,18 +286,6 @@
 							face_id: ''
 						}
 						break;
-					case 'getSoftVersion':
-						self.commandform = {
-							uuid: self.command_uuid,
-							command: 'getSoftVersion',
-						}
-						break;
-					case 'openDoor':
-						self.commandform = {
-							uuid: self.command_uuid,
-							command: 'openDoor',
-						}
-						break;
 					case 'setUserAuthTime':
 						self.commandform = {
 							uuid: self.command_uuid,
@@ -300,16 +295,41 @@
 							face_id: ''
 						}
 						break;
-					case 'deleteAll':
+					case 'upgrade':
 						self.commandform = {
 							uuid: self.command_uuid,
-							command: 'deleteAll'
+							command: 'upgrade',
+							url: ''
 						}
 						break;
-					case 'restart':
-						self.commandform = {
+						// case 'getSoftVersion':
+						// 	self.commandform = {
+						// 		uuid: self.command_uuid,
+						// 		command: 'getSoftVersion',
+						// 	}
+						// 	break;
+						// case 'openDoor':
+						// 	self.commandform = {
+						// 		uuid: self.command_uuid,
+						// 		command: 'openDoor',
+						// 	}
+						// 	break;
+						// case 'deleteAll':
+						// 	self.commandform = {
+						// 		uuid: self.command_uuid,
+						// 		command: 'deleteAll'
+						// 	}
+						// 	break;
+						// case 'restart':
+						// 	self.commandform = {
+						// 		uuid: self.command_uuid,
+						// 		command: 'restart',
+						// 	}
+						// 	break;
+					default:
+						self.def_commandform = {
 							uuid: self.command_uuid,
-							command: 'restart',
+							command: self.command,
 						}
 				}
 			},
@@ -323,6 +343,7 @@
 								self.$message.success("发送成功");
 								self.command_uuid = '';
 								self.command = '';
+								self.type = '';
 								self.dialogCommand = false;
 								self.getCommands();
 							})
@@ -332,6 +353,7 @@
 								self.$message.success("发送成功");
 								self.command_uuid = '';
 								self.command = '';
+								self.type = '';
 								self.commandform.face_id = '';
 								self.dialogCommand = false;
 								self.getCommands();
@@ -342,25 +364,8 @@
 								self.$message.success("发送成功");
 								self.command_uuid = '';
 								self.command = '';
+								self.type = '';
 								self.commandform.face_id = '';
-								self.dialogCommand = false;
-								self.getCommands();
-							})
-							break;
-						case 'getSoftVersion':
-							API.sendDeviceCommand(self.commandform).then(res => {
-								self.$message.success("发送成功");
-								self.command_uuid = '';
-								self.command = '';
-								self.dialogCommand = false;
-								self.getCommands();
-							})
-							break;
-						case 'openDoor':
-							API.sendDeviceCommand(self.commandform).then(res => {
-								self.$message.success("发送成功");
-								self.command_uuid = '';
-								self.command = '';
 								self.dialogCommand = false;
 								self.getCommands();
 							})
@@ -372,25 +377,65 @@
 								self.$message.success("发送成功");
 								self.command_uuid = '';
 								self.command = '';
+								self.type = '';
 								self.commandform.face_id = '';
 								self.dialogCommand = false;
 								self.getCommands();
 							})
 							break;
-						case 'deleteAll':
+						case 'upgrade':
 							API.sendDeviceCommand(self.commandform).then(res => {
 								self.$message.success("发送成功");
 								self.command_uuid = '';
 								self.command = '';
+								self.url = '';
 								self.dialogCommand = false;
 								self.getCommands();
 							})
 							break;
-						case 'restart':
-							API.sendDeviceCommand(self.commandform).then(res => {
+							// case 'getSoftVersion':
+							// 	API.sendDeviceCommand(self.commandform).then(res => {
+							// 		self.$message.success("发送成功");
+							// 		self.command_uuid = '';
+							// 		self.command = '';
+							// 		self.dialogCommand = false;
+							// 		self.getCommands();
+							// 	})
+							// 	break;
+							// case 'openDoor':
+							// 	API.sendDeviceCommand(self.commandform).then(res => {
+							// 		self.$message.success("发送成功");
+							// 		self.command_uuid = '';
+							// 		self.command = '';
+							// 		self.dialogCommand = false;
+							// 		self.getCommands();
+							// 	})
+							// 	break;
+
+							// case 'deleteAll':
+							// 	API.sendDeviceCommand(self.commandform).then(res => {
+							// 		self.$message.success("发送成功");
+							// 		self.command_uuid = '';
+							// 		self.command = '';
+							// 		self.dialogCommand = false;
+							// 		self.getCommands();
+							// 	})
+							// 	break;
+							// case 'restart':
+							// 	API.sendDeviceCommand(self.commandform).then(res => {
+							// 		self.$message.success("发送成功");
+							// 		self.uuid = '';
+							// 		self.command = '';
+							// 		self.dialogCommand = false;
+							// 		self.getCommands();
+							// 	})
+							// 	break;
+						default:
+							API.sendDeviceCommand(self.def_commandform).then(res => {
 								self.$message.success("发送成功");
-								self.uuid = '';
+								self.command_uuid = '';
 								self.command = '';
+								self.type = '';
 								self.dialogCommand = false;
 								self.getCommands();
 							})

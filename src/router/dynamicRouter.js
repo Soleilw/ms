@@ -146,6 +146,15 @@ const dynamicRouter = [{
 		]
 	},
 	{
+	    path: '/outInLogs',
+	    name: 'outInLogs',
+	    component: () => import('@/views/outInLogs/outInLogs'),
+	    meta: {
+	        title: '进出记录管理',
+	        icon: 'el-icon-setting'
+	    }
+	},
+	{
 	    path: '/permission',
 	    name: 'permission',
 	    component: () => import('@/views/permission/index'),
@@ -172,22 +181,7 @@ const dynamicRouter = [{
 				},
 			}
 		]
-	},
-	
-	{
-	    path: '/outInLogs',
-	    name: 'outInLogs',
-	    component: () => import('@/views/outInLogs/outInLogs'),
-	    meta: {
-	        title: '进出记录管理',
-	        icon: 'el-icon-setting'
-	    }
 	}
-	
-
-
-
-
 ]
 
 
