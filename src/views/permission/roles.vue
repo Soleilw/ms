@@ -144,7 +144,7 @@
 									<span style="font-weight: bold;">权限管理页</span>
 								</el-checkbox>
 								<el-checkbox label="roles" @change="oneChange">角色管理页</el-checkbox>
-								<el-checkbox label="user" @change="oneChange">用户管理页</el-checkbox>
+								<el-checkbox label="manage" @change="oneChange">用户管理页</el-checkbox>
 								<el-checkbox label="roleAdd" @change="oneChange">添加角色</el-checkbox>
 								<el-checkbox label="roleEdit" @change="oneChange">编辑权限</el-checkbox>
 								<el-checkbox label="roleGet" @change="oneChange">获取角色列表</el-checkbox>
@@ -160,13 +160,54 @@
 								<el-checkbox label="manageDel" @change="oneChange">删除管理员</el-checkbox>
 							</el-checkbox-group>
 						</div>
-					<div class="permission">
-						<el-checkbox-group v-model="form.permissions" class="permission-item">
-							<el-checkbox class="permission-span" label="outInLogs" @change="oneChange" border>
-								<span style="font-weight: bold;">进出记录管理页</span>
-							</el-checkbox>
-						</el-checkbox-group>
-					</div>
+						<div class="permission">
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="outInLogs" @change="oneChange" border>
+									<span style="font-weight: bold;">进出记录管理页</span>
+								</el-checkbox>
+							</el-checkbox-group>
+						</div>
+						<!-- 公安可视以下页面 -->
+						<div class="permission">
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="area" @change="oneChange" border>
+									<span style="font-weight: bold;">辖区管理页</span>
+								</el-checkbox>
+								<el-checkbox label="areaList" @change="oneChange">辖区列表子页</el-checkbox>
+							</el-checkbox-group>
+						</div>
+						<div class="permission">
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="user" @change="oneChange" border>
+									<span style="font-weight: bold;">用户管理页</span>
+								</el-checkbox>
+								<el-checkbox label="userList" @change="oneChange">用户列表子页</el-checkbox>
+							</el-checkbox-group>
+						</div>
+						<div class="permission">
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="renter" @change="oneChange" border>
+									<span style="font-weight: bold;">住户管理页</span>
+								</el-checkbox>
+								<el-checkbox label="renterList" @change="oneChange">住户列表子页</el-checkbox>
+							</el-checkbox-group>
+						</div>
+						<div class="permission">
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="school" @change="oneChange" border>
+									<span style="font-weight: bold;">学校管理页</span>
+								</el-checkbox>
+								<el-checkbox label="schoolList" @change="oneChange">学校列表子页</el-checkbox>
+							</el-checkbox-group>
+						</div>
+						<div class="permission">
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="information" @change="oneChange" border>
+									<span style="font-weight: bold;">资讯管理页</span>
+								</el-checkbox>
+								<el-checkbox label="infoList" @change="oneChange">资讯列表子页</el-checkbox>
+							</el-checkbox-group>
+						</div>
 					</el-form-item>
 					<div class="submit">
 						<el-form-item>
@@ -258,7 +299,7 @@
 
 					"permission", // 角色管理
 					"roles",
-					"user",
+					"manage",
 					"roleGet",
 					"roleAdd",
 					"roleEdit",
@@ -268,8 +309,23 @@
 					"manageEdit",
 					"manageDel",
 					"manageResetPwd", // 重置密码
+
+					"outInLogs", // 进出记录管理页
 					
-					"outInLogs" // 进出记录管理页
+					"area", // 辖区管理
+					"areaList",
+					
+					"user", // 用户管理
+					"userList",
+					
+					"renter", // 住户管理
+					"renterList",
+					
+					"school", // 学校管理
+					"schoolList",
+					
+					"information", // 资讯管理
+					"infoList",
 				],
 				// permissionList: [
 				// 	{

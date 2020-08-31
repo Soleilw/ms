@@ -19,9 +19,16 @@
 					</el-popover>
 				</template>
 			</el-table-column>
-			<el-table-column prop="result" label="结果" width="400px"></el-table-column>
+			<el-table-column prop="result" label="结果" width="300px"></el-table-column>
+			<el-table-column prop="type" label="类型"></el-table-column>
+			<el-table-column prop="offline" label="在线状态">
+				<template slot-scope="scope">
+					<span v-if="scope.row.offline == 1">离线</span>
+					<span v-if="scope.row.offline == 0">在线</span>
+				</template>
+			</el-table-column>
 			<el-table-column prop="created_at" label="时间"></el-table-column>
-			<el-table-column label="操作">
+			<el-table-column label="操作" width="200px">
 				<template slot-scope="scope">
 					<el-popover placement="right" width="800" trigger="click">
 						<el-row v-for="(item, index) in detailList" :key="index" style="padding: 10px;">

@@ -155,6 +155,101 @@ const dynamicRouter = [{
 	    }
 	},
 	{
+		path: '/area',  //  辖区管理
+		name: 'area',
+		component: () => import('@/views/area/index'),
+		meta: {
+			title: '辖区管理',
+			icon: 'el-icon-picture-outline',
+		},
+		children: [{
+				path: '/area-list',
+				name: 'areaList',
+				component: () => import('@/views/area/area-list'),
+				meta: {
+					title: '辖区列表',
+					icon: 'el-icon-warning'
+				}
+			}
+		]
+	},
+	{
+		path: '/user',  //  用户管理
+		name: 'user',
+		component: () => import('@/views/user/index'),
+		meta: {
+			title: '用户管理',
+			icon: 'el-icon-picture-outline',
+		},
+		children: [{
+				path: '/user-list',
+				name: 'userList',
+				component: () => import('@/views/user/user-list'),
+				meta: {
+					title: '用户列表',
+					icon: 'el-icon-warning'
+				}
+			}
+		]
+	},
+	{
+		path: '/renter',  //  住户管理
+		name: 'renter',
+		component: () => import('@/views/renter/index'),
+		meta: {
+			title: '住户管理',
+			icon: 'el-icon-picture-outline',
+		},
+		children: [{
+				path: '/renter-list',
+				name: 'renterList',
+				component: () => import('@/views/renter/renter-list'),
+				meta: {
+					title: '住户列表',
+					icon: 'el-icon-warning'
+				}
+			}
+		]
+	},
+	{
+		path: '/school',  //  学校管理
+		name: 'school',
+		component: () => import('@/views/school/index'),
+		meta: {
+			title: '学校管理',
+			icon: 'el-icon-picture-outline',
+		},
+		children: [{
+				path: '/school-list',
+				name: 'schoolList',
+				component: () => import('@/views/school/school-list'),
+				meta: {
+					title: '学校列表',
+					icon: 'el-icon-warning'
+				}
+			}
+		]
+	},
+	{
+		path: '/information', // 资讯管理
+		name: 'information',
+		component: () => import('@/views/information/index'),
+		meta: {
+			title: '资讯管理',
+			icon: 'el-icon-picture-outline',
+		},
+		children: [{
+				path: '/info-list',
+				name: 'infoList',
+				component: () => import('@/views/information/info-list'),
+				meta: {
+					title: '资讯列表',
+					icon: 'el-icon-warning'
+				}
+			}
+		]
+	},
+	{
 	    path: '/permission',
 	    name: 'permission',
 	    component: () => import('@/views/permission/index'),
@@ -172,9 +267,9 @@ const dynamicRouter = [{
 				}
 			},
 			{
-				path: '/user',
-				name: 'user',
-				component: () => import('@/views/permission/user'),
+				path: '/manage',
+				name: 'manage',
+				component: () => import('@/views/permission/manage'),
 				meta: {
 					title: '用户管理',
 					icon: 'el-icon-s-release'
