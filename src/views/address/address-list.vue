@@ -258,6 +258,7 @@
 			// 操作
 			handleEdit(index, row) {
 				var self = this;
+				self.getPoliceStation();
 				self.dialogAddress = true;
 				self.pro_id = '';
 				self.city_id = '';
@@ -269,9 +270,13 @@
 						type: res.type,
 						address: res.address,
 						contact: res.contact,
+						face_groups: res.face_groups,
 						stations: res.stations,
 						lng: res.lng,
 						lat: res.lat,
+					}
+					if(self.form.stations.length == self.stationList.length) {
+						self.checkAll = true;
 					}
 				})
 			},
