@@ -260,6 +260,7 @@
 				var self = this;
 				self.getPoliceStation();
 				self.dialogAddress = true;
+				self.checkAll = false;
 				self.pro_id = '';
 				self.city_id = '';
 				self.community_id = '';
@@ -267,6 +268,7 @@
 					self.form = {
 						id: row.id,
 						project_id: res.project_id,
+						area_id: res.area_id,
 						type: res.type,
 						address: res.address,
 						contact: res.contact,
