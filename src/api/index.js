@@ -77,8 +77,8 @@ API.face = function(data) {
 	return axios.post(url.Face, data)
 }
 
-API.faces = function(page,limit) {
-	return axios.get(url.Faces, {page: page, limit: limit})
+API.faces = function(page,limit, name) {
+	return axios.get(url.Faces, {page: page, limit: limit, name: name})
 }
 
 // 获取推送记录
@@ -225,6 +225,17 @@ API.oneRole = function(name) {
 // 增加角色
 API.role = function(data) {
 	return axios.post(url.Role, data)
+}
+
+// 辖区管理
+// 添加公安辖区
+API.policeStation = function (data) {
+	return axios.post(url.PoliceStation, data)
+}
+
+// 获取公安辖区
+API.policeStations = function (page, limit, name) {
+	return axios.get(url.PoliceStations, {page: page, limit: limit, name: name})
 }
 
 

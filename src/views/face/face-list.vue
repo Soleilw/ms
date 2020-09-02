@@ -4,6 +4,11 @@
 			<div class="btn">
 				<el-button type="primary" @click="addFace">添加人脸</el-button>
 			</div>
+			<div class="btn">
+				<el-input placeholder="请输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
+					<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
+				</el-input>
+			</div>
 		</div>
 
 		<el-dialog title="添加人脸" :visible.sync="dialogFace">
@@ -92,6 +97,7 @@
 			return {
 				loading: true,
 				dialogFace: false,
+				name: '', // 搜索
 				addressList: [],
 				faceGroupList: [],
 				disabled: false, // 上传图片
@@ -113,6 +119,16 @@
 			this.getFace();
 		},
 		methods: {
+			search() {
+				var self = this;
+				API.faces(self.current, self.size, self.name).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
 			getFace() {
 				var self = this;
 				API.faces(self.current).then(res => {

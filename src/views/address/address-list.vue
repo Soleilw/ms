@@ -75,7 +75,16 @@
 						<el-button size="mini" type="primary" @click="addFace">添加人脸姓名</el-button>
 						<el-button size="mini" type="danger" @click="delFace">删除人脸姓名</el-button>
 					</el-form-item>
-
+					<el-form-item label="选择公安辖区">
+						<el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+						<div class="facebox">
+							<el-checkbox-group v-model="form.stations" class="facebox-item">
+								<div v-for="(item,index) in stationList" :key="index">
+									<el-checkbox :label="item.id" @change="checkOneChange">{{item.name}}</el-checkbox>
+								</div>
+							</el-checkbox-group>
+						</div>
+					</el-form-item>
 					<div class="submit">
 						<el-form-item>
 							<el-button type="primary" @click="newProject">提交</el-button>
@@ -112,7 +121,7 @@
 <script>
 	import API from '@/api/index.js'
 	import vMap from '@/components/map/map-iframe.vue'
-
+	let facebox = [];
 	export default {
 		components: {
 			vMap
@@ -131,7 +140,8 @@
 					face_groups: [],
 					lng: '',
 					lat: '',
-					area_id: ''
+					area_id: '',
+					stations: []
 				},
 
 				proList: [], // 省级列表
@@ -143,6 +153,9 @@
 				areaList: [], //  社区列表
 				areas_id: '',
 				showMap: false, // 地图显示
+				
+				checkAll: false, // 选择公安辖区
+				stationList: [], // 公安辖区列表
 
 				tableData: [],
 				current: 1,
@@ -181,6 +194,7 @@
 			},
 			addAddress() {
 				var self = this;
+				self.getPoliceStation();
 				self.dialogAddress = true;
 				self.pro_id = '';
 				self.city_id = '';
@@ -193,7 +207,8 @@
 					face_groups: [],
 					lng: '',
 					lat: '',
-					area_id: ''
+					area_id: '',
+					stations: []
 				}
 			},
 			// 添加人脸分组名称
@@ -209,6 +224,26 @@
 				this.form.lng = mapData.latlng.lng;
 				this.form.lat = mapData.latlng.lat;
 				this.showMap = false;
+			},
+			// 获取公安辖区列表
+			getPoliceStation() {
+				var self = this;
+				API.policeStations(self.current, 1000).then(res => {
+					self.stationList = res.data;
+				})
+			},
+			// 全选
+			handleCheckAllChange(val) {
+				if (val === true) {
+					facebox = [];
+					this.stationList.forEach(item => {
+						facebox.push(item.id)
+					})
+					this.form.stations = facebox;
+				} else if (val === false) {
+					facebox = [];
+					this.form.stations = [];
+				}
 			},
 			newProject() {
 				var self = this;
@@ -234,7 +269,7 @@
 						type: res.type,
 						address: res.address,
 						contact: res.contact,
-						face_groups: res.face_groups,
+						stations: res.stations,
 						lng: res.lng,
 						lat: res.lat,
 					}
