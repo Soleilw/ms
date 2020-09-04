@@ -239,6 +239,17 @@ API.policeStations = function (page, limit, name) {
 }
 
 
+// 资讯管理
+// 新增资讯
+API.information = function (data) {
+	return axios.post(url.Information, data)
+}
+
+// 获取资讯
+API.informations = function (page, limit, id, title) {
+	return axios.get(url.Information, {page: page, limit: limit, id: id, title: title})
+}
+
 
 export default API
 

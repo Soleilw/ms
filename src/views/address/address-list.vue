@@ -80,7 +80,7 @@
 						<div class="facebox">
 							<el-checkbox-group v-model="form.stations" class="facebox-item">
 								<div v-for="(item,index) in stationList" :key="index">
-									<el-checkbox :label="item.id" @change="checkOneChange">{{item.name}}</el-checkbox>
+									<el-checkbox :label="item.id">{{item.name}}</el-checkbox>
 								</div>
 							</el-checkbox-group>
 						</div>

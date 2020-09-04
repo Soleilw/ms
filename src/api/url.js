@@ -79,6 +79,10 @@ const url = {
 	// 辖区管理
 	'PoliceStation': '/police/station', // 添加公安辖区
 	'PoliceStations': '/police/stations', // 获取公安辖区
+	
+	
+	// 资讯管理
+	'Information': '/information', // 新增资讯
 }
 
 module.exports = url;
