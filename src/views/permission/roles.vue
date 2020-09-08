@@ -326,6 +326,9 @@
 					
 					"information", // 资讯管理
 					"infoList",
+					
+					"switch", // 人脸开关管理
+					"faceSwitch"
 				],
 				// permissionList: [
 				// 	{

@@ -250,6 +250,15 @@ API.informations = function (page, limit, id, title) {
 	return axios.get(url.Information, {page: page, limit: limit, id: id, title: title})
 }
 
+// 人脸开关
+API.faceSwitch = function (data) {
+	return axios.post(url.FaceSwicth, data)
+}
+
+API.faceSwitches = function (page, limit) {
+	return axios.get(url.FaceSwicthes,  {page: page, limit: limit})
+}
+
 
 export default API
 

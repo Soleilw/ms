@@ -250,6 +250,25 @@ const dynamicRouter = [{
 		]
 	},
 	{
+		path: '/switch', // 资讯管理
+		name: 'switch',
+		component: () => import('@/views/switch/index'),
+		meta: {
+			title: '人脸开关管理',
+			icon: 'el-icon-picture-outline',
+		},
+		children: [{
+				path: '/face-switch',
+				name: 'faceSwitch',
+				component: () => import('@/views/switch/face-switch'),
+				meta: {
+					title: '开关列表',
+					icon: 'el-icon-warning'
+				}
+			}
+		]
+	},
+	{
 	    path: '/permission',
 	    name: 'permission',
 	    component: () => import('@/views/permission/index'),

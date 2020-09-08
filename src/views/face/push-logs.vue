@@ -9,6 +9,7 @@
 		</div>
 		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="face_id" label="人脸ID"></el-table-column>
+			<el-table-column prop="group" label="人脸组"></el-table-column>
 			<el-table-column prop="face.name" label="姓名"></el-table-column>
 			<el-table-column prop="address.address" label="地址"></el-table-column>
 			<el-table-column prop="face.href" label="人脸图片" width="100px">

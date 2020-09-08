@@ -83,6 +83,11 @@ const url = {
 	
 	// 资讯管理
 	'Information': '/information', // 新增资讯
+	
+	
+	// 人脸开关
+	'FaceSwicthes': '/face/switches', // 获取资讯
+	'FaceSwicth': '/face/switch', // 新增资讯
 }
 
 module.exports = url;

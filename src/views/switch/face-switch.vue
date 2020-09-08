@@ -2,30 +2,26 @@
 	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
-				<el-button type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="addPoliceArea">添加公安辖区</el-button>
+				<el-button type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="addSwitch">添加开关信息</el-button>
 			</div>
 		</div>
 
-		<el-dialog title="添加公安辖区" :visible.sync="dialogPoliceArea" width="50%">
+		<el-dialog title="添加开关信息" :visible.sync="dialogSwitch" width="50%">
 			<div class="box">
 				<el-form :model="form" label-width="80px">
-					<el-form-item label="辖区名字">
-						<el-input v-model="form.name"></el-input>
+					<el-form-item label="开关名称">
+						<el-input v-model="form.switch_title"></el-input>
+					</el-form-item>
+					<el-form-item label="版本">
+						<el-input v-model="form.version"></el-input>
+					</el-form-item>
+					<el-form-item label="开关值">
+						<!-- 2为关 1为开 -->
+						<el-input v-model="form.switch_value"></el-input>
 					</el-form-item>
 					<div class="submit">
 						<el-form-item>
-							<el-button type="primary" @click="newPoliceArea">提交</el-button>
-						</el-form-item>
-					</div>
-				</el-form>
-				
-				<el-form :model="form1" label-width="80px">
-					<el-form-item label="人脸开关">
-						<el-input v-model="form.name"></el-input>
-					</el-form-item>
-					<div class="submit">
-						<el-form-item>
-							<el-button type="primary" @click="setform1">提交</el-button>
+							<el-button type="primary" @click="newSwitch">提交</el-button>
 						</el-form-item>
 					</div>
 				</el-form>
@@ -34,9 +30,17 @@
 
 		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
-			<el-table-column prop="name" label="名称"></el-table-column>
+			<el-table-column prop="switch_title" label="开关名称"></el-table-column>
+			<el-table-column prop="version" label="版本"></el-table-column>
+			<el-table-column prop="switch_value" label="开关值">
+				<template slot-scope="scope">
+					<span v-if="scope.row.switch_value == 2">关</span>
+					<span v-if="scope.row.switch_value == 1">开</span>
+				</template>
+			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
+					<el-button slot="reference" size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
 						<el-button slot="reference" size="mini" type="danger">删除</el-button>
 					</el-popconfirm>
@@ -60,16 +64,14 @@
 		data() {
 			return {
 				loading: true,
-				dialogPoliceArea: false,
+				dialogSwitch: false,
 				form: {
-					name: '',
+					switch_title: '人脸开关',
+					version: '1.0.1',
+					switch_value: '2'
 				},
 				tableData: [],
-				 form1: {
-					 switch_title: '人脸开关',
-					 version: '1.0.1',
-					 switch_value: '2'
-				 },
+
 				// 分页
 				current: 1, // 当前页
 				size: 10, // 每页出现几条
@@ -77,19 +79,12 @@
 			}
 		},
 		mounted() {
-			this.getPoliceStation();
+			this.getSwitch();
 		},
 		methods: {
-			setform1() {
+			getSwitch() {
 				var self = this;
-				API.faceSwitch(self.form1).then(res => {
-					console.log(res)
-				}).catch(err => {
-				})
-			},
-			getPoliceStation() {
-				var self = this;
-				API.policeStations(self.current).then(res => {
+				API.faceSwitches(self.current).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
@@ -98,37 +93,44 @@
 				})
 			},
 			// 添加新的AIP
-			addPoliceArea() {
+			addSwitch() {
 				var self = this;
-				self.dialogPoliceArea = true;
+				self.dialogSwitch = true;
 				self.form = {
-					name: '',
+					switch_title: '',
+					version: '',
+					switch_value: ''
 				}
 			},
 
-			newPoliceArea() {
+			newSwitch() {
 				var self = this;
-				API.policeStation(self.form).then(res => {
-					self.dialogPoliceArea = false;
+				API.faceSwitch(self.form).then(res => {
+					self.dialogSwitch = false;
 					self.$message.success("提交成功");
-					self.getPoliceStation();
+					self.faceSwitches();
 					self.current = 1;
 					self.form = {};
-				}).catch(err => {
-				})
+				}).catch(err => {})
 			},
 			// 操作
 			handleDel(index, row) {
-				var self = this;
-				console.log(row)
-				var id = row.id
-				API.delAip(id).then(res => {
-					self.$message.success('删除成功');
-					self.getPoliceStation();
-					self.current = 1;
-				}).catch(err => {
-					self.loading = false;
-				})
+				// var self = this;
+				// console.log(row)
+				// var id = row.id
+				// API.delAip(id).then(res => {
+				// 	self.$message.success('删除成功');
+				// 	self.getPoliceStation();
+				// 	self.current = 1;
+				// }).catch(err => {
+				// 	self.loading = false;
+				// })
+			},
+			// 编辑
+			handleEdit(index, row) {
+				let self = this;
+				self.dialogSwitch = true;
+				self.form = row;
 			},
 
 			// 分页
@@ -136,7 +138,7 @@
 				var self = this;
 				self.loading = true;
 				self.current = val;
-				API.policeStations(val, self.size).then(res => {
+				API.faceSwitches(val, self.size).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
@@ -149,7 +151,7 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.policeStations(self.current, val).then(res => {
+				API.faceSwitches(self.current, val).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
