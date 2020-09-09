@@ -228,7 +228,7 @@
 			// 获取公安辖区列表
 			getPoliceStation() {
 				var self = this;
-				API.policeStations(self.current, 1000).then(res => {
+				API.policeStations(1, 1000).then(res => {
 					self.stationList = res.data;
 				})
 			},
