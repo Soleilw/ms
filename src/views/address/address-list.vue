@@ -98,6 +98,7 @@
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="project_id" label="项目ID"></el-table-column>
 			<el-table-column prop="address" label="地址"></el-table-column>
+			<el-table-column prop="stations" label="所在辖区"></el-table-column>
 			<el-table-column prop="contact" label="联系方式"></el-table-column>
 			<el-table-column prop="address_uuid" label="address_uuid"></el-table-column>
 			<el-table-column label="操作">
@@ -184,7 +185,7 @@
 			},
 			getAddress() {
 				var self = this;
-				API.addresses(1, 100).then(res => {
+				API.addresses(1, 10).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
