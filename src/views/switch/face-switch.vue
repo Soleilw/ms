@@ -41,7 +41,7 @@
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button slot="reference" size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">
 						<el-button slot="reference" size="mini" type="danger">删除</el-button>
 					</el-popconfirm>
 				</template>
@@ -108,23 +108,23 @@
 				API.faceSwitch(self.form).then(res => {
 					self.dialogSwitch = false;
 					self.$message.success("提交成功");
-					self.faceSwitches();
+					self.getSwitch();
 					self.current = 1;
 					self.form = {};
 				}).catch(err => {})
 			},
 			// 操作
 			handleDel(index, row) {
-				// var self = this;
-				// console.log(row)
-				// var id = row.id
-				// API.delAip(id).then(res => {
-				// 	self.$message.success('删除成功');
-				// 	self.getPoliceStation();
-				// 	self.current = 1;
-				// }).catch(err => {
-				// 	self.loading = false;
-				// })
+				var self = this;
+				console.log(row)
+				var id = row.id
+				API.delFaceSwitch(id).then(res => {
+					self.$message.success('删除成功');
+					self.getSwitch();
+					self.current = 1;
+				}).catch(err => {
+					self.loading = false;
+				})
 			},
 			// 编辑
 			handleEdit(index, row) {

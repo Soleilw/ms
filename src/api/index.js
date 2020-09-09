@@ -227,6 +227,18 @@ API.role = function(data) {
 	return axios.post(url.Role, data)
 }
 
+// 获取账号列表
+API.users = function(page, limit) {
+	return axios.get(url.Users, {
+		page: page,
+		limit: limit
+	})
+}
+
+API.user = function(data) {
+	return axios.post(url.User, data)
+}
+
 // 辖区管理
 // 添加公安辖区
 API.policeStation = function (data) {
@@ -251,10 +263,17 @@ API.informations = function (page, limit, id, title) {
 }
 
 // 人脸开关
+// 新增开关
 API.faceSwitch = function (data) {
 	return axios.post(url.FaceSwicth, data)
 }
 
+// 删除开关
+API.delFaceSwitch = function (id) {
+	return axios.del(url.FaceSwicth, {id: id})
+}
+
+// 获取开关
 API.faceSwitches = function (page, limit) {
 	return axios.get(url.FaceSwicthes,  {page: page, limit: limit})
 }

@@ -208,6 +208,14 @@
 								<el-checkbox label="infoList" @change="oneChange">资讯列表子页</el-checkbox>
 							</el-checkbox-group>
 						</div>
+						<div class="permission">
+							<el-checkbox-group v-model="form.permissions" class="permission-item">
+								<el-checkbox class="permission-span" label="switch" @change="oneChange" border>
+									<span style="font-weight: bold;">人脸开关管理页</span>
+								</el-checkbox>
+								<el-checkbox label="faceSwitch" @change="oneChange">开关列表子页</el-checkbox>
+							</el-checkbox-group>
+						</div>
 					</el-form-item>
 					<div class="submit">
 						<el-form-item>

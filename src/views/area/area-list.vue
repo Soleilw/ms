@@ -18,17 +18,6 @@
 						</el-form-item>
 					</div>
 				</el-form>
-				
-				<el-form :model="form1" label-width="80px">
-					<el-form-item label="人脸开关">
-						<el-input v-model="form.name"></el-input>
-					</el-form-item>
-					<div class="submit">
-						<el-form-item>
-							<el-button type="primary" @click="setform1">提交</el-button>
-						</el-form-item>
-					</div>
-				</el-form>
 			</div>
 		</el-dialog>
 
@@ -80,13 +69,6 @@
 			this.getPoliceStation();
 		},
 		methods: {
-			setform1() {
-				var self = this;
-				API.faceSwitch(self.form1).then(res => {
-					console.log(res)
-				}).catch(err => {
-				})
-			},
 			getPoliceStation() {
 				var self = this;
 				API.policeStations(self.current).then(res => {

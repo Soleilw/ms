@@ -74,6 +74,8 @@ const url = {
 	// 权限管理
 	'Role': '/role' ,// 新增角色
 	'Roles': '/roles' ,// 获取角色
+	'Users': '/users' ,// 获取用户
+	'User': '/user' ,// 获取用户
 	
 	
 	// 辖区管理

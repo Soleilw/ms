@@ -160,7 +160,7 @@ const dynamicRouter = [{
 		component: () => import('@/views/area/index'),
 		meta: {
 			title: '辖区管理',
-			icon: 'el-icon-picture-outline',
+			icon: 'el-icon-map-location',
 		},
 		children: [{
 				path: '/area-list',
@@ -168,7 +168,7 @@ const dynamicRouter = [{
 				component: () => import('@/views/area/area-list'),
 				meta: {
 					title: '辖区列表',
-					icon: 'el-icon-warning'
+					icon: 'el-icon-map-location'
 				}
 			}
 		]
@@ -179,7 +179,7 @@ const dynamicRouter = [{
 		component: () => import('@/views/user/index'),
 		meta: {
 			title: '用户管理',
-			icon: 'el-icon-picture-outline',
+			icon: 'el-icon-user',
 		},
 		children: [{
 				path: '/user-list',
@@ -198,7 +198,7 @@ const dynamicRouter = [{
 		component: () => import('@/views/renter/index'),
 		meta: {
 			title: '住户管理',
-			icon: 'el-icon-picture-outline',
+			icon: 'el-icon-user',
 		},
 		children: [{
 				path: '/renter-list',
@@ -217,7 +217,7 @@ const dynamicRouter = [{
 		component: () => import('@/views/school/index'),
 		meta: {
 			title: '学校管理',
-			icon: 'el-icon-picture-outline',
+			icon: 'el-icon-user',
 		},
 		children: [{
 				path: '/school-list',
@@ -255,7 +255,7 @@ const dynamicRouter = [{
 		component: () => import('@/views/switch/index'),
 		meta: {
 			title: '人脸开关管理',
-			icon: 'el-icon-picture-outline',
+			icon: 'el-icon-key',
 		},
 		children: [{
 				path: '/face-switch',

@@ -32,10 +32,10 @@ export const DynamicRoutes = [{
 		path: '',
 		component: () => import('@/components/layout/Home.vue'),
 		name: 'container',
-		redirect: 'baiduaip',
+		redirect: 'outInLogs',
 		meta: {
 			requiresAuth: true,
-			title: '百度接口'
+			title: '辖区管理'
 		},
 		children: []
 	},
