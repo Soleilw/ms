@@ -18,6 +18,12 @@
 			<div class="btn">
 				<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
 			</div>
+			<div class="btn">
+				<el-select v-model="area_address_id" placeholder="请选择地址" filterable @change="areaAddressChange">
+					<el-option v-for="(item, index) in area_address_List" :key="index" :label="item.address" :value="item.id">
+					</el-option>
+				</el-select>
+			</div>
 		</div>
 
 		<el-dialog title="添加设备" :visible.sync="dialogDevice">
@@ -558,7 +564,9 @@
 							})
 						}
 					}
-				}
+				},
+				area_address_List: [], //选择省市区后获取地址列表
+				area_address_id: ''
 
 			}
 		},
@@ -581,15 +589,31 @@
 					self.cascaderData = res.data;
 				})
 			},
+			// 获取地址
 			proChange(val) {
 				var self = this;
-				self.pro_city_area_id = val[3]
-				self.loading = true;
-				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id).then(res => {
+				self.pro_city_area_id = val[3];
+				API.devices(1, self.size, self.type, self.uuid,self.pro_city_area_id).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
-					self.$message.success('搜索成功!');
+				}).catch(err => {
+					self.loading = false;
+				})
+				API.addresses(1, 100, '', self.pro_city_area_id).then(res => {
+					self.loading = false;
+					self.area_address_List = res.data;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			
+			areaAddressChange(val) {
+				var self = this;
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, val).then(res => {
+					self.loading = false;
+					self.tableDate = res.data;
+					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
 				})
