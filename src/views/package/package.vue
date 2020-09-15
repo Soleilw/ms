@@ -164,7 +164,7 @@
 									<div class="facebox">
 										<div v-for="(item,index) in deviceList" :key="index">
 											<el-checkbox-group v-model="sendForm.devices" class="facebox-item">
-												<el-checkbox :label="item.id">{{item.remark ? item.remark : item.uuid}}</el-checkbox>
+												<el-checkbox :label="item.id">{{item.remark ? item.remark : item.uuid}} / {{item.remark ? item.remark : '无'}}</el-checkbox>
 											</el-checkbox-group>
 										</div>
 									</div>
