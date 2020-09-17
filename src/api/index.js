@@ -83,12 +83,13 @@ API.getaddress = function(id) {
 	})
 }
 
-API.addresses = function(page, limit, project_id, area_id) {
+API.addresses = function(page, limit, project_id, area_id, address) {
 	return axios.get(url.Addresses, {
 		page: page,
 		limit: limit,
 		project_id: project_id,
-		area_id: area_id
+		area_id: area_id,
+		address: address
 	})
 }
 
@@ -192,12 +193,12 @@ API.deviceLogs = function(page, limit, uuid, type) {
 	})
 }
 
-API.deviceFaceLogs = function(page, limit, uuid, address_id) {
+API.deviceFaceLogs = function(page, limit, uuid) {
 	return axios.get(url.DeviceRecord, {
 		page: page,
 		limit: limit,
 		uuid: uuid,
-		address_id: address_id
+		// address_id: address_id
 	})
 }
 

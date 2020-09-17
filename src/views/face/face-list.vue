@@ -122,6 +122,7 @@
 			search() {
 				var self = this;
 				API.faces(self.current, self.size, self.name).then(res => {
+					
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;

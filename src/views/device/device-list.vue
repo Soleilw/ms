@@ -111,16 +111,17 @@
 			<el-table-column prop="uuid" label="uuid" width="200px"></el-table-column>
 			<el-table-column prop="type_string" label="类型" width="100px"></el-table-column>
 			<el-table-column prop="direction" label="方向" width="80px"></el-table-column>
+			<el-table-column prop="ip" label="IP地址"></el-table-column>
 			<el-table-column prop="version" label="版本"></el-table-column>
-			<el-table-column prop="remark" label="备注" width="300px"></el-table-column>
-			<el-table-column prop="online" label="状态">
+			<el-table-column prop="remark" label="备注" width="250px"></el-table-column>
+			<el-table-column prop="online" label="状态" width="80px">
 				<template slot-scope="scope">
 					<span v-if="scope.row.online == 1">在线</span>
 					<span v-if="scope.row.online == 0">离线</span>
 				</template>
 			</el-table-column>
-			<el-table-column prop="last_login" label="最后登录时间" width="200px"></el-table-column>
-			<el-table-column label="操作" width="200px">
+			<el-table-column prop="last_login" label="最后登录时间" width="150px"></el-table-column>
+			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-dropdown>
 						<el-button type="primary">
@@ -925,7 +926,7 @@
 				this.dialogShowRecord = true;
 				this.face_uuid = row.uuid;
 				this.address_id = row.address_id;
-				API.deviceFaceLogs(1, 10, row.uuid, row.address_id).then(res => {
+				API.deviceFaceLogs(1, 10, row.uuid).then(res => {
 					this.faceLogsTable = res.data;
 					this.totalFace = res.total;
 					// this.faceLogsTable.forEach(item => {

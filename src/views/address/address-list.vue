@@ -4,6 +4,14 @@
 			<div class="btn">
 				<el-button type="primary" @click="addAddress">添加地址</el-button>
 			</div>
+			<div class="btn">
+				<el-input placeholder="输入地址名称" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
+					<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
+				</el-input>
+			</div>
+			<div class="btn">
+				<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="areaProChange" :props="props"></el-cascader>
+			</div>
 		</div>
 
 		<el-dialog title="添加地址" :visible.sync="dialogAddress" :close-on-click-modal="false" width="80%">
@@ -144,6 +152,7 @@
 					area_id: '',
 					stations: []
 				},
+				name: '', // 用于搜索
 
 				proList: [], // 省级列表
 				pro_id: '',
@@ -154,7 +163,7 @@
 				areaList: [], //  社区列表
 				areas_id: '',
 				showMap: false, // 地图显示
-				
+
 				checkAll: false, // 选择公安辖区
 				stationList: [], // 公安辖区列表
 
@@ -162,6 +171,48 @@
 				current: 1,
 				size: 10,
 				total: 0,
+
+				pro_city_area: [], // 根据省市区搜索
+				pro_city_area_id: '', // 根据社区id搜索
+				cascaderData: [],
+				props: {
+					label: 'title',
+					value: 'id',
+					lazy: true,
+					lazyLoad(node, resolve) {
+						var level = node.level
+						if (level == 1) {
+							var city_id = node.data.id
+							API.areas(1, 100, city_id).then(res => {
+								var city_node = res.data
+								city_node.forEach(item => {
+									item.leaf = level >= 3
+								})
+								resolve(city_node)
+							})
+						}
+						if (level == 2) {
+							var community_id = node.data.id
+							API.areas(1, 100, community_id).then(res => {
+								var community_node = res.data
+								community_node.forEach(item => {
+									item.leaf = level >= 3
+								})
+								resolve(community_node)
+							})
+						}
+						if (level == 3) {
+							var area_id = node.data.id
+							API.areas(1, 100, area_id).then(res => {
+								var area_node = res.data
+								area_node.forEach(item => {
+									item.leaf = level >= 3
+								})
+								resolve(area_node)
+							})
+						}
+					}
+				},
 			}
 		},
 		mounted() {
@@ -169,8 +220,45 @@
 			this.getProject();
 			this.getAddressType();
 			this.getPro();
+			// 省市区数据
+			this.getProArae();
 		},
 		methods: {
+			// 获取社区列表（省市区选中）
+			getProArae() {
+				var self = this;
+				API.areas(1, 100, 0).then(res => {
+					self.cascaderData = res.data;
+				})
+			},
+			// 获取地址
+			areaProChange(val) {
+				var self = this;
+				self.pro_city_area_id = val[3];
+				console.log(self.pro_city_area_id)
+				self.loading = true;
+				API.addresses(1, self.size, '', self.pro_city_area_id, self.name).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+					self.$message.success('搜索成功!');
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			// 搜索
+			search() {
+				var self = this;
+				self.loading = true;
+				API.addresses(1, self.size, '', self.pro_city_area_id, self.name).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+					self.$message.success('搜索成功!');
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
 			getProject() {
 				var self = this;
 				API.projects(1, 100).then(res => {
@@ -278,7 +366,7 @@
 						lng: res.lng,
 						lat: res.lat,
 					}
-					if(self.form.stations.length == self.stationList.length) {
+					if (self.form.stations.length == self.stationList.length) {
 						self.checkAll = true;
 					}
 				})
@@ -334,7 +422,7 @@
 				var self = this;
 				self.loading = true;
 				self.current = val;
-				API.addresses(val, self.size).then(res => {
+				API.addresses(val, self.size, '', self.pro_city_area_id, self.name).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
@@ -347,7 +435,7 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.addresses(self.current, val).then(res => {
+				API.addresses(self.current, val, '', self.pro_city_area_id, self.name).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
