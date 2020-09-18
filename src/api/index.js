@@ -193,11 +193,14 @@ API.deviceLogs = function(page, limit, uuid, type) {
 	})
 }
 
-API.deviceFaceLogs = function(page, limit, uuid) {
+API.deviceFaceLogs = function(page, limit, uuid, name, area_id, address_id) {
 	return axios.get(url.DeviceRecord, {
 		page: page,
 		limit: limit,
 		uuid: uuid,
+		name: name,
+		area_id: area_id,
+		address_id: address_id
 		// address_id: address_id
 	})
 }
