@@ -20,6 +20,12 @@
 					</el-option>
 				</el-select>
 			</div>
+			<div class="btn">
+				<el-select v-model="address_uuid" placeholder="请选择设备号" filterable @change="addressUUIDChange">
+					<el-option v-for="(item, index) in address_uuid_list" :key="index" :label="item.uuid + '/' + item.remark" :value="item.uuid">
+					</el-option>
+				</el-select>
+			</div>
 		</div>
 		<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
@@ -103,7 +109,10 @@
 					}
 				},
 				area_address_List: [], //选择省市区后获取地址列表
-				area_address_id: ''
+				area_address_id: '',
+				address_uuid: '',
+				address_uuid_list: [], // 根据地址获取设备
+				
 			}
 		},
 		mounted() {
@@ -139,7 +148,6 @@
 			
 			areaAddressChange(val) {
 				var self = this;
-				console.log(self.area_address_id)
 				API.deviceFaceLogs(1, self.size, self.uuid, self.name, self.pro_city_area_id, val).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
@@ -147,7 +155,34 @@
 				}).catch(err => {
 					self.loading = false;
 				})
+				self.getDeviceList(val);
 			},
+			// 设备号下拉
+			getDeviceList(val) {
+				var self = this;
+				self.loading = true;
+				API.devices(1, self.size, '', '', '', self.area_address_id).then(res => {
+					self.loading = false;
+					self.address_uuid_list = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			
+			addressUUIDChange(val) {
+				var self = this;
+				self.loading = true;
+				API.deviceFaceLogs(1, self.size, val, self.name, self.pro_city_area_id,self.area_address_id).then(res => {
+					self.loading = false;
+					self.faceLogsTable = res.data;
+					self.total = res.total;
+					self.$message.success('搜索成功！');
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			
 			// 搜索
 			search() {
 				var self = this;

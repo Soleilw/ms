@@ -182,8 +182,7 @@
 
 				<div class="block">
 					<el-pagination @current-change="versionCurrentChange" :current-page.sync="currentVersion" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-					 :page-size="sizeVersion" layout="sizes, prev, pager, next, jumper" @size-change="versionSizeChange" :total="totalVersion"
-					>
+					 :page-size="sizeVersion" layout="sizes, prev, pager, next, jumper" @size-change="versionSizeChange" :total="totalVersion">
 					</el-pagination>
 				</div>
 			</div>
@@ -396,6 +395,7 @@
 					project_id: ''
 				}
 				this.sendForm.version_id = row.id;
+				console.log(this.sendForm.version_id)
 			},
 			typeChange(val) {
 				var self = this;
@@ -446,8 +446,6 @@
 				})
 			},
 
-
-
 			handleCheckAllAddress(val) {
 				var self = this;
 				console.log(self.sendForm.addresses)
@@ -472,6 +470,7 @@
 				switch (type) {
 					case 1:
 						var formData_1 = {
+							version_id: self.sendForm.version_id,
 							type: 1
 						}
 						API.publishApk(formData_1).then(res => {
@@ -481,6 +480,7 @@
 						break;
 					case 2:
 						var formData_2 = {
+							version_id: self.sendForm.version_id,
 							type: 2,
 							addresses: self.sendForm.addresses
 						}
