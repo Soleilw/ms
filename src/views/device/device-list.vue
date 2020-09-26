@@ -135,7 +135,7 @@
 								<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
 							</el-dropdown-item>
 							<el-dropdown-item>
-								<el-button v-if="scope.row.type == 4" size="mini" type="primary" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
+								<el-button v-if="scope.row.type == 4 || scope.row.type == 1" size="mini" type="primary" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
 							</el-dropdown-item>
 							<el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
