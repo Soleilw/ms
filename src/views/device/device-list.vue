@@ -398,7 +398,10 @@
 
 		<!-- 查看用户-->
 		<el-dialog title="查看用户" :visible.sync="dialogUserList" width="80%">
+			<div style="margin-bottom: 20px;">总人数：{{totalUserListPage}}人</div>
 			<el-table :data="userListData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" :max-height="600">
+				<el-table-column type="index" width="50" label="序号">
+				</el-table-column>
 				<el-table-column prop="name" label="姓名"></el-table-column>
 				<el-table-column prop="face_id" label="FACE_ID"></el-table-column>
 				<el-table-column prop="href" label="照片">
@@ -417,6 +420,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
+
 		</el-dialog>
 	</div>
 </template>
@@ -507,6 +511,7 @@
 				commandList: [],
 				dialogUserList: false, // 查看用户列表
 				userListData: [],
+				totalUserListPage: '', // 用户列表总人数
 				user_list_uuid: '',
 
 				timer: '',
@@ -594,7 +599,7 @@
 			proChange(val) {
 				var self = this;
 				self.pro_city_area_id = val[3];
-				API.devices(1, self.size, self.type, self.uuid,self.pro_city_area_id).then(res => {
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -608,7 +613,7 @@
 					self.loading = false;
 				})
 			},
-			
+
 			areaAddressChange(val) {
 				var self = this;
 				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, val).then(res => {
@@ -851,8 +856,8 @@
 					self.hotness = res.configs.heatvision;
 					self.form.direction = res.direction;
 					self.form.remark = res.remark;
-					self.form.face_groups =  res.face_group;
-					
+					self.form.face_groups = res.face_group;
+
 					self.face_project = res.project;
 					self.face_address = res.address_id;
 					self.face_apk = res.apk;
@@ -1199,7 +1204,7 @@
 				self.dialogUserList = true;
 				self.user_list_uuid = row.uuid;
 				API.deviceUserList(1, 10, row.uuid).then(res => {
-					self.userListData = res;
+					self.userListData = res.data;
 					self.totalUserListPage = res.total;
 				})
 			},
@@ -1214,8 +1219,8 @@
 				API.sendDeviceCommand(delUser).then(res => {
 					self.$message.success("删除成功");
 					API.deviceUserList(1, 10, self.user_list_uuid).then(res => {
-						self.userListData = res;
-						// self.totalUserListPage = res.total;
+						self.userListData = res.data;
+						self.totalUserListPage = res.total;
 					})
 				})
 			},
