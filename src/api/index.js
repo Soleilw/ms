@@ -114,11 +114,12 @@ API.faces = function(page, limit, name) {
 }
 
 // 获取推送记录
-API.pushRecords = function(page, limit, name) {
+API.pushRecords = function(page, limit, name, address) {
 	return axios.get(url.PushRecords, {
 		page: page,
 		limit: limit,
-		name: name
+		name: name,
+		address: address
 	})
 }
 

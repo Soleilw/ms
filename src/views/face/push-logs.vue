@@ -6,6 +6,13 @@
 					<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
 				</el-input>
 			</div>
+			<div class="btn">
+				<el-input placeholder="请填写地址" type="textarea" v-model="address" class="input-with-select" @keyup.enter.native="addressSearch(address)">
+				</el-input>
+			</div>
+			<div class="btn">
+				<el-button @click="addressSearch(address)" type="primary">搜索地址</el-button>
+			</div>
 		</div>
 		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
 			<el-table-column prop="face_id" label="人脸ID"></el-table-column>
@@ -65,6 +72,7 @@
 			return {
 				loading: true,
 				name: '',
+				address: '', // 搜索地址
 				tableData: [],
 				detailList: [],
 				current: 1,
@@ -100,6 +108,20 @@
 					self.loading = false;
 				})
 			},
+			// 搜索地址
+			addressSearch(val) {
+				var self = this;
+				self.loading = true;
+				API.pushRecords(1, 10, self.name, val).then(res => {
+					console.log(res)
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+					self.$message.success('搜索成功!');
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
 			// 查看详情
 			showDetail(index, row) {
 				var self = this;
@@ -122,7 +144,7 @@
 				var self = this;
 				self.loading = true;
 				self.current = val;
-				API.pushRecords(val, self.size).then(res => {
+				API.pushRecords(val, self.size,self.name, self.address).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
@@ -135,7 +157,7 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.pushRecords(self.current, val).then(res => {
+				API.pushRecords(self.current, val,self.name, self.address).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
