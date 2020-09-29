@@ -235,7 +235,7 @@
 				self.current = val;
 				API.dangerFaces(val, self.size).then(res => {
 					self.loading = false;
-					self.tableData = res.data;
+					self.tableDate = res.data;
 					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
@@ -248,7 +248,7 @@
 				self.size = val;
 				API.dangerFaces(self.current, val).then(res => {
 					self.loading = false;
-					self.tableData = res.data;
+					self.tableDate = res.data;
 					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
