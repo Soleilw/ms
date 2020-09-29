@@ -6,16 +6,15 @@ const dynamicRouter = [{
 	        title: '数据总览',
 	        icon: 'el-icon-menu'
 	    }
+	},{
+		path: '/baiduaip',
+		name: 'baiduaip',
+		component: () => import('@/views/baiduAip/baiduAip'),
+		meta: {
+			title: '百度接口',
+			icon: 'el-icon-document'
+		}
 	},
-	// {
-	// 	path: '/baiduaip',
-	// 	name: 'baiduaip',
-	// 	component: () => import('@/views/baiduAip/baiduAip'),
-	// 	meta: {
-	// 		title: '百度接口',
-	// 		icon: 'el-icon-document'
-	// 	}
-	// },
 	{
 		path: '/project',
 		name: 'project',
@@ -109,15 +108,15 @@ const dynamicRouter = [{
 			}
 		]
 	},
-	// {
-	// 	path: '/package',
-	// 	name: 'package',
-	// 	component: () => import('@/views/package/package'),
-	// 	meta: {
-	// 		title: '安装包管理',
-	// 		icon: 'el-icon-shopping-bag-2'
-	// 	}
-	// },
+	{
+		path: '/package',
+		name: 'package',
+		component: () => import('@/views/package/package'),
+		meta: {
+			title: '安装包管理',
+			icon: 'el-icon-shopping-bag-2'
+		}
+	},
 	{
 		path: '/danger',
 		name: 'danger',

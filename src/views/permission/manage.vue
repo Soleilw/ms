@@ -10,13 +10,13 @@
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="username" label="账号"></el-table-column>
 			<el-table-column prop="role" label="角色名"></el-table-column>
-			<!-- <el-table-column label="操作" width="300px">
+			<el-table-column label="操作" width="300px">
 				<template slot-scope="scope">
 					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">重置密码</el-button>
 					<el-button type="danger" size="mini" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
-			</el-table-column> -->
+			</el-table-column>
 		</el-table>
 
 		<el-dialog :visible.sync="dialogDel" title="删除角色" width="20%" align="center" :close-on-click-modal="false">

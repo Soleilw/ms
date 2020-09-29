@@ -109,7 +109,7 @@
 			<el-table-column prop="stations" label="所在辖区"></el-table-column>
 			<el-table-column prop="contact" label="联系方式"></el-table-column>
 			<el-table-column prop="address_uuid" label="address_uuid"></el-table-column>
-			<!-- <el-table-column label="操作">
+		<!-- 	<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">

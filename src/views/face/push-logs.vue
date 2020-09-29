@@ -37,7 +37,7 @@
 			</el-table-column>
 			<el-table-column prop="created_at" label="创建时间"></el-table-column>
 			<el-table-column prop="updated_at" label="完成时间"></el-table-column>
-			<!-- <el-table-column label="操作" width="200px">
+	<!-- 		<el-table-column label="操作" width="200px">
 				<template slot-scope="scope">
 					<el-popover placement="right" width="800" trigger="click">
 						<el-row v-for="(item, index) in detailList" :key="index" style="padding: 10px;">
