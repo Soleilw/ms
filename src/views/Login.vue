@@ -37,8 +37,8 @@
 		data() {
 			return {
 				adminForm: {
-					username: "admin",
-					password: "123456"
+					username: "",
+					password: ""
 				}
 			};
 		},

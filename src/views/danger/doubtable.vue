@@ -61,13 +61,13 @@
 			<el-table-column prop="href" label="人脸图片">
 				<template slot-scope="scope"><img :src="scope.row.href" style="max-width:180px;max-height:80px;" /></template>
 			</el-table-column>
-			<el-table-column label="操作">
+			<!-- <el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
 						<el-button slot="reference" size="mini" type="danger">删除</el-button>
 					</el-popconfirm>
 				</template>
-			</el-table-column>
+			</el-table-column> -->
 		</el-table>
 
 		<div class="block">

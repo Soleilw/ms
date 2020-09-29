@@ -128,9 +128,9 @@
 							操作<i class="el-icon-arrow-down el-icon--right"></i>
 						</el-button>
 						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item>
+							<!-- <el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleExit(scope.$index, scope.row)">编辑</el-button>
-							</el-dropdown-item>
+							</el-dropdown-item> -->
 							<el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
 							</el-dropdown-item>
@@ -149,11 +149,11 @@
 							<el-dropdown-item>
 								<el-button size="mini" type="primary" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
 							</el-dropdown-item>
-							<el-dropdown-item>
+						<!-- 	<el-dropdown-item>
 								<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
 									<el-button slot="reference" size="mini" type="danger">删除</el-button>
 								</el-popconfirm>
-							</el-dropdown-item>
+							</el-dropdown-item> -->
 						</el-dropdown-menu>
 					</el-dropdown>
 				</template>
