@@ -72,13 +72,13 @@
 			<el-table-column prop="log.timestamp" label="抓拍时间">
 			</el-table-column>
 
-		<!-- 	<el-table-column label="操作">
+			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
 						<el-button slot="reference" size="mini" type="danger">删除</el-button>
 					</el-popconfirm>
 				</template>
-			</el-table-column> -->
+			</el-table-column>
 		</el-table>
 
 		<div class="block">
