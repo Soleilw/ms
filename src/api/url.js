@@ -51,6 +51,7 @@ const url = {
 	"DeviceUserList": '/device/user/list', // 查看用户列表
 	"Commands": '/commands', // 查看指令列表
 	"SendDeviceCommand": 'send/device/command', // 发送指令
+	"CatchFaces": '/catch/faces', // 查看人像
 	
 	// apk管理
 	'Apk': '/apk', // 创建apk

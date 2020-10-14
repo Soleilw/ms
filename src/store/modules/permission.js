@@ -34,8 +34,9 @@ export default {
 	
     actions: {
         async FETCH_PERMISSION({ commit, state }) {
-				var res = await API.permissions()
+				let res = await API.permissions()
 				let arr = res;
+				// let arr = ['permission', 'roles', 'manage', 'outInLogs'];
 				let routes = recursionRouter(arr, dynamicRouter)
 				let MainContainer = DynamicRoutes.find(v => v.path === '')
 				let children = MainContainer.children

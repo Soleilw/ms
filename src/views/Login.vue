@@ -1,7 +1,7 @@
 <template>
 	<div class="login-wrap">
 		<div class="login">
-			<div class="title">图巴诺总控管理后台</div>
+			<div class="title">中山市沙溪镇人脸识别乡村安防公安系统</div>
 			<div class="form-info">
 				<div class="form-info-item">
 					<el-input v-model="adminForm.username" placeholder="username"></el-input>
@@ -49,6 +49,8 @@
 					localStorage.setItem('username', self.adminForm.username)
 					self.$router.replace("/overview");
 				})
+				// 	localStorage.setItem('username', 'admin')
+				// self.$router.replace("/overview");
 			}
 		}
 	};
@@ -59,8 +61,8 @@
 		width: 100%;
 		height: 100%;
 		min-width: 760px;
-		background-image: url(../assets/image/earth.jpg);
-		background-color: #000;
+		// background-image: url(../assets/image/earth.jpg);
+		background-color: #000066;
 		overflow: hidden;
 	}
 
@@ -71,7 +73,7 @@
 		bottom: 0;
 		left: 0;
 		margin: auto;
-		width: 25vw;
+		width: 30vw;
 		height: 18vw;
 		background-color: #fff;
 		border-radius: 1vw;

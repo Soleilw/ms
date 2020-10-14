@@ -42,7 +42,23 @@
 					</el-popover>
 				</template>
 			</el-table-column>
+			<el-table-column label="操作">
+				<template slot-scope="scope">
+					<el-button size="mini" type="primary" @click="handleCatchFace(scope.$index, scope.row)">查看人像</el-button>
+				</template>
+			</el-table-column>
 		</el-table>
+		
+		<el-dialog title="查看人像" :visible.sync="dialogCatchFace" width="900px">
+			<div class="box" style="display: flex; flex-wrap: wrap;">
+				<div v-for="(item, index) in catchFaceList" :key="index" >
+					<img :src="'data:image/png;base64,' + item.face_img" style="max-width:200px; max-height:200px;margin-left: 20px;" />
+				</div>
+			</div>
+			
+			
+		</el-dialog>
+		
 		<div class="block">
 			<el-pagination @current-change="currentPage" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
 			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizePage" :total="total">
@@ -61,6 +77,9 @@
 				uuid: '',
 				name: '',
 				faceLogsTable: [],
+				
+				dialogCatchFace: false, // 查看人像
+				catchFaceList: [],
 				// 分页
 				current: 1, // 当前页
 				size: 10, // 每页出现几条
@@ -205,6 +224,16 @@
 					this.loading = false;
 				})
 			},
+			
+			// 查看人像
+			handleCatchFace(index, row) {
+				let self = this;
+				self.dialogCatchFace = true;
+				API.catchFace(row.id).then(res => {
+					self.catchFaceList = res
+				})
+			},
+			
 			// 分页
 			currentPage(val) {
 				var self = this;

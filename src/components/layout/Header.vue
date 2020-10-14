@@ -26,6 +26,7 @@
 				</el-breadcrumb>
 			</div>
 			<!-- 个人中心 -->
+			<div></div>
 			<div class="info">
 				<el-dropdown @command="handleCommand">
 					<span class="el-dropdown-link">
@@ -140,7 +141,7 @@
 		height: 50px;
 		font-size: 20px;
 		// background-image: linear-gradient(to right, #4CA1AF , #4CA1AF);
-		background: #2a9f93;
+		background: #003366;
 		color: #fff;
 		z-index: 100;
 	}
