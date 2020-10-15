@@ -2,21 +2,18 @@
 	<div>
 		<div class="handle-box">
 			<div class="btn">
-				<el-button type="primary" @click="addPolice">添加警员</el-button>
+				<el-button type="primary" @click="addDepartment">添加部门</el-button>
 			</div>
 		</div>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
-			<el-table-column prop="id" label="所属部门"></el-table-column>
-			<el-table-column prop="username" label="姓名"></el-table-column>
-			<el-table-column prop="role" label="手机号"></el-table-column>
-			<el-table-column prop="role" label="身份证号"></el-table-column>
-			<el-table-column prop="role" label="工号"></el-table-column>
-			<el-table-column prop="role" label="人脸照片"></el-table-column>
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
+			<el-table-column prop="id" label="部门等级"></el-table-column>
+			<el-table-column prop="username" label="部门名称"></el-table-column>
 			<el-table-column label="操作" width="300px">
 				<template slot-scope="scope">
-					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">审核</el-button>
-					<el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">短信推送结果</el-button>
+					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑权限</el-button>
+					<el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">查看绑定警员</el-button>
+					<el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">编辑名称</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -35,28 +32,17 @@
 			</el-pagination>
 		</div>
 
-		<el-dialog title="添加警员" :visible.sync="dialogPolice" width="60%" :close-on-click-modal="false">
+		<el-dialog title="添加警员" :visible.sync="dialogDepartment" width="60%" :close-on-click-modal="false">
 			<div class="box">
 				<el-form :model="form" label-width="80px">
-					<el-form-item label="姓名">
-						<el-input v-model="form.name" placeholder="请输入姓名"></el-input>
-					</el-form-item>
-					<el-form-item label="手机号">
-						<el-input v-model="form.password" placeholder="请输入手机号" type="password"></el-input>
-					</el-form-item>
-					<el-form-item label="手机号">
-						<el-input v-model="form.password" placeholder="请输入身份证号" type="password"></el-input>
-					</el-form-item>
-					<el-form-item label="选择部门">
-						<el-select v-model="form.station_id" placeholder="请选择部门">
+					<el-form-item label="部门等级">
+						<el-select v-model="form.station_id" placeholder="请选择部门等级">
 							<el-option v-for="item in areaList" :key="item.id" :label="item.name" :value="item.id">
 							</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="工号">
-						<el-input v-model="form.password" placeholder="请输入工号" type="password"></el-input>
-					</el-form-item>
-					<el-form-item label="上传人脸">
+					<el-form-item label="部门名称">
+						<el-input v-model="form.password" placeholder="请输入部门名称" type="password"></el-input>
 					</el-form-item>
 					<div class="submit">
 						<el-form-item>
@@ -76,7 +62,7 @@
 	export default {
 		data() {
 			return {
-				dialogPolice: false,
+				dialogDepartment: false,
 				form: {
 					name: ''
 				},
@@ -116,9 +102,9 @@
 			getUsers() {
 				var self = this;
 			},
-			addPolice() {
+			addDepartment() {
 				var self = this
-				self.dialogPolice = true;
+				self.dialogDepartment = true;
 				self.form = {
 					username: '',
 					password: '',
@@ -130,7 +116,7 @@
 				var self = this;
 				if (self.form.username && self.form.password && self.form.role && self.form.station_id) {
 					API.user(self.form).then(res => {
-						self.dialogPolice = false;
+						self.dialogDepartment = false;
 						self.$message.success('提交成功');
 						self.getUsers();
 						self.currentPage = 1;
@@ -144,7 +130,7 @@
 			// 操作
 			handleEdit(index, row) {
 				var self = this;
-				self.dialogPolice = true;
+				self.dialogDepartment = true;
 				self.form.username = row.username;
 				self.form.role = row.role;
 				self.form.station_id = row.station_id;

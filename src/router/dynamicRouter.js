@@ -290,11 +290,29 @@ const dynamicRouter = [{
 				name: 'manage',
 				component: () => import('@/views/permission/manage'),
 				meta: {
-					title: '用户管理',
+					title: '账号管理',
 					icon: 'el-icon-s-release'
 				},
 			}
 		]
+	},
+	{
+	   path: '/police',
+	   name: 'policeList',
+	   component: () => import('@/views/police/police-list'),
+	   meta: {
+	   	title: '警员管理',
+	   	icon: 'el-icon-document'
+	   }
+	},
+	{
+	   path: '/department',
+	   name: 'department',
+	   component: () => import('@/views/department/department'),
+	   meta: {
+	   	title: '部门管理',
+	   	icon: 'el-icon-document'
+	   }
 	}
 ]
 

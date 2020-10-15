@@ -24,6 +24,12 @@
 					</el-option>
 				</el-select>
 			</div>
+			<div class="btn"> 
+				<el-select v-model="deviceState" placeholder="请选择状态" filterable @change="deviceStateChange">
+					<el-option v-for="(item, index) in deviceStateList" :key="index" :label="item.online" :value="item.offline">
+					</el-option>
+				</el-select>
+			</div>
 		</div>
 
 		<el-dialog title="添加设备" :visible.sync="dialogDevice">
@@ -446,6 +452,18 @@
 				projectList: [],
 				addressList: [],
 				faceGroupList: [],
+				deviceStateList: [
+					{
+						online: '在线',
+						offline: 1
+					},
+					{
+						online: '离线',
+						offline: 2
+					}
+				], // 状态搜索，在线1，离线2
+				deviceState: '',
+				
 				checkAll: false, // 全选人脸组
 				faceGroup: [], // 已选择的人脸组，编辑时
 				uuidList: [],
@@ -651,6 +669,21 @@
 					self.loading = false;
 				})
 			},
+			
+			// 根据设备状态搜索
+			deviceStateChange(val) {
+				var self = this;
+				self.loading = true;
+				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, val).then(res => {
+					self.loading = false;
+					self.tableDate = res.data;
+					self.total = res.total;
+					self.$message.success('搜索成功!');
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			
 			// 获取设备列表
 			getDevice() {
 				var self = this;
@@ -1229,7 +1262,7 @@
 				var self = this;
 				self.current = val;
 				self.loading = true;
-				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id).then(res => {
+				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -1242,7 +1275,7 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id).then(res => {
+				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;

@@ -41,339 +41,620 @@
 						<el-input v-model="form.name" placeholder="请输入角色名" :disabled="disabledRole"></el-input>
 					</el-form-item> -->
 					<el-form-item label="选择权限">
+						<div v-if="username == 'admin'">
+							<el-checkbox v-model="checkAll" @change="AllChange">全选</el-checkbox>
+							<div class="permission" style="width: 1000px;">
+								<div class="table">
+									<div class="th" style="width: 20%;">一级菜单</div>
+									<div class="th" style="width: 20%;">二级菜单</div>
+									<div class="th" style="width: 60%;">操作</div>
+								</div>
+								<el-checkbox-group v-model="form.permissions">
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="overview" @change="oneChange">
+													<span style="font-weight: bold;">数据总览</span>
+												</el-checkbox>
+											</div>
 
-						<el-checkbox v-model="checkAll" @change="AllChange">全选</el-checkbox>
-						<div class="permission" style="width: 1000px;">
-							<div class="table">
-								<div class="th" style="width: 20%;">一级菜单</div>
-								<div class="th" style="width: 20%;">二级菜单</div>
-								<div class="th" style="width: 60%;">操作</div>
+										</div>
+										<div class="tb tr" style="width: 20%;"></div>
+										<div class="tb tr" style="width: 60%;"></div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="baiduaip" @change="oneChange">
+													<span style="font-weight: bold;">百度接口管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;"></div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="baiduaipAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="baiduaipDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="baiduaipGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="project" @change="oneChange">
+													<span style="font-weight: bold;">项目管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;"></div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="projectAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="projectDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="projectGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="address" @change="oneChange">
+													<span style="font-weight: bold;">地址管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="addressList" @change="oneChange">地址列表</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="areas" @change="oneChange">地区管理</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="addressAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="addressDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="addressGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												暂无
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="face" @change="oneChange">
+													<span style="font-weight: bold;">人脸管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="faceList" @change="oneChange">人脸列表</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="pushLogs" @change="oneChange">推送记录</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="faceAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="faceDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="faceGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												暂无
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="device" @change="oneChange">
+													<span style="font-weight: bold;">设备管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="deviceList" @change="oneChange">设备列表</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="command" @change="oneChange">指令管理</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="deviceAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="deviceDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="deviceGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												暂无
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="package" @change="oneChange">
+													<span style="font-weight: bold;">包管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="apkAdd" @change="oneChange" class="permission-span">新增安装包</el-checkbox>
+												<el-checkbox label="apkDel" @change="oneChange" class="permission-span">删除安装包</el-checkbox>
+												<el-checkbox label="apkGet" @change="oneChange" class="permission-span">查看安装包</el-checkbox>
+												<el-checkbox label="apkVersionAdd" @change="oneChange" class="permission-span">新增版本</el-checkbox>
+												<el-checkbox label="apkVersionSend" @change="oneChange" class="permission-span">发布版本</el-checkbox>
+												<el-checkbox label="apkVersionDel" @change="oneChange" class="permission-span">删除版本</el-checkbox>
+											</div>
+
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="danger" @change="oneChange">
+													<span style="font-weight: bold;">可疑管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="doubtable" @change="oneChange">可疑人脸</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="dangerlogs" @change="oneChange">可疑日志</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="dangerAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="dangerDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="dangerGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="dangerLogGet" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="dangerLogDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+											</div>
+
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="permission" @change="oneChange">
+													<span style="font-weight: bold;">权限管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="roles" @change="oneChange">角色管理</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="manage" @change="oneChange">账号管理</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="roleAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="roleDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="roleEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
+												<el-checkbox label="roleGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="manageAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="manageDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="manageEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
+												<el-checkbox label="manageGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+												<el-checkbox label="manageResetPwd" @change="oneChange" class="permission-span">重置密码</el-checkbox>
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<el-checkbox label="outInLogs" @change="oneChange">
+												<span style="font-weight: bold;">进出记录管理</span>
+											</el-checkbox>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<el-checkbox label="policeList" @change="oneChange">
+												<span style="font-weight: bold;">警员管理</span>
+											</el-checkbox>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<el-checkbox label="department" @change="oneChange">
+												<span style="font-weight: bold;">部门管理</span>
+											</el-checkbox>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="area" @change="oneChange">
+													<span style="font-weight: bold;">辖区管理</span>
+												</el-checkbox>
+											</div>
+
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="areaList" @change="oneChange">辖区列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<el-checkbox label="user" @change="oneChange">
+												<span style="font-weight: bold;">用户管理</span>
+											</el-checkbox>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="userList" @change="oneChange">用户列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="renter" @change="oneChange">
+													<span style="font-weight: bold;">住户管理</span>
+												</el-checkbox>
+											</div>
+
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="renterList" @change="oneChange">住户列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="school" @change="oneChange">
+													<span style="font-weight: bold;">学校管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="schoolList" @change="oneChange">学校列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="information" @change="oneChange">
+													<span style="font-weight: bold;">资讯管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="infoList" @change="oneChange">资讯列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="switch" @change="oneChange">
+													<span style="font-weight: bold;">人脸开关管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="faceSwitch" @change="oneChange">开关列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+								</el-checkbox-group>
 							</div>
-							<el-checkbox-group v-model="form.permissions">
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox label="overview" @change="oneChange">
-												<span style="font-weight: bold;">数据总览</span>
-											</el-checkbox>
-										</div>
-
-									</div>
-									<div class="tb tr" style="width: 20%;"></div>
-									<div class="tb tr" style="width: 60%;">
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox label="baiduaip" @change="oneChange">
-												<span style="font-weight: bold;">百度接口管理</span>
-											</el-checkbox>
-										</div>
-									</div>
-									<div class="tb tr" style="width: 20%;"></div>
-									<div class="tb set" style="width: 60%;">
-										<div class="level2">
-											<el-checkbox label="baiduaipAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
-											<el-checkbox label="baiduaipDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-											<el-checkbox label="baiduaipGet" @change="oneChange" class="permission-span">查看</el-checkbox>
-										</div>
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="project" @change="oneChange">
-												<span style="font-weight: bold;">项目管理</span>
-											</el-checkbox>
-										</div>
-									</div>
-									<div class="tb tr" style="width: 20%;"></div>
-									<div class="tb set" style="width: 60%;">
-										<div class="level2">
-											<el-checkbox label="projectAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
-											<el-checkbox label="projectDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-											<el-checkbox label="projectGet" @change="oneChange" class="permission-span">查看</el-checkbox>
-										</div>
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="address" @change="oneChange">
-												<span style="font-weight: bold;">地址管理</span>
-											</el-checkbox>
-										</div>
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="addressList" @change="oneChange">地址列表</el-checkbox>
-										</div>
-										<div class="level2">
-											<el-checkbox label="areas" @change="oneChange">地区管理</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-										<div class="level2">
-											<el-checkbox label="addressAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
-											<el-checkbox label="addressDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-											<el-checkbox label="addressGet" @change="oneChange" class="permission-span">查看</el-checkbox>
-										</div>
-										<div class="level2">
-											暂无
-										</div>
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="face" @change="oneChange">
-												<span style="font-weight: bold;">人脸管理</span>
-											</el-checkbox>
-
-										</div>
-
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="faceList" @change="oneChange">人脸列表</el-checkbox>
-										</div>
-										<div class="level2">
-											<el-checkbox label="pushLogs" @change="oneChange">推送记录</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-										<div class="level2">
-											<el-checkbox label="faceAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
-											<el-checkbox label="faceDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-											<el-checkbox label="faceGet" @change="oneChange" class="permission-span">查看</el-checkbox>
-										</div>
-										<div class="level2">
-											暂无
-										</div>
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="device" @change="oneChange">
-												<span style="font-weight: bold;">设备管理</span>
-											</el-checkbox>
-										</div>
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="deviceList" @change="oneChange">设备列表</el-checkbox>
-										</div>
-										<div class="level2">
-											<el-checkbox label="command" @change="oneChange">指令管理</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-										<div class="level2">
-											<el-checkbox label="deviceAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
-											<el-checkbox label="deviceDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-											<el-checkbox label="deviceGet" @change="oneChange" class="permission-span">查看</el-checkbox>
-										</div>
-										<div class="level2">
-											暂无
-										</div>
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="package" @change="oneChange">
-												<span style="font-weight: bold;">包管理</span>
-											</el-checkbox>
-										</div>
-									</div>
-									<div class="tb tr" style="width: 20%;">
-									</div>
-									<div class="tb set" style="width: 60%;">
-										<div class="level2">
-											<el-checkbox label="apkAdd" @change="oneChange" class="permission-span">新增安装包</el-checkbox>
-											<el-checkbox label="apkDel" @change="oneChange" class="permission-span">删除安装包</el-checkbox>
-											<el-checkbox label="apkGet" @change="oneChange" class="permission-span">查看安装包</el-checkbox>
-											<el-checkbox label="apkVersionAdd" @change="oneChange" class="permission-span">新增版本</el-checkbox>
-											<el-checkbox label="apkVersionSend" @change="oneChange" class="permission-span">发布版本</el-checkbox>
-											<el-checkbox label="apkVersionDel" @change="oneChange" class="permission-span">删除版本</el-checkbox>
-										</div>
-
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="danger" @change="oneChange">
-												<span style="font-weight: bold;">可疑管理</span>
-											</el-checkbox>
-										</div>
-
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="doubtable" @change="oneChange">可疑人脸</el-checkbox>
-										</div>
-										<div class="level2">
-											<el-checkbox label="dangerlogs" @change="oneChange">可疑日志</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-										<div class="level2">
-											<el-checkbox label="dangerAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
-											<el-checkbox label="dangerDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-											<el-checkbox label="dangerGet" @change="oneChange" class="permission-span">查看</el-checkbox>
-										</div>
-										<div class="level2">
-											<el-checkbox label="dangerLogGet" @change="oneChange" class="permission-span">新增</el-checkbox>
-											<el-checkbox label="dangerLogDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-										</div>
-
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="permission" @change="oneChange">
-												<span style="font-weight: bold;">权限管理</span>
-											</el-checkbox>
-										</div>
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="roles" @change="oneChange">角色管理</el-checkbox>
-										</div>
-										<div class="level2">
-											<el-checkbox label="manage" @change="oneChange">用户管理</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-										<div class="level2">
-											<el-checkbox label="roleAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
-											<el-checkbox label="roleDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-											<el-checkbox label="roleEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
-											<el-checkbox label="roleGet" @change="oneChange" class="permission-span">查看</el-checkbox>
-										</div>
-										<div class="level2">
-											<el-checkbox label="manageAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
-											<el-checkbox label="manageDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-											<el-checkbox label="manageEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
-											<el-checkbox label="manageGet" @change="oneChange" class="permission-span">查看</el-checkbox>
-											<el-checkbox label="manageResetPwd" @change="oneChange" class="permission-span">重置密码</el-checkbox>
-										</div>
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<el-checkbox class="permission-span" label="outInLogs" @change="oneChange">
-											<span style="font-weight: bold;">进出记录管理</span>
-										</el-checkbox>
-									</div>
-									<div class="tb tr" style="width: 20%;">
-									</div>
-									<div class="tb set" style="width: 60%;">
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="area" @change="oneChange">
-												<span style="font-weight: bold;">辖区管理</span>
-											</el-checkbox>
-										</div>
-
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="areaList" @change="oneChange">辖区列表</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<el-checkbox class="permission-span" label="user" @change="oneChange">
-											<span style="font-weight: bold;">用户管理</span>
-										</el-checkbox>
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="userList" @change="oneChange">用户列表</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="renter" @change="oneChange">
-												<span style="font-weight: bold;">住户管理</span>
-											</el-checkbox>
-										</div>
-
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="renterList" @change="oneChange">住户列表</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="school" @change="oneChange">
-												<span style="font-weight: bold;">学校管理</span>
-											</el-checkbox>
-										</div>
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="schoolList" @change="oneChange">学校列表子</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="information" @change="oneChange">
-												<span style="font-weight: bold;">资讯管理</span>
-											</el-checkbox>
-										</div>
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="infoList" @change="oneChange">资讯列表</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-									</div>
-								</div>
-								<div class="table">
-									<div class="tb" style="width: 20%;">
-										<div class="level1">
-											<el-checkbox class="permission-span" label="switch" @change="oneChange">
-												<span style="font-weight: bold;">人脸开关管理</span>
-											</el-checkbox>
-										</div>
-									</div>
-									<div class="tb tr" style="width: 20%;">
-										<div class="level2">
-											<el-checkbox label="faceSwitch" @change="oneChange">开关列表</el-checkbox>
-										</div>
-									</div>
-									<div class="tb set" style="width: 60%;">
-									</div>
-								</div>
-							</el-checkbox-group>
 						</div>
-					
+						<!-- 其他用户走这个权限列表 -->
+						<div v-else>
+							<el-checkbox v-model="checkAll" @change="AllChange">全选</el-checkbox>
+							<div class="permission" style="width: 1000px;">
+								<div class="table">
+									<div class="th" style="width: 20%;">一级菜单</div>
+									<div class="th" style="width: 20%;">二级菜单</div>
+									<div class="th" style="width: 60%;">操作</div>
+								</div>
+								<el-checkbox-group v-model="form.permissions">
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="overview" @change="oneChange">
+													<span style="font-weight: bold;">数据总览</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;"></div>
+										<div class="tb tr" style="width: 60%;"></div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="address" @change="oneChange">
+													<span style="font-weight: bold;">地址管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="addressList" @change="oneChange">地址列表</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="areas" @change="oneChange">地区管理</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="addressAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="addressDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="addressGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												暂无
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="face" @change="oneChange">
+													<span style="font-weight: bold;">人脸管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="faceList" @change="oneChange">人脸列表</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="pushLogs" @change="oneChange">推送记录</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="faceAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="faceDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="faceGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												暂无
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="device" @change="oneChange">
+													<span style="font-weight: bold;">设备管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="deviceList" @change="oneChange">设备列表</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="command" @change="oneChange">指令管理</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="deviceAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="deviceDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="deviceGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												暂无
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="danger" @change="oneChange">
+													<span style="font-weight: bold;">可疑管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="doubtable" @change="oneChange">可疑人脸</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="dangerlogs" @change="oneChange">可疑日志</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="dangerAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="dangerDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="dangerGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="dangerLogGet" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="dangerLogDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+											</div>
+
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="permission" @change="oneChange">
+													<span style="font-weight: bold;">权限管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="roles" @change="oneChange">角色管理</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="manage" @change="oneChange">账号管理</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="roleAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="roleDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="roleEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
+												<el-checkbox label="roleGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="manageAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="manageDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="manageEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
+												<el-checkbox label="manageGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+												<el-checkbox label="manageResetPwd" @change="oneChange" class="permission-span">重置密码</el-checkbox>
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<el-checkbox label="outInLogs" @change="oneChange">
+												<span style="font-weight: bold;">进出记录管理</span>
+											</el-checkbox>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<el-checkbox label="policeList" @change="oneChange">
+												<span style="font-weight: bold;">警员管理</span>
+											</el-checkbox>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<el-checkbox label="department" @change="oneChange">
+												<span style="font-weight: bold;">部门管理</span>
+											</el-checkbox>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="area" @change="oneChange">
+													<span style="font-weight: bold;">辖区管理</span>
+												</el-checkbox>
+											</div>
+
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="areaList" @change="oneChange">辖区列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<el-checkbox label="user" @change="oneChange">
+												<span style="font-weight: bold;">用户管理</span>
+											</el-checkbox>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="userList" @change="oneChange">用户列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="renter" @change="oneChange">
+													<span style="font-weight: bold;">住户管理</span>
+												</el-checkbox>
+											</div>
+
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="renterList" @change="oneChange">住户列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="school" @change="oneChange">
+													<span style="font-weight: bold;">学校管理</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="schoolList" @change="oneChange">学校列表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+								</el-checkbox-group>
+							</div>
+						</div>
 					</el-form-item>
 					<div class="submit">
 						<el-form-item>
@@ -393,8 +674,9 @@
 	export default {
 		data() {
 			return {
-				loading: false,
-				dialogRole: true,
+				username: localStorage.getItem('username'),
+				loading: true,
+				dialogRole: false,
 				form: {
 					name: '',
 					permissions: []
@@ -411,7 +693,7 @@
 				tableData: [],
 
 				checkAll: false,
-				permissionList: [
+				adminPermissionList: [ // admin的权限(自用)
 					"overview", // 数据总览
 
 					"baiduaip", // 百度接口管理页
@@ -477,7 +759,12 @@
 					"manageResetPwd", // 重置密码
 
 					"outInLogs", // 进出记录管理页
-
+					
+					"policeList", // 警员管理
+					
+					"department", // 部门管理
+					
+					
 					"area", // 辖区管理
 					"areaList",
 
@@ -496,68 +783,68 @@
 					"switch", // 人脸开关管理
 					"faceSwitch"
 				],
-				// permissionList: [
-				// 	{
-				// 		title: 'resident',
-				// 		name: '住户管理页'
-				// 	},
-				// 	{
-				// 		title: 'residentGet',
-				// 		name: '获取住户'
-				// 	},
-				// 	{
-				// 		title: 'house',
-				// 		name: '房屋管理页'
-				// 	},
-				// 	{
-				// 		title: 'houses',
-				// 		name: '房屋列表'
-				// 	},
-				// 	{
-				// 		title: 'housesAdd',
-				// 		name: '新增房屋'
-				// 	},
-				// 	{
-				// 		title: 'housesGet',
-				// 		name: '获取房屋'
-				// 	},
-				// 	{
-				// 		title: 'permission',
-				// 		name: '角色管理页'
-				// 	},
-				// 	{
-				// 		title: 'roleGet',
-				// 		name: '获取角色列表'
-				// 	},
-				// 	{
-				// 		title: 'roleAdd',
-				// 		name: '新增角色'
-				// 	},{
-				// 		title: 'roleEdit',
-				// 		name: '编辑权限'
-				// 	},{
-				// 		title: 'roleDel',
-				// 		name: '删除角色'
-				// 	},{
-				// 		title: 'manageGet',
-				// 		name: '管理员列表'
-				// 	},{
-				// 		title: 'manageAdd',
-				// 		name: '新增管理员'
-				// 	},
-				// 	,{
-				// 		title: 'manageEdit',
-				// 		name: '编辑管理员'
-				// 	},
-				// 	,{
-				// 		title: 'manageDel',
-				// 		name: '删除管理员'
-				// 	},
-				// 	,{
-				// 		title: 'manageResetPwd',
-				// 		name: '重置密码'
-				// 	}
-				// ],
+				permissionList: [ // 其他用户的权限（公安用）
+					"overview", // 数据总览
+
+					"address", // 地址管理页
+					"addressList", // 地址列表
+					"areas", // 地区管理
+					"addressAdd", // 添加地址
+					"addressGet", // 获取地址
+					"addressDel", // 删除地址
+
+					"face", // 人脸管理页
+					"faceList",
+					"pushLogs", // 推送记录子页
+					"faceAdd", // 添加人脸
+					"faceGet", // 获取人脸
+					"faceDel", // 删除人脸
+
+					"device", // 设备管理页
+					"deviceList", // 设备列表
+					"command", // 指令管理
+					"deviceAdd", // 添加设备
+					"deviceGet", // 获取设备
+					"deviceDel", // 删除设备
+
+
+					"danger", // 可疑管理页
+					"doubtable", // 可疑人脸子页
+					"dangerlogs", // 可疑日志子页
+					"dangerAdd", // 添加可疑人脸
+					"dangerDel", // 获取可疑人脸
+					"dangerGet", // 删除可疑人脸
+					"dangerLogGet", // 获取可疑日志列表
+					"dangerLogDel", // 删除可疑日志
+
+
+					"permission", // 角色管理
+					"roles",
+					"manage",
+					"roleGet",
+					"roleAdd",
+					"roleEdit",
+					"roleDel",
+					"manageGet",
+					"manageAdd",
+					"manageEdit",
+					"manageDel",
+					"manageResetPwd", // 重置密码
+
+					"outInLogs", // 进出记录管理页
+
+					"area", // 辖区管理
+					"areaList",
+
+					"user", // 用户管理
+					"userList",
+
+					"renter", // 住户管理
+					"renterList",
+
+					"school", // 学校管理
+					"schoolList",
+				],
 
 
 				dialogDel: false,
@@ -584,7 +871,13 @@
 				self.disabledRole = false;
 				self.checkAll = true;
 				if (self.checkAll === true) {
-					self.form.permissions = self.checkAll ? self.permissionList : [];
+					if (localStorage.getItem('username') == 'admin') {
+						self.form.permissions = self.checkAll ? self.adminPermissionList : [];
+						console.log(self.form.permissions)
+					} else {
+						self.form.permissions = self.checkAll ? self.permissionList : [];
+						console.log(self.form.permissions)
+					}
 				}
 			},
 			getRoles() {
@@ -615,17 +908,29 @@
 				self.disabledRole = true;
 				API.oneRole(row.name).then(res => {
 					self.form = res;
-					self.checkAll = res.permissions.length >= self.permissionList.length;
+					if (localStorage.getItem('username') == 'admin') {
+						self.checkAll = res.permissions.length >= self.adminPermissionList.length;
+					} else {
+						self.checkAll = res.permissions.length >= self.permissionList.length;
+					}
 				})
 			},
 			AllChange(val) {
 				var self = this;
-				self.form.permissions = val ? self.permissionList : [];
+				if (localStorage.getItem('username') == 'admin') {
+					self.form.permissions = val ? self.adminPermissionList : [];
+				} else {
+					self.form.permissions = val ? self.permissionList : [];
+				}
 			},
 			oneChange(val) {
 				var self = this;
 				console.log(self.form.permissions);
-				self.checkAll = self.form.permissions.length >= self.permissionList.length;
+				if (localStorage.getItem('username') == 'admin') {
+					self.checkAll = self.form.permissions.length >= self.adminPermissionList.length;
+				} else {
+					self.checkAll = self.form.permissions.length >= self.permissionList.length;
+				}
 			},
 
 			handleDel(index, row) {
