@@ -123,7 +123,7 @@
 			<el-table-column prop="online" label="状态" width="80px">
 				<template slot-scope="scope">
 					<span v-if="scope.row.online == 1">在线</span>
-					<span v-if="scope.row.online == 0">离线</span>
+					<span v-if="scope.row.online == 2">离线</span>
 				</template>
 			</el-table-column>
 			<el-table-column prop="last_login" label="最后登录时间" width="150px"></el-table-column>
