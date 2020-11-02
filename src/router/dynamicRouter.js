@@ -29,7 +29,7 @@ const dynamicRouter = [{
 	    name: 'police',
 	    component: () => import('@/views/police/index'),
 	    meta: {
-	        title: '警务管理',
+	        title: '日常管理',
 	        icon: 'el-icon-setting'
 	    },
 		children: [{
@@ -58,6 +58,52 @@ const dynamicRouter = [{
 					title: '账号管理',
 					icon: 'el-icon-s-release'
 				},
+			},
+			{
+				path: '/address',
+				name: 'address',
+				component: () => import('@/views/address/index'),
+				meta: {
+					title: '地址管理',
+					icon: 'el-icon-location'
+				},
+				children: [{
+						path: '/address-list',
+						name: 'addressList',
+						component: () => import('@/views/address/address-list'),
+						meta: {
+							title: '地址列表',
+							icon: 'el-icon-warning'
+						}
+					},
+					{
+						path: '/areas',
+						name: 'areas',
+						component: () => import('@/views/address/areas'),
+						meta: {
+							title: '地区管理',
+							icon: 'el-icon-s-release'
+						},
+					}
+				]
+			},
+			{
+			    path: '/outInLogs',
+			    name: 'outInLogs',
+			    component: () => import('@/views/outInLogs/outInLogs'),
+			    meta: {
+			        title: '进出记录管理',
+			        icon: 'el-icon-setting'
+			    }
+			},
+		{
+				path: '/area-list',
+				name: 'areaList',
+				component: () => import('@/views/area/area-list'),
+				meta: {
+					title: '辖区管理',
+					icon: 'el-icon-map-location'
+				}
 			}
 		]
 	},
@@ -84,6 +130,15 @@ const dynamicRouter = [{
 				component: () => import('@/views/security/search'),
 				meta: {
 					title: '搜索人脸',
+					icon: 'el-icon-s-release'
+				},
+			},
+			{
+				path: '/dangerlogs',
+				name: 'dangerlogs',
+				component: () => import('@/views/danger/dangerlogs'),
+				meta: {
+					title: '可疑人脸日志',
 					icon: 'el-icon-s-release'
 				},
 			}
@@ -126,34 +181,34 @@ const dynamicRouter = [{
 	        icon: 'el-icon-setting'
 	    }
 	},
-	{
-		path: '/address',
-		name: 'address',
-		component: () => import('@/views/address/index'),
-		meta: {
-			title: '地址管理',
-			icon: 'el-icon-location'
-		},
-		children: [{
-				path: '/address-list',
-				name: 'addressList',
-				component: () => import('@/views/address/address-list'),
-				meta: {
-					title: '地址列表',
-					icon: 'el-icon-warning'
-				}
-			},
-			{
-				path: '/areas',
-				name: 'areas',
-				component: () => import('@/views/address/areas'),
-				meta: {
-					title: '地区管理',
-					icon: 'el-icon-s-release'
-				},
-			}
-		]
-	},
+	// {
+	// 	path: '/address',
+	// 	name: 'address',
+	// 	component: () => import('@/views/address/index'),
+	// 	meta: {
+	// 		title: '地址管理',
+	// 		icon: 'el-icon-location'
+	// 	},
+	// 	children: [{
+	// 			path: '/address-list',
+	// 			name: 'addressList',
+	// 			component: () => import('@/views/address/address-list'),
+	// 			meta: {
+	// 				title: '地址列表',
+	// 				icon: 'el-icon-warning'
+	// 			}
+	// 		},
+	// 		{
+	// 			path: '/areas',
+	// 			name: 'areas',
+	// 			component: () => import('@/views/address/areas'),
+	// 			meta: {
+	// 				title: '地区管理',
+	// 				icon: 'el-icon-s-release'
+	// 			},
+	// 		}
+	// 	]
+	// },
 	{
 		path: '/face',
 		name: 'face',
@@ -219,63 +274,63 @@ const dynamicRouter = [{
 			icon: 'el-icon-shopping-bag-2'
 		}
 	},
-	{
-		path: '/danger',
-		name: 'danger',
-		component: () => import('@/views/danger/index'),
-		meta: {
-			title: '可疑管理',
-			icon: 'el-icon-picture-outline',
-		},
-		children: [
-			// {
-			// 	path: '/doubtable',
-			// 	name: 'doubtable',
-			// 	component: () => import('@/views/danger/doubtable'),
-			// 	meta: {
-			// 		title: '可疑人脸管理',
-			// 		icon: 'el-icon-warning'
-			// 	}
-			// },
-			{
-				path: '/dangerlogs',
-				name: 'dangerlogs',
-				component: () => import('@/views/danger/dangerlogs'),
-				meta: {
-					title: '可疑人脸日志',
-					icon: 'el-icon-s-release'
-				},
-			}
-		]
-	},
-	{
-	    path: '/outInLogs',
-	    name: 'outInLogs',
-	    component: () => import('@/views/outInLogs/outInLogs'),
-	    meta: {
-	        title: '进出记录管理',
-	        icon: 'el-icon-setting'
-	    }
-	},
-	{
-		path: '/area',  //  辖区管理
-		name: 'area',
-		component: () => import('@/views/area/index'),
-		meta: {
-			title: '辖区管理',
-			icon: 'el-icon-map-location',
-		},
-		children: [{
-				path: '/area-list',
-				name: 'areaList',
-				component: () => import('@/views/area/area-list'),
-				meta: {
-					title: '辖区列表',
-					icon: 'el-icon-map-location'
-				}
-			}
-		]
-	},
+	// {
+	// 	path: '/danger',
+	// 	name: 'danger',
+	// 	component: () => import('@/views/danger/index'),
+	// 	meta: {
+	// 		title: '可疑管理',
+	// 		icon: 'el-icon-picture-outline',
+	// 	},
+	// 	children: [
+	// 		// {
+	// 		// 	path: '/doubtable',
+	// 		// 	name: 'doubtable',
+	// 		// 	component: () => import('@/views/danger/doubtable'),
+	// 		// 	meta: {
+	// 		// 		title: '可疑人脸管理',
+	// 		// 		icon: 'el-icon-warning'
+	// 		// 	}
+	// 		// },
+	// 		{
+	// 			path: '/dangerlogs',
+	// 			name: 'dangerlogs',
+	// 			component: () => import('@/views/danger/dangerlogs'),
+	// 			meta: {
+	// 				title: '可疑人脸日志',
+	// 				icon: 'el-icon-s-release'
+	// 			},
+	// 		}
+	// 	]
+	// },
+	// {
+	//     path: '/outInLogs',
+	//     name: 'outInLogs',
+	//     component: () => import('@/views/outInLogs/outInLogs'),
+	//     meta: {
+	//         title: '进出记录管理',
+	//         icon: 'el-icon-setting'
+	//     }
+	// },
+	// {
+	// 	path: '/area',  //  辖区管理
+	// 	name: 'area',
+	// 	component: () => import('@/views/area/index'),
+	// 	meta: {
+	// 		title: '辖区管理',
+	// 		icon: 'el-icon-map-location',
+	// 	},
+	// 	children: [{
+	// 			path: '/area-list',
+	// 			name: 'areaList',
+	// 			component: () => import('@/views/area/area-list'),
+	// 			meta: {
+	// 				title: '辖区列表',
+	// 				icon: 'el-icon-map-location'
+	// 			}
+	// 		}
+	// 	]
+	// },
 
 	// {
 	// 	path: '/user',  //  用户管理

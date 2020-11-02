@@ -16,7 +16,7 @@
 								<template slot="title">
 									{{childrenItem.meta.title}}
 								</template>
-								<el-menu-item v-for="threeItem in childrenItem.children" :key="threeItem.path" :index="threeItem.path">{{ threeItem.title }}</el-menu-item>
+								<el-menu-item v-for="threeItem in childrenItem.children" :key="threeItem.path" :index="threeItem.path">{{ threeItem.meta.title }}</el-menu-item>
 							</el-submenu>
 							<el-menu-item v-else :index="childrenItem.path" :key="childrenItem.path">{{ childrenItem.meta.title }}</el-menu-item>
 						</template>

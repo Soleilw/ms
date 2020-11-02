@@ -117,11 +117,31 @@
 					self.index = 'police-list';
 					return 'police-list'
 				}
+				if (self.$route.path.split('/')[1] == 'address-list') {
+					self.index = 'police-list';
+					return 'police-list'
+				}
+				if (self.$route.path.split('/')[1] == 'areas') {
+					self.index = 'police-list';
+					return 'police-list'
+				}
+				if (self.$route.path.split('/')[1] == 'outInLogs') {
+					self.index = 'police-list';
+					return 'police-list'
+				}
+				if (self.$route.path.split('/')[1] == 'area-list') {
+					self.index = 'police-list';
+					return 'police-list'
+				}
 				if (self.$route.path.split('/')[1] == 'upload') {
 					self.index = 'upload'
 					return 'upload'
 				}
 				if (self.$route.path.split('/')[1] == 'search') {
+					self.index = 'upload'
+					return 'upload'
+				}
+				if (self.$route.path.split('/')[1] == 'dangerlogs') {
 					self.index = 'upload'
 					return 'upload'
 				}

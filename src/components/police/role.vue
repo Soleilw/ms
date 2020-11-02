@@ -153,7 +153,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="table">
+							<!-- 	<div class="table">
 									<div class="tb" style="width: 20%;">
 										<div class="level1">
 											<el-checkbox label="face" @change="oneChange">
@@ -206,7 +206,7 @@
 											暂无
 										</div>
 									</div>
-								</div>
+								</div> -->
 								<div class="table">
 									<div class="tb" style="width: 20%;">
 										<div class="level1">
@@ -406,19 +406,19 @@
 					"areasGet",
 					"areasDel",
 
-					"face", // 人脸管理页
-					"faceList",
-					"pushLogs", // 推送记录子页
-					"faceAdd", // 添加人脸
-					"faceGet", // 获取人脸
-					"faceDel", // 删除人脸
+					// "face", // 人脸管理页
+					// "faceList",
+					// "pushLogs", // 推送记录子页
+					// "faceAdd", // 添加人脸
+					// "faceGet", // 获取人脸
+					// "faceDel", // 删除人脸
 
-					"device", // 设备管理页
-					"deviceList", // 设备列表
-					"command", // 指令管理
-					"deviceAdd", // 添加设备
-					"deviceGet", // 获取设备
-					"deviceDel", // 删除设备
+					// "device", // 设备管理页
+					// "deviceList", // 设备列表
+					// "command", // 指令管理
+					// "deviceAdd", // 添加设备
+					// "deviceGet", // 获取设备
+					// "deviceDel", // 删除设备
 
 
 					"danger", // 可疑管理页

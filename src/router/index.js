@@ -6,7 +6,7 @@ Vue.use(Router)
 
 /* 初始路由 */
 export default new Router({
-	mode: 'history',
+	mode: 'hash',
 	routes: [{
 			path: '/login',
 			name: 'login',

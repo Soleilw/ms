@@ -72,18 +72,37 @@
 		</el-dialog>
 
 		<!-- 查看详情 -->
-		<el-dialog :visible.sync="dialogDetail" title="查看详情" :close-on-click-modal="false">
+		<el-dialog :visible.sync="dialogDetail" title="查看详情" :close-on-click-modal="false" width="80%">
 			<div class="box">
 				<el-table :data="DetailForm" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 					<el-table-column prop="id" label="ID"></el-table-column>
 					<el-table-column prop="danger.name" label="姓名"></el-table-column>
-					<el-table-column prop="danger.href" label="人脸库照片" width="200px">
+					<el-table-column prop="danger.href" label="人脸库照片" >
 						<template slot-scope="scope">
 							<el-popover placement="top-start" title="" trigger="click">
 								<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
 								<img slot="reference" :src="scope.row.danger.href" style="max-width:180px;max-height:80px;">
 							</el-popover>
 						</template>
+					</el-table-column>
+					<el-table-column prop="log.image" label="抓拍原图" >
+						<template slot-scope="scope">
+							<el-popover placement="top-start" title="" trigger="click">
+								<img :src="scope.row.log.image" style="max-width:800px;max-height:800px;" />
+								<img slot="reference" :src="scope.row.log.image" style="max-width:180px;max-height:80px;">
+							</el-popover>
+						</template>
+					</el-table-column>
+					
+					<el-table-column prop="log.catch_faces[0].face_img" label="抓拍照片">
+						<template slot-scope="scope">
+							<el-popover placement="top-start" title="" trigger="click">
+								<img :src="'data:image/png;base64,' + scope.row.log.catch_faces[0].face_img" style="max-width:800px;max-height:800px;" />
+								<img slot="reference" :src="'data:image/png;base64,' +scope.row.log.catch_faces[0].face_img" style="max-width:180px;max-height:80px;">
+							</el-popover>
+						</template>
+					</el-table-column>
+					<el-table-column prop="log.timestamp" label="抓拍时间">
 					</el-table-column>
 				</el-table>
 			</div>
@@ -101,6 +120,7 @@
 
 <script>
 	import API from '@/api//index.js'
+	import DATE from '@/utils/date.js'
 
 	export default {
 		data() {
@@ -239,6 +259,9 @@
 				this.dialogDetail = true;
 				console.log([row])
 				this.DetailForm = [row];
+				this.DetailForm.forEach(item => {
+					item.log.timestamp = DATE.formatTime(item.log.timestamp, 'Y-M-D h:m:s')
+				})
 			},
 
 			// 分页
