@@ -5,11 +5,15 @@
 				<el-button type="primary" @click="addAddress">添加地址</el-button>
 			</div>
 			<div class="btn">
-				<el-input placeholder="输入地址名称" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
-					<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
-				</el-input>
+				<div class="tip">根据地址筛选：</div>
+				<div>
+					<el-input placeholder="输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
+						<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
+					</el-input>
+				</div>
 			</div>
 			<div class="btn">
+				<div class="tip">根据地区筛选：</div>
 				<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="areaProChange" :props="props"></el-cascader>
 			</div>
 		</div>
@@ -102,14 +106,14 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
-			<el-table-column prop="id" label="ID"></el-table-column>
-			<el-table-column prop="project_id" label="项目ID"></el-table-column>
-			<el-table-column prop="address" label="地址"></el-table-column>
-			<el-table-column prop="stations" label="所在辖区"></el-table-column>
-			<el-table-column prop="contact" label="联系方式"></el-table-column>
-			<el-table-column prop="address_uuid" label="address_uuid"></el-table-column>
-			<el-table-column label="操作">
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
+			<el-table-column prop="id" label="ID" width="100px"></el-table-column>
+			<el-table-column prop="project_id" label="项目ID" width="100px"></el-table-column>
+			<el-table-column prop="address" label="地址" width="400px"></el-table-column>
+			<el-table-column prop="stations" label="所在辖区" width="200px"></el-table-column>
+			<el-table-column prop="contact" label="联系方式" width="400px"></el-table-column>
+			<el-table-column prop="address_uuid" label="address_uuid" width="200px"></el-table-column>
+			<el-table-column label="操作" width="200px" fixed="right">
 				<template slot-scope="scope">
 					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">

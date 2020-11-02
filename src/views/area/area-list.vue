@@ -2,7 +2,7 @@
 	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
-				<el-button type="primary" size="medium" icon="el-icon-circle-plus-outline" @click="addPoliceArea">添加公安辖区</el-button>
+				<el-button type="primary" size="medium" @click="addPoliceArea">添加公安辖区</el-button>
 			</div>
 		</div>
 
@@ -21,7 +21,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="name" label="名称"></el-table-column>
 			<el-table-column label="操作">

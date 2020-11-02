@@ -273,19 +273,80 @@
 									</div>
 									<div class="table">
 										<div class="tb" style="width: 20%;">
-											<el-checkbox label="policeList" @change="oneChange">
-												<span style="font-weight: bold;">警员管理</span>
-											</el-checkbox>
+											<div class="level1">
+												<el-checkbox label="police" @change="oneChange">
+													<span style="font-weight: bold;">警务管理</span>
+												</el-checkbox>
+											</div>
 										</div>
 										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="policeList" @change="oneChange">警员管理</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="department" @change="oneChange">部门管理</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="account" @change="oneChange">账号管理</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="policeListAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="policeListDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="policeListEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
+												<el-checkbox label="policeListGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="departmentGet" @change="oneChange" class="permission-span">新增</el-checkbox>
+												<el-checkbox label="departmentDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="departmentEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
+												<el-checkbox label="departmentGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<div class="level1">
+												<el-checkbox label="security" @change="oneChange">
+													<span style="font-weight: bold;">安防布控</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="upload" @change="oneChange">上传可疑人脸</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="search" @change="oneChange">搜索人脸</el-checkbox>
+											</div>
 										</div>
 										<div class="tb set" style="width: 60%;">
 										</div>
 									</div>
 									<div class="table">
 										<div class="tb" style="width: 20%;">
-											<el-checkbox label="department" @change="oneChange">
-												<span style="font-weight: bold;">部门管理</span>
+											<div class="level1">
+												<el-checkbox label="statistical" @change="oneChange">
+													<span style="font-weight: bold;">统计</span>
+												</el-checkbox>
+											</div>
+										</div>
+										<div class="tb tr" style="width: 20%;">
+											<div class="level2">
+												<el-checkbox label="data" @change="oneChange">数据统计</el-checkbox>
+											</div>
+											<div class="level2">
+												<el-checkbox label="generate" @change="oneChange">导出数据表</el-checkbox>
+											</div>
+										</div>
+										<div class="tb set" style="width: 60%;">
+										</div>
+									</div>
+									<div class="table">
+										<div class="tb" style="width: 20%;">
+											<el-checkbox label="alert" @change="oneChange">
+												<span style="font-weight: bold;">告警处理</span>
 											</el-checkbox>
 										</div>
 										<div class="tb tr" style="width: 20%;">
@@ -760,10 +821,28 @@
 
 					"outInLogs", // 进出记录管理页
 					
+					"police", // 警务管理
 					"policeList", // 警员管理
-					
 					"department", // 部门管理
+					"account", // 账号管理
+					"policeListAdd",
+					"policeListGet",
+					"policeListEdit",
+					"policeListDel",
+					"departmentAdd",
+					"departmentGet",
+					"departmentEdit",
+					"departmentDel",
 					
+					"security", // 安防布控
+					"upload", // 上传可疑人脸
+					"search", // 搜索人脸
+					
+					"statistical", // 搜索人脸
+					"data", // 搜索人脸
+					"generate", // 搜索人脸
+					
+					"alert", // 告警处理
 					
 					"area", // 辖区管理
 					"areaList",

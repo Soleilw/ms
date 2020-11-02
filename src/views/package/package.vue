@@ -7,7 +7,7 @@
 		</div>
 
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}">
 			<el-table-column prop="id" label="APKID"></el-table-column>
 			<el-table-column prop="name" label="名称"></el-table-column>
 			<el-table-column prop="description" label="描述"></el-table-column>
@@ -84,7 +84,7 @@
 					</div>
 				</el-dialog>
 
-				<el-table :data="versionTableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620"
+				<el-table :data="versionTableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620"
 				 v-loading="versionLoading" element-loading-text="获取数据中">
 					<el-table-column prop="id" label="ID" align="center"></el-table-column>
 					<el-table-column prop="apk_id" label="APKID" align="center"></el-table-column>
@@ -480,7 +480,7 @@
 						break;
 					case 2:
 						var formData_2 = {
-							version_id: self.sendForm.version_id,
+							
 							type: 2,
 							addresses: self.sendForm.addresses
 						}

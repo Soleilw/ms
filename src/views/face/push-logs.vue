@@ -2,19 +2,23 @@
 	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
-				<el-input placeholder="请输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
-					<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
-				</el-input>
+				<div class="tip">根据姓名筛选：</div>
+				<div>
+					<el-input placeholder="请输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
+						<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
+					</el-input>
+				</div>
 			</div>
 			<div class="btn">
-				<el-input placeholder="请填写地址" type="textarea" v-model="address" class="input-with-select" @keyup.enter.native="addressSearch(address)">
-				</el-input>
-			</div>
-			<div class="btn">
-				<el-button @click="addressSearch(address)" type="primary">搜索地址</el-button>
+				<div class="tip">根据地址筛选：</div>
+				<div>
+					<el-input placeholder="请填写地址" autosize type="textarea" v-model="address" @keyup.enter.native="addressSearch(address)">
+					</el-input>
+				</div>
+				
 			</div>
 		</div>
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="face_id" label="人脸ID"></el-table-column>
 			<el-table-column prop="group" label="人脸组"></el-table-column>
 			<el-table-column prop="face.name" label="姓名"></el-table-column>

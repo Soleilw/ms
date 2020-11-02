@@ -5,26 +5,31 @@
 				<el-button type="primary" @click="addDevice">添加设备</el-button>
 			</div>
 			<div class="btn">
-				<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
-					<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
-				</el-input>
+				<div class="tip">根据设备号筛选：</div>
+				<div>
+					<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
+						<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
+					</el-input>
+				</div>
+				
 			</div>
 			<div class="btn">
+				<div class="tip">根据类型筛选：</div>
 				<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
 					<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
 					</el-option>
 				</el-select>
 			</div>
 			<div class="btn">
+				<div class="tip">根据省市区筛选：</div>
 				<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
-			</div>
-			<div class="btn">
 				<el-select v-model="area_address_id" placeholder="请选择地址" filterable @change="areaAddressChange">
 					<el-option v-for="(item, index) in area_address_List" :key="index" :label="item.address" :value="item.id">
 					</el-option>
 				</el-select>
 			</div>
-			<div class="btn"> 
+			<div class="btn">
+				<div class="tip">根据状态筛选：</div>
 				<el-select v-model="deviceState" placeholder="请选择状态" filterable @change="deviceStateChange">
 					<el-option v-for="(item, index) in deviceStateList" :key="index" :label="item.online" :value="item.offline">
 					</el-option>
@@ -111,23 +116,23 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID" width="80px"></el-table-column>
-			<el-table-column prop="address.address" label="地址" width="200px"></el-table-column>
+			<el-table-column prop="address.address" label="地址" width="400px"></el-table-column>
 			<el-table-column prop="uuid" label="uuid" width="200px"></el-table-column>
-			<el-table-column prop="type_string" label="类型" width="100px"></el-table-column>
-			<el-table-column prop="direction" label="方向" width="80px"></el-table-column>
-			<el-table-column prop="ip" label="IP地址"></el-table-column>
+			<el-table-column prop="type_string" label="类型" width="150px"></el-table-column>
+			<el-table-column prop="direction" label="方向"></el-table-column>
+			<el-table-column prop="ip" label="IP地址" width="200px"></el-table-column>
 			<el-table-column prop="version" label="版本"></el-table-column>
-			<el-table-column prop="remark" label="备注" width="250px"></el-table-column>
-			<el-table-column prop="online" label="状态" width="80px">
+			<el-table-column prop="remark" label="备注" width="500px"></el-table-column>
+			<el-table-column prop="online" label="状态">
 				<template slot-scope="scope">
 					<span v-if="scope.row.online == 1">在线</span>
 					<span v-if="scope.row.online == 2">离线</span>
 				</template>
 			</el-table-column>
 			<el-table-column prop="last_login" label="最后登录时间" width="150px"></el-table-column>
-			<el-table-column label="操作">
+			<el-table-column label="操作" width="150px" fixed="right">
 				<template slot-scope="scope">
 					<el-dropdown>
 						<el-button type="primary">
@@ -452,8 +457,7 @@
 				projectList: [],
 				addressList: [],
 				faceGroupList: [],
-				deviceStateList: [
-					{
+				deviceStateList: [{
 						online: '在线',
 						offline: 1
 					},
@@ -463,7 +467,7 @@
 					}
 				], // 状态搜索，在线1，离线2
 				deviceState: '',
-				
+
 				checkAll: false, // 全选人脸组
 				faceGroup: [], // 已选择的人脸组，编辑时
 				uuidList: [],
@@ -669,7 +673,7 @@
 					self.loading = false;
 				})
 			},
-			
+
 			// 根据设备状态搜索
 			deviceStateChange(val) {
 				var self = this;
@@ -683,7 +687,7 @@
 					self.loading = false;
 				})
 			},
-			
+
 			// 获取设备列表
 			getDevice() {
 				var self = this;
@@ -1262,11 +1266,12 @@
 				var self = this;
 				self.current = val;
 				self.loading = true;
-				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-				}).catch(err => {
+				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState).then(
+					res => {
+						self.loading = false;
+						self.tableDate = res.data;
+						self.total = res.total;
+					}).catch(err => {
 					self.loading = false;
 				})
 			},
@@ -1275,13 +1280,14 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-				}).catch(err => {
-					self.loading = false;
-				})
+				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState)
+					.then(res => {
+						self.loading = false;
+						self.tableDate = res.data;
+						self.total = res.total;
+					}).catch(err => {
+						self.loading = false;
+					})
 			}
 		},
 

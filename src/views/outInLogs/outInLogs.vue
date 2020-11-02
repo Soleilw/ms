@@ -2,32 +2,38 @@
 	<div v-loading="loading" element-loading-text="加载中">
 		<div class="handle-box">
 			<div class="btn">
-				<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
-					<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
-				</el-input>
+				<div class="tip">根据设备号筛选：</div>
+				<div>
+					<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
+						<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
+					</el-input>
+				</div>
 			</div>
 			<div class="btn">
-				<el-input placeholder="输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
-					<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
-				</el-input>
+				<div class="tip">根据姓名或身份证筛选：</div>
+				<div>
+					<el-input placeholder="输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
+						<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
+					</el-input>
+				</div>
 			</div>
 			<div class="btn">
+				<div class="tip">根据省市区筛选地址设备号：</div>
 				<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
-			</div>
-			<div class="btn">
 				<el-select v-model="area_address_id" placeholder="请选择地址" filterable @change="areaAddressChange">
 					<el-option v-for="(item, index) in area_address_List" :key="index" :label="item.address" :value="item.id">
 					</el-option>
 				</el-select>
-			</div>
-			<div class="btn">
 				<el-select v-model="address_uuid" placeholder="请选择设备号" filterable @change="addressUUIDChange">
 					<el-option v-for="(item, index) in address_uuid_list" :key="index" :label="item.uuid + '/' + item.remark" :value="item.uuid">
 					</el-option>
 				</el-select>
 			</div>
+			<div class="btn">
+				<el-button type="primary">重新筛选</el-button>
+			</div>
 		</div>
-		<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 			<el-table-column prop="face.name" label="名称"></el-table-column>
@@ -152,7 +158,7 @@
 				self.pro_city_area_id = val[3];
 				API.deviceFaceLogs(1, self.size, self.uuid, self.name, self.pro_city_area_id, self.area_address_id).then(res => {
 					self.loading = false;
-					self.tableDate = res.data;
+					self.faceLogsTable = res.data;
 					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
@@ -169,7 +175,7 @@
 				var self = this;
 				API.deviceFaceLogs(1, self.size, self.uuid, self.name, self.pro_city_area_id, val).then(res => {
 					self.loading = false;
-					self.tableDate = res.data;
+					self.faceLogsTable = res.data;
 					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;

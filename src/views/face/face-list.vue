@@ -5,9 +5,12 @@
 				<el-button type="primary" @click="addFace">添加人脸</el-button>
 			</div>
 			<div class="btn">
-				<el-input placeholder="请输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
-					<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
-				</el-input>
+				<div class="tip">根据姓名筛选：</div>
+				<div>
+					<el-input placeholder="请输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
+						<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
+					</el-input>
+				</div>
 			</div>
 		</div>
 
@@ -56,7 +59,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="name" label="名字"></el-table-column>
 			<el-table-column prop="face_id" label="人脸ID"></el-table-column>

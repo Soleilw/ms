@@ -1,7 +1,10 @@
 <template>
 	<div class="login-wrap">
 		<div class="login">
-			<div class="title">中山市沙溪镇人脸识别乡村安防公安系统</div>
+			<div class="title">
+				<img class="logo" src="../assets/image/badges-2.png" alt="">
+				<div>中山市沙溪镇人脸识别乡村安防公安系统</div>
+			</div>
 			<div class="form-info">
 				<div class="form-info-item">
 					<el-input v-model="adminForm.username" placeholder="username"></el-input>
@@ -47,9 +50,9 @@
 				var self = this;
 				API.login(self.adminForm).then(res => {
 					localStorage.setItem('username', self.adminForm.username)
-					self.$router.replace("/overview");
+					self.$router.replace("/");
 				})
-				// 	localStorage.setItem('username', 'admin')
+				// localStorage.setItem('username', 'admin')
 				// self.$router.replace("/overview");
 			}
 		}
@@ -74,25 +77,33 @@
 		left: 0;
 		margin: auto;
 		width: 30vw;
-		height: 18vw;
+		height: 16vw;
 		background-color: #fff;
 		border-radius: 1vw;
 		color: #000;
 		text-align: center;
 		overflow-x: auto;
 
+		.logo {
+			width: 50px;
+			height: 50px;
+		}
+
 		.title {
-			padding-top: 2vw;
-			font-size: 1.4vw;
+			padding-top: 1vw;
+			font-size: 1.5rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 
 		.form-info {
-			margin-top: 1vw;
+			margin-top: 1.25rem;
 		}
 
 		.form-info-item {
-			margin: 0 1vw;
-			padding-top: 1vw;
+			margin: 0 1.25rem;
+			padding-top: 1rem;
 		}
 
 		.login_btn {

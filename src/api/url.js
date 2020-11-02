@@ -2,8 +2,9 @@ const url = {
 	// 用户管理接口
 	'Login': '/login', // 登录
 	'Password': '/password', // 重置密码
-	'Token': '/token', // 重置密码
-	'Permissions': '/permissions', // 重置密码
+	'Token': '/token', // token
+	'Permissions': '/permissions', // 角色权限
+	'LoginLogs': '/login/logs', // 获取登录记录
 
 	
 	// 百度配置
@@ -65,6 +66,17 @@ const url = {
 	'DangerFaces': '/danger/faces', // 获取可疑人脸
 	'DelDangerFace': '/danger/face', // 删除可疑人脸
 	'DangerLogs': '/danger/logs', // 可疑人脸日志
+	'DangerAlerts': '/danger/alerts', // 可疑人脸报警
+	'HandleAlerts': '/handle/alerts ', // 处理告警
+	'DangerTypes': '/danger/types', // 获取可疑类型已经告警类型
+	'SearchImageFace': '/search/image/face', // 获取可疑类型已经告警类型
+	
+	// 警务管理
+	'PoliceLevel': '/police/level', // 新增部门等级
+	'PoliceLevels': '/police/levels', // 获取部门等级
+	'Policeman': '/policeman', // 新增警员信息
+	'Policemen': '/policemen', // 获取警员信息
+	'PassPoliceman': '/pass/policeman ', // 警员审核
 	
 	// 上传人脸
 	'UploadFace': '/upload/face', // 上传人脸

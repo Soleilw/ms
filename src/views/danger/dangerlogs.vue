@@ -1,10 +1,8 @@
 <template>
 	<div v-loading="loading" element-loading-text="获取数据中">
-		<!-- 	<div class="btn">
-			<el-button type="primary" @click="addDoubtable">添加可疑人脸</el-button>
-		</div> -->
 
-		<el-dialog title="添加可疑人脸" :visible.sync="dialogDoubtable" :close-on-click-modal="false">
+		
+		<el-dialog title="设置搜索条件" :visible.sync="dialogSearch" :close-on-click-modal="false">
 			<div class="box">
 				<el-form :model="form" label-width="100px">
 					<el-form-item label="姓名">
@@ -45,7 +43,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="danger.name" label="姓名"></el-table-column>
 			<el-table-column prop="danger.number" label="身份证号"></el-table-column>
@@ -100,7 +98,7 @@
 		data() {
 			return {
 				loading: true,
-				dialogDoubtable: false,
+				dialogSearch: false, // 搜索设置条件
 				// 上传人脸
 				imgData: {
 					key: '',
@@ -121,6 +119,7 @@
 				tableDate: [],
 				id: '',
 				dialogDel: false,
+				
 				// 分页
 				current: 1, // 当前页
 				size: 10, // 每页出现几条

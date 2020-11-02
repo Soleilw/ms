@@ -28,7 +28,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="switch_title" label="开关名称"></el-table-column>
 			<el-table-column prop="version" label="版本"></el-table-column>
@@ -82,6 +82,9 @@
 			this.getSwitch();
 		},
 		methods: {
+			oneChange(val) {
+				console.log(self.checkList)
+			},
 			getSwitch() {
 				var self = this;
 				API.faceSwitches(self.current).then(res => {

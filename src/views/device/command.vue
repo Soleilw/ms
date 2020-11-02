@@ -70,12 +70,16 @@
 
 			</el-dialog>
 			<div class="btn">
-				<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
-					<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
-				</el-input>
+				<div class="tip">根据设备号筛选：</div>
+				<div>
+					<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
+						<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
+					</el-input>
+				</div>
+			
 			</div>
 		</div>
-		<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" :max-height="480">
+		<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" :max-height="480">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 			<el-table-column prop="command" label="指令"></el-table-column>

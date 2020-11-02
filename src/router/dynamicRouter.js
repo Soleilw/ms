@@ -25,6 +25,108 @@ const dynamicRouter = [{
 		}
 	},
 	{
+	    path: '/police',
+	    name: 'police',
+	    component: () => import('@/views/police/index'),
+	    meta: {
+	        title: '警务管理',
+	        icon: 'el-icon-setting'
+	    },
+		children: [{
+				path: '/police-list',
+				name: 'policeList',
+				component: () => import('@/views/police/police-list'),
+				meta: {
+					title: '警员管理',
+					icon: 'el-icon-warning'
+				}
+			},
+			{
+				path: '/department',
+				name: 'department',
+				component: () => import('@/views/police/department'),
+				meta: {
+					title: '部门管理',
+					icon: 'el-icon-s-release'
+				},
+			},
+			{
+				path: '/account',
+				name: 'account',
+				component: () => import('@/views/police/account'),
+				meta: {
+					title: '账号管理',
+					icon: 'el-icon-s-release'
+				},
+			}
+		]
+	},
+	{
+	    path: '/security',
+	    name: 'security',
+	    component: () => import('@/views/security/index'),
+	    meta: {
+	        title: '安防布控',
+	        icon: 'el-icon-setting'
+	    },
+		children: [{
+				path: '/upload',
+				name: 'upload',
+				component: () => import('@/views/security/upload'),
+				meta: {
+					title: '可疑人脸上传',
+					icon: 'el-icon-warning'
+				}
+			},
+			{
+				path: '/search',
+				name: 'search',
+				component: () => import('@/views/security/search'),
+				meta: {
+					title: '搜索人脸',
+					icon: 'el-icon-s-release'
+				},
+			}
+		]
+	},
+	{
+	    path: '/statistical',
+	    name: 'statistical',
+	    component: () => import('@/views/statistical/index'),
+	    meta: {
+	        title: '统计',
+	        icon: 'el-icon-setting'
+	    },
+		children: [{
+				path: '/data',
+				name: 'data',
+				component: () => import('@/views/statistical/data'),
+				meta: {
+					title: '数据统计',
+					icon: 'el-icon-warning'
+				}
+			},
+			{
+				path: '/generate',
+				name: 'generate',
+				component: () => import('@/views/statistical/generate'),
+				meta: {
+					title: '导出数据表',
+					icon: 'el-icon-s-release'
+				},
+			}
+		]
+	},
+	{
+	    path: '/alert',
+	    name: 'alert',
+	    component: () => import('@/views/alert/alert'),
+	    meta: {
+	        title: '告警处理',
+	        icon: 'el-icon-setting'
+	    }
+	},
+	{
 		path: '/address',
 		name: 'address',
 		component: () => import('@/views/address/index'),
@@ -125,15 +227,16 @@ const dynamicRouter = [{
 			title: '可疑管理',
 			icon: 'el-icon-picture-outline',
 		},
-		children: [{
-				path: '/doubtable',
-				name: 'doubtable',
-				component: () => import('@/views/danger/doubtable'),
-				meta: {
-					title: '可疑人脸管理',
-					icon: 'el-icon-warning'
-				}
-			},
+		children: [
+			// {
+			// 	path: '/doubtable',
+			// 	name: 'doubtable',
+			// 	component: () => import('@/views/danger/doubtable'),
+			// 	meta: {
+			// 		title: '可疑人脸管理',
+			// 		icon: 'el-icon-warning'
+			// 	}
+			// },
 			{
 				path: '/dangerlogs',
 				name: 'dangerlogs',
@@ -173,82 +276,83 @@ const dynamicRouter = [{
 			}
 		]
 	},
-	{
-		path: '/user',  //  用户管理
-		name: 'user',
-		component: () => import('@/views/user/index'),
-		meta: {
-			title: '用户管理',
-			icon: 'el-icon-user',
-		},
-		children: [{
-				path: '/user-list',
-				name: 'userList',
-				component: () => import('@/views/user/user-list'),
-				meta: {
-					title: '用户列表',
-					icon: 'el-icon-warning'
-				}
-			}
-		]
-	},
-	{
-		path: '/renter',  //  住户管理
-		name: 'renter',
-		component: () => import('@/views/renter/index'),
-		meta: {
-			title: '住户管理',
-			icon: 'el-icon-user',
-		},
-		children: [{
-				path: '/renter-list',
-				name: 'renterList',
-				component: () => import('@/views/renter/renter-list'),
-				meta: {
-					title: '住户列表',
-					icon: 'el-icon-warning'
-				}
-			}
-		]
-	},
-	{
-		path: '/school',  //  学校管理
-		name: 'school',
-		component: () => import('@/views/school/index'),
-		meta: {
-			title: '学校管理',
-			icon: 'el-icon-user',
-		},
-		children: [{
-				path: '/school-list',
-				name: 'schoolList',
-				component: () => import('@/views/school/school-list'),
-				meta: {
-					title: '学校列表',
-					icon: 'el-icon-warning'
-				}
-			}
-		]
-	},
-	{
-		path: '/information', // 资讯管理
-		name: 'information',
-		component: () => import('@/views/information/index'),
-		meta: {
-			title: '资讯管理',
-			icon: 'el-icon-picture-outline',
-		},
-		children: [{
-				path: '/info-list',
-				name: 'infoList',
-				component: () => import('@/views/information/info-list'),
-				meta: {
-					title: '资讯列表',
-					icon: 'el-icon-warning'
-				}
-			}
-		]
-	},
+
+	// {
+	// 	path: '/user',  //  用户管理
+	// 	name: 'user',
+	// 	component: () => import('@/views/user/index'),
+	// 	meta: {
+	// 		title: '用户管理',
+	// 		icon: 'el-icon-user',
+	// 	},
+	// 	children: [{
+	// 			path: '/user-list',
+	// 			name: 'userList',
+	// 			component: () => import('@/views/user/user-list'),
+	// 			meta: {
+	// 				title: '用户列表',
+	// 				icon: 'el-icon-warning'
+	// 			}
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	path: '/renter',  //  住户管理
+	// 	name: 'renter',
+	// 	component: () => import('@/views/renter/index'),
+	// 	meta: {
+	// 		title: '住户管理',
+	// 		icon: 'el-icon-user',
+	// 	},
+	// 	children: [{
+	// 			path: '/renter-list',
+	// 			name: 'renterList',
+	// 			component: () => import('@/views/renter/renter-list'),
+	// 			meta: {
+	// 				title: '住户列表',
+	// 				icon: 'el-icon-warning'
+	// 			}
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	path: '/school',  //  学校管理
+	// 	name: 'school',
+	// 	component: () => import('@/views/school/index'),
+	// 	meta: {
+	// 		title: '学校管理',
+	// 		icon: 'el-icon-user',
+	// 	},
+	// 	children: [{
+	// 			path: '/school-list',
+	// 			name: 'schoolList',
+	// 			component: () => import('@/views/school/school-list'),
+	// 			meta: {
+	// 				title: '学校列表',
+	// 				icon: 'el-icon-warning'
+	// 			}
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	path: '/information', // 资讯管理
+	// 	name: 'information',
+	// 	component: () => import('@/views/information/index'),
+	// 	meta: {
+	// 		title: '资讯管理',
+	// 		icon: 'el-icon-picture-outline',
+	// 	},
+	// 	children: [{
+	// 			path: '/info-list',
+	// 			name: 'infoList',
+	// 			component: () => import('@/views/information/info-list'),
+	// 			meta: {
+	// 				title: '资讯列表',
+	// 				icon: 'el-icon-warning'
+	// 			}
+	// 		}
+	// 	]
+	// },
 	{
 		path: '/switch', // 资讯管理
 		name: 'switch',
@@ -296,24 +400,25 @@ const dynamicRouter = [{
 			}
 		]
 	},
-	{
-	   path: '/police',
-	   name: 'policeList',
-	   component: () => import('@/views/police/police-list'),
-	   meta: {
-	   	title: '警员管理',
-	   	icon: 'el-icon-document'
-	   }
-	},
-	{
-	   path: '/department',
-	   name: 'department',
-	   component: () => import('@/views/department/department'),
-	   meta: {
-	   	title: '部门管理',
-	   	icon: 'el-icon-document'
-	   }
-	}
+
+	// {
+	//    path: '/police',
+	//    name: 'policeList',
+	//    component: () => import('@/views/police/police-list'),
+	//    meta: {
+	//    	title: '警员管理',
+	//    	icon: 'el-icon-document'
+	//    }
+	// },
+	// {
+	//    path: '/department',
+	//    name: 'department',
+	//    component: () => import('@/views/department/department'),
+	//    meta: {
+	//    	title: '部门管理',
+	//    	icon: 'el-icon-document'
+	//    }
+	// }
 ]
 
 

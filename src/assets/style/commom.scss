@@ -1,19 +1,29 @@
 .handle-box {
-	display: flex;
+	// display: flex;
 	background: #f0f0f0;
 	margin-bottom: 20px;
 	padding: 5px;
 	border-radius: 5px;
 }
 
-.btn {	
-		margin: 5px;
+.btn {
+	display: flex;
+	align-items: center;
+	margin: 5px;
+	
+	input {
+		width: 300px;
 	}
+}
+	
+.tip {
+	font-size: 18px;
+}
 	
 .el-table {
-		border: 1px solid #dfe6ec;
+	border: 1px solid #dfe6ec;
 		border-radius: 5px;
-	}
+}
 	
 .block {
 		text-align: center;

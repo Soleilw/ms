@@ -5,7 +5,7 @@
 				<img src="../../assets/image/logo.png" alt="">
 			</div>
 			<div class="title">
-				<span>图巴诺总控</span>
+				<span>公安后台系统</span>
 			</div>
 			<!-- 折叠按钮 -->
 			<div class="collapse-btn" @click="collapseChage">
@@ -26,7 +26,6 @@
 				</el-breadcrumb>
 			</div>
 			<!-- 个人中心 -->
-			<div></div>
 			<div class="info">
 				<el-dropdown @command="handleCommand">
 					<span class="el-dropdown-link">
@@ -42,28 +41,28 @@
 			<div class="logout">
 				<el-button icon="el-icon-circle-close" @click="logout" size="mini">退出</el-button>
 			</div>
-		</div>
-
-		<el-dialog title="修改密码" :visible.sync="dialogResetPassWord" width="500px" :close-on-click-modal="false">
-			<div class="box">
-				<el-form :model="pwdForm" label-width="120px">
-					<el-form-item label="旧密码">
-						<el-input v-model="pwdForm.old_password"></el-input>
-					</el-form-item>
-					<el-form-item label="新密码">
-						<el-input v-model="pwdForm.new_password"></el-input>
-					</el-form-item>
-					<el-form-item label="再次确认新密码">
-						<el-input v-model="pwdForm.confirm_password"></el-input>
-					</el-form-item>
-					<div class="submit">
-						<el-form-item>
-							<el-button type="primary" @click="ChangePassword">提交</el-button>
+			
+			<el-dialog title="修改密码" :visible.sync="dialogResetPassWord" width="500px" :close-on-click-modal="false">
+				<div class="box">
+					<el-form :model="pwdForm" label-width="120px">
+						<el-form-item label="旧密码">
+							<el-input v-model="pwdForm.old_password"></el-input>
 						</el-form-item>
-					</div>
-				</el-form>
-			</div>
-		</el-dialog>
+						<el-form-item label="新密码">
+							<el-input v-model="pwdForm.new_password"></el-input>
+						</el-form-item>
+						<el-form-item label="再次确认新密码">
+							<el-input v-model="pwdForm.confirm_password"></el-input>
+						</el-form-item>
+						<div class="submit">
+							<el-form-item>
+								<el-button type="primary" @click="ChangePassword">提交</el-button>
+							</el-form-item>
+						</div>
+					</el-form>
+				</div>
+			</el-dialog>
+		</div>
 	</div>
 
 </template>
@@ -89,6 +88,9 @@
 		},
 		computed: {
 			...mapState(['collapse', 'crumbList'])
+		},
+		mounted() {
+			console.log(11,this.crumbList)
 		},
 		methods: {
 			handleCommand(command) {

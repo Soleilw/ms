@@ -7,50 +7,117 @@
 		</div>
 
 
-		<el-dialog title="添加可疑人脸" :visible.sync="dialogDoubtable" :close-on-click-modal="false">
+		<el-dialog title="添加可疑人脸" :visible.sync="dialogDoubtable" :close-on-click-modal="false" width="80%">
 			<div class="box">
-				<el-form :model="form" label-width="100px">
-					<el-form-item label="姓名">
-						<el-input v-model="form.name" placeholder="请输入姓名"></el-input>
-					</el-form-item>
-					<el-form-item label="身份证号">
-						<el-input v-model="form.number" placeholder="请输入身份证号"></el-input>
-					</el-form-item>
-					<el-form-item label="通知相似度">
-						<el-input v-model="form.notify_score" placeholder="请输入通知相似度(保留一位小数点,例如78.9)"></el-input>
-					</el-form-item>
-					<el-form-item label="通知列表">
-						<el-input type="textarea" v-model="form.notify_user" placeholder="请输入手机号码,多个手机号用逗号分隔(例如: +8613212341234,8613212341234)"></el-input>
-					</el-form-item>
-					<div class="tips">
-						<p><span>提示：</span>如有人脸照片会覆盖掉原有的人脸照片！</p>
-					</div>
-					<el-form-item label="上传人脸图片">
-						<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeAvatarUpload"
-						 :auto-upload="false" :on-success="handleAvatarSuccess" :on-remove="handleRemove" :on-exceed="handleExceed"
-						 :on-change="handleChange" :data="imgData">
-							<el-button size="small" type="primary">选择图片</el-button>
-						</el-upload>
-						<div v-if="hasNewImage" style="color: red; font-size: 12px;">* 点击文件名可删除所选图片</div>
+				<el-tabs v-model="activeName">
+					<el-tab-pane label="新增可疑性质" name="natureDoubtable">
+						<el-form :model="natureForm" label-width="100px">
+							<el-form-item label="可疑性质">
+								<el-input v-model="form.name" placeholder="请输入可疑性质"></el-input>
+							</el-form-item>
+						</el-form>
+					</el-tab-pane>
+					<el-tab-pane label="上传单个可疑人脸" name="oneDoubtable">
+						<el-form :model="form" label-width="100px">
+							<el-form-item label="姓名">
+								<el-input v-model="form.name" placeholder="请输入姓名"></el-input>
+							</el-form-item>
+							<el-form-item label="身份证号">
+								<el-input v-model="form.number" placeholder="请输入身份证号"></el-input>
+							</el-form-item>
+							<el-form-item label="通知相似度">
+								<el-input v-model="form.notify_score" placeholder="请输入通知相似度(保留一位小数点,例如78.9)"></el-input>
+							</el-form-item>
+							<el-form-item label="通知列表">
+								<el-input type="textarea" v-model="form.notify_user" placeholder="请输入手机号码,多个手机号用逗号分隔(例如: +8613212341234,8613212341234)"></el-input>
+							</el-form-item>
+						<!-- 	<div class="tips">
+								<p><span>提示：</span>如有人脸照片会覆盖掉原有的人脸照片！</p>
+							</div> -->
+							<el-form-item label="上传人脸图片">
+								<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeAvatarUpload"
+								 :auto-upload="false" :on-success="handleAvatarSuccess" :on-remove="handleRemove" :on-exceed="handleExceed"
+								 :on-change="handleChange" :data="imgData" list-type="picture-card">
+									<el-button size="small" type="primary">选择图片</el-button>
+								</el-upload>
+							<!-- 	<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeAvatarUpload"
+								 :auto-upload="false" :on-success="handleAvatarSuccess" :on-remove="handleRemove" :on-exceed="handleExceed"
+								 :on-change="handleChange" :data="imgData">
+									<el-button size="small" type="primary">选择图片</el-button>
+								</el-upload>
+								<div v-if="hasNewImage" style="color: red; font-size: 12px;">* 点击文件名可删除所选图片</div>
 
-						<div class="up-img" v-if="old_href">
-							<span style="display: flex;justify-items: center;color: #409eff;">原人脸图片</span>
-							<img class="pic-box" :src="old_href">
-						</div>
-						<div class="up-img" v-if="form.href">
-							<span style="display: flex;justify-items: center;color: #67C23A;">新人脸图片</span>
-							<img class="pic-box" :src="form.href">
-						</div>
-						<div class="up-img" v-else>
-							<img class="pic-box" :src="change_href">
-						</div>
-					</el-form-item>
-					<div class="submit">
-						<el-form-item>
-							<el-button type="primary" @click="newDoubtablet">提交</el-button>
-						</el-form-item>
-					</div>
-				</el-form>
+								<div class="up-img" v-if="old_href">
+									<span style="display: flex;justify-items: center;color: #409eff;">原人脸图片</span>
+									<img class="pic-box" :src="old_href">
+								</div>
+								<div class="up-img" v-if="form.href">
+									<span style="display: flex;justify-items: center;color: #67C23A;">新人脸图片</span>
+									<img class="pic-box" :src="form.href">
+								</div>
+								<div class="up-img" v-else>
+									<img class="pic-box" :src="change_href">
+								</div> -->
+							</el-form-item>
+							<div class="submit">
+								<el-form-item>
+									<el-button type="primary" @click="newDoubtablet">提交</el-button>
+								</el-form-item>
+							</div>
+						</el-form>
+					</el-tab-pane>
+					<el-tab-pane label="批量上传可疑人脸" name="allDoubtable">
+						<el-form :model="form" label-width="100px">
+							<el-form-item label="可疑性质">
+								<!-- <el-select v-model="face_apk" placeholder="请选择可疑性质" @change="apkChange">
+									<el-option v-for="item in apkList" :key="item.id" :label="item.name" :value="item.id">
+									</el-option>
+								</el-select> -->
+							</el-form-item>
+							<el-form-item label="通知相似度">
+								<el-input v-model="form.notify_score" placeholder="请输入通知相似度(保留一位小数点,例如78.9)"></el-input>
+							</el-form-item>
+							<el-form-item label="通知列表">
+								<!-- <el-select v-model="face_apk" placeholder="请选择警员" @change="apkChange">
+									<el-option v-for="item in apkList" :key="item.id" :label="item.name" :value="item.id">
+									</el-option>
+								</el-select> -->
+								<!-- <el-input type="textarea" v-model="form.notify_user" placeholder="请输入手机号码,多个手机号用逗号分隔(例如: +8613212341234,8613212341234)"></el-input> -->
+							</el-form-item>
+						<!-- 	<div class="tips">
+								<p><span>提示：</span>如有人脸照片会覆盖掉原有的人脸照片！</p>
+							</div> -->
+							<el-form-item label="批量上传图片">
+								<el-upload action="https://upload-z2.qiniup.com" ref="upload" :before-upload="beforeAvatarUpload"
+								 :auto-upload="false" :on-success="handleAvatarSuccess" :on-remove="handleRemove" :on-exceed="handleExceed"
+								 :on-change="handleChange" :data="imgData" :file-list="fileList" multiple list-type="picture-card">
+									<el-button size="small" type="primary">选择图片</el-button>
+								</el-upload>
+								<!-- <div v-if="hasNewImage" style="color: red; font-size: 12px;">* 点击文件名可删除所选图片</div>
+						
+								<div class="up-img" v-if="old_href">
+									<span style="display: flex;justify-items: center;color: #409eff;">原人脸图片</span>
+									<img class="pic-box" :src="old_href">
+								</div>
+								<div class="up-img" v-if="form.href">
+									<span style="display: flex;justify-items: center;color: #67C23A;">新人脸图片</span>
+									<img class="pic-box" :src="form.href">
+								</div>
+								<div class="up-img" v-else>
+									<img class="pic-box" :src="change_href">
+								</div> -->
+							</el-form-item>
+							<div class="submit">
+								<el-form-item>
+									<el-button type="primary" @click="newDoubtablet">生成Excel表</el-button>
+								</el-form-item>
+							</div>
+						</el-form>
+					</el-tab-pane>
+				</el-tabs>
+
+
+
 			</div>
 		</el-dialog>
 
@@ -58,6 +125,7 @@
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="name" label="姓名"></el-table-column>
 			<el-table-column prop="number" label="身份证号"></el-table-column>
+			<el-table-column prop="number" label="性质"></el-table-column>
 			<el-table-column prop="href" label="人脸图片">
 				<template slot-scope="scope"><img :src="scope.row.href" style="max-width:180px;max-height:80px;" /></template>
 			</el-table-column>
@@ -94,9 +162,15 @@
 					key: '',
 					token: ''
 				},
+				fileList: [],
+				imgList: [], // 图片列表
 				fileName: '',
 				suffix: '',
 				qiniuaddr: "https://tu.fengniaotuangou.cn", // 七牛云图片外链地址
+				activeName: 'natureDoubtable',
+				natureForm: {
+					name: ''
+				}, // 可疑性质
 				form: {
 					href: '',
 					name: '',
@@ -104,6 +178,7 @@
 					notify_score: '',
 					notify_user: ''
 				},
+
 				old_href: '', // 原人脸图片
 				change_href: '',
 				hasNewImage: false,
@@ -152,13 +227,15 @@
 				self.change_href = URL.createObjectURL(file.raw);
 				self.hasNewImage = true;
 			},
-			handleRemove(file) {
+			handleRemove(file, fileList) {
 				var self = this;
 				self.change_href = '';
 				self.hasNewImage = false;
+				console.log(file, fileList)
 			},
-			beforeAvatarUpload(file) {
+			beforeAvatarUpload(file, fileList) {
 				var self = this;
+				console.log(file, fileList)
 				// self.familyForm.href = file.name;
 				self.fileName = md5(file.name);
 				self.suffix = file.name.substring(file.name.lastIndexOf('.') + 1);
@@ -182,10 +259,22 @@
 					this.$refs.upload.submit();
 				}
 			},
-			handleAvatarSuccess(res, file) {
+			handleAvatarSuccess(res, file, fileList) {
 				var self = this;
-				file.url = `${self.qiniuaddr}/${res.key}`;
-				self.form.href = file.url;
+				if(self.imgList) {
+					file.url = `${self.qiniuaddr}/${res.key}`;
+					self.imgList.push({
+						href: file.url
+					})
+				} else {
+					file.url = `${self.qiniuaddr}/${res.key}`;
+					self.imgList.push({
+						href: file.url
+					})
+				}
+				console.log(22,self.imgList)
+				// file.url = `${self.qiniuaddr}/${res.key}`;
+				// self.form.href = file.url;
 				API.dangerFace(self.form).then(res => {
 					self.$message.success('上传成功');
 					self.current = 1;

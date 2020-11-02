@@ -6,7 +6,7 @@ Vue.use(Router)
 
 /* 初始路由 */
 export default new Router({
-	// mode: 'history',
+	mode: 'history',
 	routes: [{
 			path: '/login',
 			name: 'login',
@@ -32,11 +32,11 @@ export const DynamicRoutes = [{
 		path: '',
 		component: () => import('@/components/layout/Home.vue'),
 		name: 'container',
-		redirect: 'outInLogs',
-		meta: {
-			requiresAuth: true,
-			title: '辖区管理'
-		},
+		redirect: 'alert',
+		// meta: {
+		// 	requiresAuth: true,
+		// 	title: '进出记录管理'
+		// },
 		children: []
 	},
 	{

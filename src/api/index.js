@@ -113,6 +113,11 @@ API.faces = function(page, limit, name) {
 	})
 }
 
+// 搜索人脸
+API.searchFace = function (data) {
+	return axios.post(url.SearchImageFace, data)
+}
+
 // 获取推送记录
 API.pushRecords = function(page, limit, name, address) {
 	return axios.get(url.PushRecords, {
@@ -195,15 +200,24 @@ API.deviceLogs = function(page, limit, uuid, type) {
 	})
 }
 
-API.deviceFaceLogs = function(page, limit, uuid, name, area_id, address_id) {
+API.deviceFaceLogs = function(page, limit, uuid, search, area_id, address_id) {
 	return axios.get(url.DeviceRecord, {
 		page: page,
 		limit: limit,
 		uuid: uuid,
-		name: name,
+		search: search,
 		area_id: area_id,
 		address_id: address_id
 		// address_id: address_id
+	})
+}
+
+// 搜索人脸
+API.searchFaceLogs = function(page, limit, faces) {
+	return axios.get(url.DeviceRecord, {
+		page: page,
+		limit: limit,
+		faces: faces,
 	})
 }
 
@@ -296,12 +310,37 @@ API.dangerFaces = function(page, limit) {
 	})
 }
 
-// 获取可疑人脸
-API.dangerLogs = function(page, limit) {
+// 获取可疑人脸日志
+API.dangerLogs = function(page, limit, danger_id, address) {
 	return axios.get(url.DangerLogs, {
 		page: page,
-		limit: limit
+		limit: limit,
+		danger_id: danger_id,
+		address: address
 	})
+}
+
+// 获取可疑人脸报警
+API.alert = function(page, limit, state, search, dangers) {
+	return axios.get(url.DangerAlerts, {
+		page: page,
+		limit: limit,
+		state: state,
+		search: search,
+		dangers: dangers
+	})
+}
+
+// 处理告警
+API.handleAlerts = function(results) {
+	return axios.post(url.HandleAlerts, {
+		results: results
+	})
+}
+
+// 处理告警
+API.dangerTypes = function() {
+	return axios.get(url.DangerTypes,{})
 }
 
 // 权限管理
@@ -335,6 +374,44 @@ API.users = function(page, limit) {
 
 API.user = function(data) {
 	return axios.post(url.User, data)
+}
+
+// 警务管理
+// 新增公安账号等级
+API.policeLevel = function (data) {
+	return axios.post(url.PoliceLevel,data)
+}
+
+// 获取公安账号等级
+API.policeLevels = function (page, limit, level, parent_id) {
+	return axios.get(url.PoliceLevels, {
+		page: page,
+		limit: limit,
+		level: level,
+		parent_id: parent_id
+	})
+}
+
+// 新增警员信息
+API.policeman = function (data) {
+	return axios.post(url.Policeman,data)
+}
+
+// 获取警员信息
+API.policemen = function (page, limit, station_id, department_id, state, search) {
+	return axios.get(url.Policemen, {
+		page: page,
+		limit: limit,
+		station_id: station_id, // 辖区
+		department_id: department_id, // 部门
+		state: state,
+		search: search
+	})
+}
+
+// 审核警员信息
+API.audit = function (data) {
+	return axios.post(url.PassPoliceman,data)
 }
 
 // 辖区管理
