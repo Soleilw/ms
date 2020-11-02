@@ -25,7 +25,7 @@
 				<!-- 告警通知 -->
 				<div class="alert">
 					<audio id="audio" src="../../assets/media/alert.mp3" />
-					<el-badge :is-dot="alertList.length > 0 ? true : false" class="item"><img src="../../assets/image/alert.png" alt=""
+					<el-badge :is-dot="alertListLength > 0 ? true : false" class="item"><img src="../../assets/image/alert.png" alt=""
 						 @click="toAlert"></el-badge>
 				</div>
 				<el-dropdown @command="handleCommand">
@@ -183,7 +183,7 @@
 		mounted() {
 			API.alert(1, 10, 1).then(res => {
 				console.log(12121)
-				this.alertList = res.data
+				// this.alertList = res.data
 				this.alertListLength = res.total;
 			})
 			this.getAlert()
@@ -194,7 +194,7 @@
 				setInterval(() => {
 					console.log(232323)
 					API.alert(1, 10, 1).then(res => {
-						this.alertList = res.data
+						// this.alertList = res.data
 						this.alertListLength = res.total;
 					})
 				}, 30000)
