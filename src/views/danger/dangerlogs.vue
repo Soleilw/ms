@@ -1,7 +1,7 @@
 <template>
 	<div v-loading="loading" element-loading-text="获取数据中">
 
-		
+
 		<el-dialog title="设置搜索条件" :visible.sync="dialogSearch" :close-on-click-modal="false">
 			<div class="box">
 				<el-form :model="form" label-width="100px">
@@ -49,35 +49,49 @@
 			<el-table-column prop="danger.number" label="身份证号"></el-table-column>
 			<el-table-column prop="danger.href" label="照片">
 				<template slot-scope="scope">
-					<el-popover placement="top-start" title="" trigger="click">
+					<el-popover placement="left" title="" trigger="click">
 						<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
 						<img slot="reference" :src="scope.row.danger.href" style="max-width:180px;max-height:80px;">
 					</el-popover>
 				</template>
 			</el-table-column>
+			<el-table-column prop="score" label="相似度">
+			</el-table-column>
 			<el-table-column prop="log.image" label="抓拍照片">
 				<template slot-scope="scope">
-					<el-popover placement="top-start" title="" trigger="click">
+					<el-popover placement="bottom" title="" trigger="click">
 						<img :src="scope.row.log.image" style="max-width:800px;max-height:800px;" />
 						<img slot="reference" :src="scope.row.log.image" style="max-width:180px;max-height:80px;">
 					</el-popover>
 				</template>
 			</el-table-column>
-			<el-table-column prop="score" label="相似度">
-			</el-table-column>
 			<el-table-column prop="address" label="抓拍地点">
 			</el-table-column>
 			<el-table-column prop="log.timestamp" label="抓拍时间">
 			</el-table-column>
-
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+					<!-- <el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
 						<el-button slot="reference" size="mini" type="danger">删除</el-button>
-					</el-popconfirm>
+					</el-popconfirm> -->
+					<el-button type="primary" @click="compareImage(scope.row.danger.href, scope.row.log.image)">对比照片</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
+
+		<el-dialog title="对比照片" :visible.sync="dialogCompare" :close-on-click-modal="false" width="60%">
+			<div class="box">
+				<div class="compare">
+					<div style="width: 500px; height: 600px;">
+						<el-image fit="cover" :src="compare_href" :preview-src-list="hrefList" style="max-width: 100%;max-height: 100%;"></el-image>
+					</div>
+					<div style="width: 800px; height: 700px;">
+					<el-image fit="cover" :src="compare_image" :preview-src-list="imageList" style="max-width: 100%;max-height: 100%;"></el-image>
+					</div>
+				</div>
+
+			</div>
+		</el-dialog>
 
 		<div class="block">
 			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
@@ -119,7 +133,13 @@
 				tableDate: [],
 				id: '',
 				dialogDel: false,
-				
+
+				dialogCompare: false, // 对比照片
+				compare_href: '',
+				compare_image: '',
+				hrefList: [],
+				imageList: [],
+
 				// 分页
 				current: 1, // 当前页
 				size: 10, // 每页出现几条
@@ -131,6 +151,14 @@
 			this.getQiniuToken();
 		},
 		methods: {
+			showHref(val) {
+				val = true;
+				console.log(val)
+			},
+			showImage(val) {
+				val = true;
+				console.log(val)
+			},
 			getDangerLogs() {
 				var self = this;
 				API.dangerLogs(self.current).then(res => {
@@ -230,6 +258,16 @@
 				// })
 			},
 
+			// 对比图片
+			compareImage(href, image) {
+				var self = this;
+				self.dialogCompare = true;
+				self.compare_href = href;
+				self.compare_image = image;
+				self.hrefList.push(href)
+				self.imageList.push(image)
+			},
+
 			getQiniuToken() {
 				var self = this;
 				axios.get('https://api.fengniaotuangou.cn/api/upload/token').then(res => {
@@ -291,5 +329,11 @@
 	.tips {
 		margin-bottom: 20px;
 		color: red;
+	}
+
+	/* 对比照片 */
+	.compare {
+		display: flex;
+		justify-content: center;
 	}
 </style>

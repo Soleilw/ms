@@ -389,25 +389,25 @@ const dynamicRouter = [{
 	// 		}
 	// 	]
 	// },
-	// {
-	// 	path: '/information', // 资讯管理
-	// 	name: 'information',
-	// 	component: () => import('@/views/information/index'),
-	// 	meta: {
-	// 		title: '资讯管理',
-	// 		icon: 'el-icon-picture-outline',
-	// 	},
-	// 	children: [{
-	// 			path: '/info-list',
-	// 			name: 'infoList',
-	// 			component: () => import('@/views/information/info-list'),
-	// 			meta: {
-	// 				title: '资讯列表',
-	// 				icon: 'el-icon-warning'
-	// 			}
-	// 		}
-	// 	]
-	// },
+	{
+		path: '/information', // 资讯管理
+		name: 'information',
+		component: () => import('@/views/information/index'),
+		meta: {
+			title: '资讯管理',
+			icon: 'el-icon-picture-outline',
+		},
+		children: [{
+				path: '/info-list',
+				name: 'infoList',
+				component: () => import('@/views/information/info-list'),
+				meta: {
+					title: '资讯列表',
+					icon: 'el-icon-warning'
+				}
+			}
+		]
+	},
 	{
 		path: '/switch', // 资讯管理
 		name: 'switch',

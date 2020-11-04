@@ -51,6 +51,8 @@
 				API.login(self.adminForm).then(res => {
 					localStorage.setItem('username', self.adminForm.username)
 					self.$router.replace("/");
+				}).catch(err => {
+					self.$message.error(err.response.data.msg)
 				})
 				// localStorage.setItem('username', 'admin')
 				// self.$router.replace("/overview");

@@ -120,7 +120,12 @@
 			<el-table-column prop="danger_type" label="告警分类"></el-table-column>
 			<el-table-column prop="alert_type" label="告警性质"></el-table-column>
 			<el-table-column prop="href" label="人脸图片">
-				<template slot-scope="scope"><img :src="scope.row.href" style="max-width:180px;max-height:80px;" /></template>
+				<template slot-scope="scope">
+					<el-popover placement="bottom" title="" trigger="click">
+						<img :src="scope.row.href" style="max-width:800px;max-height:800px;" />
+						<img slot="reference" :src="scope.row.href" style="max-width:180px;max-height:80px;">
+					</el-popover>
+				</template>
 			</el-table-column>
 			<el-table-column label="操作" width="500px">
 				<template slot-scope="scope">

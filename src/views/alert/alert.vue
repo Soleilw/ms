@@ -77,6 +77,7 @@
 				<el-table :data="DetailForm" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 					<el-table-column prop="id" label="ID"></el-table-column>
 					<el-table-column prop="danger.name" label="姓名"></el-table-column>
+					<el-table-column prop="danger.notify_score" label="相似度"></el-table-column>
 					<el-table-column prop="danger.href" label="人脸库照片" >
 						<template slot-scope="scope">
 							<el-popover placement="top-start" title="" trigger="click">
