@@ -1,4 +1,4 @@
-const TimeStamp = new Date().getTime();
+// const TimeStamp = new Date().getTime();
 
 module.exports = {
 	lintOnSave: false,
@@ -13,10 +13,10 @@ module.exports = {
 		//   }
 		// }
 	},
-	configureWebpack: {
-		output: { // 输出重构  打包编译后的 文件名称  【模块名称.时间戳.js】
-			filename: `js/[name].${TimeStamp}.js`,
-			chunkFilename: `js/[name].${TimeStamp}.js`
-		}
-	},
+	// configureWebpack: {
+	// 	output: { // 输出重构  打包编译后的 文件名称  【模块名称.时间戳.js】
+	// 		filename: `js/[name].${TimeStamp}.js`,
+	// 		chunkFilename: `js/[name].${TimeStamp}.js`
+	// 	}
+	// },
 }
