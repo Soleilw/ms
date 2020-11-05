@@ -509,7 +509,7 @@
 				var self = this;
 				self.current = val;
 				self.loading = true;
-				API.policemen(val, self.size, self.station, val, self.auditState).then(res => {
+				API.policemen(val, self.size, self.station, self.department, self.auditState).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
@@ -522,7 +522,7 @@
 				var self = this;
 				self.size = val;
 				self.loading = true;
-				API.policemen(self.current, val, self.station, val, self.auditState).then(res => {
+				API.policemen(self.current, val, self.station, self.department, self.auditState).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
