@@ -78,29 +78,44 @@
 					<el-table-column prop="id" label="ID"></el-table-column>
 					<el-table-column prop="danger.name" label="姓名"></el-table-column>
 					<el-table-column prop="danger.notify_score" label="相似度"></el-table-column>
-					<el-table-column prop="danger.href" label="人脸库照片" >
+					<el-table-column prop="danger.href" label="人脸库照片">
 						<template slot-scope="scope">
-							<el-popover placement="top-start" title="" trigger="click">
-								<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
-								<img slot="reference" :src="scope.row.danger.href" style="max-width:180px;max-height:80px;">
-							</el-popover>
+							<div v-if="scope.row.danger.href">
+								<el-popover placement="top-start" title="" trigger="click">
+									<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
+									<img slot="reference" :src="scope.row.danger.href" style="max-width:180px;max-height:80px;">
+								</el-popover>
+							</div>
+							<div v-else>
+								<span>--暂无图片--</span>
+							</div>
 						</template>
 					</el-table-column>
-					<el-table-column prop="log.image" label="抓拍原图" >
+					<el-table-column prop="log.image" label="抓拍原图">
 						<template slot-scope="scope">
-							<el-popover placement="top-start" title="" trigger="click">
-								<img :src="scope.row.log.image" style="max-width:800px;max-height:800px;" />
-								<img slot="reference" :src="scope.row.log.image" style="max-width:180px;max-height:80px;">
-							</el-popover>
+							<div v-if="scope.row.log.image">
+								<el-popover placement="top-start" title="" trigger="click">
+									<img :src="scope.row.log.image" style="max-width:800px;max-height:800px;" />
+									<img slot="reference" :src="scope.row.log.image" style="max-width:180px;max-height:80px;">
+								</el-popover>
+							</div>
+							<div v-else>
+								<span>--暂无图片--</span>
+							</div>
 						</template>
 					</el-table-column>
-					
+
 					<el-table-column prop="log.catch_faces[0].face_img" label="抓拍照片">
 						<template slot-scope="scope">
-							<el-popover placement="top-start" title="" trigger="click">
-								<img :src="'data:image/png;base64,' + scope.row.log.catch_faces[0].face_img" style="max-width:800px;max-height:800px;" />
-								<img slot="reference" :src="'data:image/png;base64,' +scope.row.log.catch_faces[0].face_img" style="max-width:180px;max-height:80px;">
-							</el-popover>
+							<div v-if="scope.row.log.catch_faces.length > 0">
+								<el-popover placement="top-start" title="" trigger="click">
+									<img :src="'data:image/png;base64,' + scope.row.log.catch_faces[0].face_img" style="max-width:800px;max-height:800px;" />
+									<img slot="reference" :src="'data:image/png;base64,' +scope.row.log.catch_faces[0].face_img" style="max-width:180px;max-height:80px;">
+								</el-popover>
+							</div>
+							<div v-else>
+								<span>--暂无图片--</span>
+							</div>
 						</template>
 					</el-table-column>
 					<el-table-column prop="log.timestamp" label="抓拍时间">
@@ -257,12 +272,12 @@
 
 			// 查看详情
 			handleDetail(index, row) {
-				this.dialogDetail = true;
 				console.log([row])
 				this.DetailForm = [row];
 				this.DetailForm.forEach(item => {
 					item.log.timestamp = DATE.formatTime(item.log.timestamp, 'Y-M-D h:m:s')
 				})
+				this.dialogDetail = true;
 			},
 
 			// 分页
