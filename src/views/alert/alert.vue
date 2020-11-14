@@ -21,6 +21,17 @@
 				</el-select>
 			</div>
 			<div class="btn">
+				<div class="tip">
+					根据告警分类和时间筛选：
+				</div>
+				<el-select v-model="state" placeholder="请选择告警分类" filterable @change="stateChange">
+					<el-option v-for="(item, index) in stateList" :key="index" :label="item.label" :value="item.value">
+					</el-option>
+				</el-select>
+				<el-date-picker v-model="value1" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+				</el-date-picker>
+			</div>
+			<div class="btn">
 				<el-button type="primary" @click="batchOpen">批量处理</el-button>
 			</div>
 		</div>

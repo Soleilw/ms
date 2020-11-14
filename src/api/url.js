@@ -103,6 +103,9 @@ const url = {
 	// 人脸开关
 	'FaceSwicthes': '/face/switches', // 获取资讯
 	'FaceSwicth': '/face/switch', // 新增资讯
+	
+	// 统计
+	'Count': 'count' // 统计
 }
 
 module.exports = url;

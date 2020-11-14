@@ -26,7 +26,7 @@
 					<el-table-column prop="number" label="女性人数"></el-table-column>
 					<el-table-column prop="created_at" label="待审核人数"></el-table-column>
 					<el-table-column prop="href" label="通过审核人数"></el-table-column>
-					<el-table-column prop="href" label="记录照片" width="150px">
+					<el-table-column  label="操作" width="150px">
 						<template slot-scope='scope'>
 							<el-button>房屋地址列表</el-button>
 						</template>
@@ -97,7 +97,7 @@
 				change_href: '',
 				hasNewImage: false,
 
-				tableDate: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+				tableDate: [],
 				id: '',
 				dialogDel: false,
 
@@ -135,9 +135,17 @@
 			}
 		},
 		mounted() {
+			this.getData();
 			this.renterSummary(); 
 		},
 		methods: {
+			// 获取统计数据
+			getData() {
+				API.statistical().then(res => {
+					console.log(res)
+				})
+			},
+			
 			openExcel() {
 				let self = this;
 				self.dialogExcel = true;

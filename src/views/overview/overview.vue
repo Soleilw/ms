@@ -5,28 +5,28 @@
 				<div class="overview panel">
 					<div class="inner">
 						<div class="item">
-							<h4>10000000</h4>
+							<h4>{{CZWCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								出租屋数
 							</span>
 						</div>
 						<div class="item">
-							<h4>10000000</h4>
+							<h4>{{deviceCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								设备总数
 							</span>
 						</div>
 						<div class="item">
-							<h4>10000000</h4>
+							<h4>{{householderCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								户主总数
 							</span>
 						</div>
 						<div class="item">
-							<h4>10000000</h4>
+							<h4>{{tenantCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								租客总数
@@ -35,20 +35,14 @@
 					</div>
 				</div>
 				<div class="summary">
-					<!-- 出租屋已租/空置情况 -->
-					<div class="rent-people panel">
-						<div class="inner">
-							<div id="out-in"></div>
-						</div>
-					</div>
 					<!-- 单个出租屋男女比例 -->
 					<div class="rent-people panel">
 						<div class="inner">
-							<div class="search-input">
+							<!-- 		<div class="search-input">
 								<el-input placeholder="请输入要查询的出租屋" size="mini">
 									<el-button slot="append" icon="el-icon-search"></el-button>
 								</el-input>
-							</div>
+							</div> -->
 							<div id="rents"></div>
 						</div>
 					</div>
@@ -56,45 +50,47 @@
 				<h3>重点关注人员进出记录</h3>
 				<div class="record panel">
 					<div class="inner">
-						<div class="table">
-							<el-table :data="recordData" max-height="350" border :cell-style="getCellClass" :header-cell-style="getRowClass">
-								<el-table-column prop="id" label="ID"></el-table-column>
-								<el-table-column prop="id" label="ID"></el-table-column>
-								<el-table-column prop="id" label="ID"></el-table-column>
-								<el-table-column prop="id" label="ID"></el-table-column>
-							</el-table>
+						<div style="display: flex;justify-content: space-around;" v-for="(item, index) in recordData" :key="index">
+							<div style="width: 20%;">
+								<img :src="item.log.image" style="max-width:120px;max-height:120px;">
+							</div>
+							<div style="width: 20%;">
+								<div><span>姓名：</span>{{item.danger.name}}</div>
+								<div><span>设备名</span>{{item.log.device_uuid}}</div>
+							</div>
+							<div style="width: 60%;">
+								<div><span>抓拍地址</span>{{item.address}}</div>
+								<div><span>抓拍时间</span>{{item.log.timestamp}}</div>
+							</div>
 						</div>
+						<!-- 			<div class="table">
+							<el-table :data="recordData" max-height="350" border :cell-style="getCellClass" :header-cell-style="getRowClass">
+								<el-table-column prop="danger.name" label="姓名"></el-table-column>
+								<el-table-column prop="danger.number" label="身份证号"></el-table-column>
+								<el-table-column prop="danger.href" label="照片">
+									<template slot-scope="scope">
+										<img slot="reference" :src="scope.row.danger.href" style="max-width:50px;max-height:50px;">
+									</template>
+								</el-table-column>
+								<el-table-column prop="score" label="相似度">
+								</el-table-column>
+								<el-table-column prop="log.image" label="抓拍照片">
+									<template slot-scope="scope">
+										<img slot="reference" :src="scope.row.log.image" style="max-width:50px;max-height:50px;">
+									</template>
+								</el-table-column>
+							</el-table>
+						</div> -->
 
 					</div>
 				</div>
 			</div>
 			<div class="column">
 				<!-- 地图 -->
-				<div class="map">
+				<div class="map" v-loading="loading" element-loading-text="加载地图中">
 					<h3>出租屋地图分布</h3>
 					<div class="chart">
-						<div id="geo"></div>
-					</div>
-				</div>
-				<!-- 出租屋人数统计 -->
-				<h3>出租屋人数统计</h3>
-				<div class="summary">
-					<!-- 总出租屋男女比例 -->
-					<div class="rent-people panel">
-						<div class="inner">
-							<div id="total-rent-sex"></div>
-						</div>
-					</div>
-					<!-- 单个出租屋男女比例 -->
-					<div class="rent-people panel">
-						<div class="inner">
-							<div class="search-input">
-								<el-input placeholder="请输入要查询的出租屋"  size="mini">
-									<el-button slot="append" icon="el-icon-search"></el-button>
-								</el-input>
-							</div>
-							<div id="single-rent-sex"></div>
-						</div>
+						<div id="geo" ref="geo"></div>
 					</div>
 				</div>
 			</div>
@@ -117,8 +113,8 @@
 							</div>
 							<!-- 切换页面 -->
 							<div class="change">
-								<el-button size="mini">查看学校数据</el-button>
-								<el-button size="mini">查看出租屋数据</el-button>
+								<!-- 	<el-button size="mini">查看学校数据</el-button>
+								<el-button size="mini">查看出租屋数据</el-button> -->
 								<el-button size="mini" @click="toManage">进入后台管理</el-button>
 							</div>
 						</div>
@@ -129,17 +125,40 @@
 						</div>
 					</div>
 				</div>
-				<h3>实时报警记录</h3>
+				<h3>实时告警记录</h3>
 				<div class="police panel">
 					<div class="inner">
-						<div class="table">
-							<el-table :data="callData" max-height="610" border :cell-style="getCellClass" :header-cell-style="getRowClass">
-								<el-table-column prop="id" label="ID"></el-table-column>
-								<el-table-column prop="id" label="ID"></el-table-column>
-								<el-table-column prop="id" label="ID"></el-table-column>
-								<el-table-column prop="id" label="ID"></el-table-column>
-							</el-table>
+						<div style="height: 600px; overflow: hidden;">
+
+							<div style="display: flex;justify-content: space-around;color: #fff;" v-for="(item, index) in recordData" :key="index">
+								<div style="width: 28%;">
+									<img :src="item.log.image" style="max-width:120px;max-height:120px;">
+								</div>
+								<div style="display: flex;flex-direction: column;  width: 40%;">
+									<div style="display: flex;justify-content: space-between;"><span style="width: 200px;">姓名：</span>{{item.danger.name}}</div>
+									<div style="display: flex;justify-content: space-between;"><span style="width: 200px;">设备名：</span>{{item.log.device_uuid}}</div>
+								</div>
+								<div style="display: flex;flex-direction: column;width: 34%;">
+									<div style="display: flex;justify-content: space-between;"><span span style="width: 250px;">抓拍地址：</span>{{item.address}}</div>
+									<div style="display: flex;justify-content: space-between;"><span span style="width: 250px;">抓拍时间：</span>{{item.log.timestamp}}</div>
+								</div>
+							</div>
 						</div>
+
+						<!-- 				<div class="table">
+							<div>共{{}}条告警记录 查看更多...</div>
+							<el-table :data="callData" border :cell-style="getCellClass" :header-cell-style="getRowClass">
+								<el-table-column prop="danger.name" label="姓名"></el-table-column>
+								<el-table-column prop="alert_type" label="告警分类"></el-table-column>
+								<el-table-column prop="danger_type" label="危险类型"></el-table-column>
+								<el-table-column prop="state" label="处理状态">
+									<template slot-scope="scope">
+										<span v-if="scope.row.state == 1">未处理</span>
+										<span v-if="scope.row.state == 2">已处理</span>
+									</template>
+								</el-table-column>
+							</el-table>
+						</div> -->
 					</div>
 				</div>
 			</div>
@@ -149,57 +168,98 @@
 </template>
 
 <script>
+	import API from '@/api/index.js'
+	import TMap from 'TMap'
+
 	var dotData = [{
-			lat: 22.527279,
-			lng: 113.371349
+			lng: 113.341355,
+			lat: 22.525103
 		},
 		{
-			lat: 22.528672,
-			lng: 113.399731
+			lng: 113.341355,
+			lat: 22.525103
 		},
-		{
-			lat: 22.50969,
-			lng: 113.3964
-		},
-		{
-			lat: 43.943310,
-			lng: 81.042140
-		},
-		{
-			lat: 22.67037,
-			lng: 113.35359
-		}
-	]
+	];
 	export default {
 		data() {
 			return {
-				recordData: [{
-					id: 1
-				}, {
-					id: 1
-				}, {
-					id: 1
-				}],
-				callData: [{
-					id: 1
-				}, {
-					id: 1
-				}, {
-					id: 1
-				}],
+				loading: true,
+				recordData: [],
+				callData: [],
+
+				deviceCount: '',
+				CZWCount: '',
+				XXCount: '',
+				ZPDCount: '',
+				householderCount: '',
+				tenantCount: '',
+				tenantMenCount: '',
+				tenantWomenCount: '',
+
+
 				username: localStorage.getItem('username'),
 				rent: '总',
 			}
 		},
 		mounted() {
-			this.init();
-			this.renterSummary();
+			this.getAlerts();
+			this.getDangerLogs();
+			this.getData();
+			// this.init();
 		},
 		methods: {
 			// 进入后台
 			toManage() {
 				this.$router.replace("/");
 			},
+			// 获取告警处理
+			getAlerts() {
+				var self = this;
+				API.alert(1, 10).then(res => {
+					self.callData = res.data;
+					self.total = res.total;
+				})
+			},
+			// 获取重点人员进出记录
+			getDangerLogs() {
+				var self = this;
+				API.dangerLogs(self.current).then(res => {
+					self.recordData = res.data;
+					self.total = res.total;
+				})
+			},
+			// 获取后台的统计数据
+			getData() {
+				console.log(1)
+				API.statistical().then(res => {
+					this.CZWCount = res.CZWCount;
+					this.XXCount = res.XXCount;
+					this.ZPDCount = res.ZPDCount;
+					this.deviceCount = res.deviceCount;
+					this.householderCount = res.householderCount;
+					this.tenantCount = res.tenantCount;
+					this.tenantMenCount = res.tenantMenCount;
+					this.tenantWomenCount = res.tenantWomenCount;
+					this.renterSummary();
+				})
+				var type = ['CZW'];
+				API.addressesMap(1, 1000, type).then(res => {
+					res.data.forEach(item => {
+						if (item.lat && item.lng) {
+							dotData.push({
+								lat: item.lat,
+								lng: item.lng,
+								address: item.address
+							})
+						}
+					})
+					this.init();
+					this.loading = false;
+				}).catch(err => {
+					this.loading = false;
+				})
+			},
+
 			// 表格透明化
 			getRowClass({
 				row,
@@ -219,28 +279,34 @@
 			},
 			// 地图
 			init() {
+				console.log(2)
+				var self = this;
 				var center = new TMap.LatLng(22.51595, 113.3926);
 				//初始化地图
 				var map = new TMap.Map("geo", {
 					zoom: 10, //设置地图缩放级别
 					center: center, //设置地图中心点坐标
-					mapStyleId: "style1" //个性化样式
+					mapStyleId: "style2" //个性化样式
 				});
 				//初始化散点图并添加至map图层
-				new TMap.visualization.Dot({
+				var dot = new TMap.visualization.Dot({
 						faceTo: "screen", //散点固定的朝向
 					})
 					.addTo(map)
 					.setData(dotData); //设置数据
+
+				// 绑定点击事件
+				dot.on("click", function(evt) {
+					if (evt.detail.dot) {
+						self.$message.success("当前点击地址为：" + evt.detail.dot.address)
+					}
+				})
 			},
 			// 出租屋人数比例
 			renterSummary() {
 				var self = this;
 				self.$nextTick(function() {
-					let people = self.$echarts.init(document.getElementById('total-rent-sex'));
-					let onePeople = self.$echarts.init(document.getElementById('single-rent-sex'));
 					let rents = self.$echarts.init(document.getElementById('rents'));
-					let outIn = self.$echarts.init(document.getElementById('out-in'));
 					var option = {
 						// 标题
 						title: {
@@ -286,14 +352,14 @@
 
 							},
 							data: [{
-									value: 1000,
+									value: self.tenantMenCount,
 									name: '男',
 									itemStyle: {
 										color: '#006cff' // 设置颜色
 									}
 								},
 								{
-									value: 310,
+									value: self.tenantWomenCount,
 									name: '女',
 									itemStyle: {
 										color: '#ddd',
@@ -302,68 +368,7 @@
 							]
 						}]
 					};
-					var outOption = {
-						xAxis: {
-							type: 'category',
-							boundaryGap: false
-						},
-						yAxis: {
-							type: 'value',
-							boundaryGap: [0, '30%']
-						},
-						visualMap: {
-							type: 'piecewise',
-							show: false,
-							dimension: 0,
-							seriesIndex: 0,
-							pieces: [{
-								gt: 1,
-								lt: 3,
-								// color: 'rgba(0, 180, 0, 0.5)'
-							}, {
-								gt: 5,
-								lt: 7,
-								// color: 'rgba(0, 180, 0, 0.5)'
-							}]
-						},
-						series: [{
-							type: 'line',
-							smooth: 0.6,
-							symbol: 'none',
-							lineStyle: {
-								color: '#fff',
-								width: 5
-							},
-							markLine: {
-								symbol: ['none', 'none'],
-								label: {
-									show: false
-								},
-								data: [{
-										xAxis: 1
-									},
-									{
-										xAxis: 3
-									},
-									{
-										xAxis: 5
-									},
-									{
-										xAxis: 7
-									}
-								]
-							},
-							areaStyle: {},
-							data: [
-								['2019-10-10', 200],
-								['2019-10-11', 400],
-							]
-						}]
-					};
-					people.setOption(option);
-					onePeople.setOption(option);
 					rents.setOption(option);
-					outIn.setOption(outOption);
 				})
 			}
 		}
@@ -399,6 +404,7 @@
 		}
 
 		h4 {
+			text-align: center;
 			font-size: 1.167rem;
 			padding-left: 0.2rem;
 			color: #fff;
@@ -466,7 +472,7 @@
 
 			#geo {
 				width: 100%;
-				height: 25rem;
+				height: 45rem;
 			}
 		}
 	}
@@ -479,7 +485,7 @@
 
 
 		.rent-people {
-			width: 49%;
+			width: 100%;
 			height: 19rem;
 			margin-top: 10px;
 
@@ -534,11 +540,12 @@
 			// 操作
 			.operation {
 				display: flex;
-				flex-wrap: wrap;
+				flex-direction: column;
 				align-items: center;
 
+
 				span {
-					font-size: 28px;
+					font-size: 25px;
 					color: #fff;
 				}
 			}

@@ -31,7 +31,7 @@
 							</div>
 
 							<el-form-item label="可疑分类">
-								<el-select v-model="form.alert_type" placeholder="请选择可疑分类">
+								<el-select v-model="form.alert_type" placeholder="请选择可疑分类" @change="alertTypeChange">
 									<el-option v-for="(name, value) in dangerTypeList" :key="name" :label="name" :value="value"></el-option>
 								</el-select>
 							</el-form-item>
@@ -41,13 +41,75 @@
 							<el-form-item label="通知列表">
 								<el-input type="textarea" v-model="form.notify_user" placeholder="请输入手机号码,多个手机号用逗号分隔(例如: +8613212341234,8613212341234)"></el-input>
 							</el-form-item>
+							<el-form-item label="选择警员">
+								<!-- 根据辖区/部门/姓名去选择 -->
+								<el-select v-model="way" placeholder="请选择方式" @change="methodChange">
+									<el-option v-for="(item, index) in methodList" :key="index" :label="item.name" :value="item.value"></el-option>
+								</el-select>
+							</el-form-item>
+							<!-- 根据辖区选择 -->
+							<div v-if="way == 1">
+								<el-form-item>
+									<el-select v-model="station" placeholder="请选择辖区" @change="changeArea">
+										<el-option v-for="(item, index) in areaList" :key="index" :label="item.name" :value="item.id"></el-option>
+									</el-select>
+								</el-form-item>
+							</div>
+							<div v-if="way == 1 && station">
+								<el-form-item>
+									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']">
+										<span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
+									</el-transfer>
+								</el-form-item>
+							</div>
+							<!-- 根据部门选择 -->
+							<div v-if="way == 2">
+								<el-form-item>
+									<el-select v-model="department_one" placeholder="请选择所属的一级部门" @change="ChangeLevelOne" style="margin-right: 10px;">
+										<el-option v-for="(item, index)  in levelOneList" :key="index" :label="item.title" :value="item.id">
+										</el-option>
+									</el-select>
+									<el-select v-model="department_two" placeholder="请选择所属的二级部门" @change="ChangeLevelTwo" style="margin-right: 10px;">
+										<el-option v-for="(item, index)  in levelTwoList" :key="index" :label="item.title" :value="item.id">
+										</el-option>
+									</el-select>
+									<el-select v-model="department_three" placeholder="请选择所属的三级部门" @change="ChangeLevelThree" style="margin-right: 10px;">
+										<el-option v-for="(item, index)  in levelThreeList" :key="index" :label="item.title" :value="item.id">
+										</el-option>
+									</el-select>
+									<el-select v-model="department_four" placeholder="请选择所属的四级部门" @change="ChangeLevelFour" style="margin-right: 10px;">
+										<el-option v-for="(item, index)  in levelFourList" :key="index" :label="item.title" :value="item.id">
+										</el-option>
+									</el-select>
+									<el-button type="primary" @click="resetSelect">重新筛选</el-button>
+								</el-form-item>
+							</div>
+							<div v-if="way == 2 && department">
+								<el-form-item>
+									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']">
+										<span slot-scope="{ option }">
+											{{ option.key }} - {{ option.label }}</span>
+									</el-transfer>
+								</el-form-item>
+							</div>
+							<!-- 根据姓名选择 -->
+							<div v-if="way == 3">
+								<el-form-item>
+									<el-transfer v-model="policeNameList" :data="policeList" filterable :titles="['姓名', '选中警员']" :button-texts="['到左边', '到右边']">
+										<span slot-scope="{ option }">
+											<span>{{ option.key }}</span>
+											<span class="small">{{ option.label }}</span>
+										</span>
+									</el-transfer>
+								</el-form-item>
+							</div>
 							<!-- 	<div class="tips">
 								<p><span>提示：</span>如有人脸照片会覆盖掉原有的人脸照片！</p>
 							</div> -->
 							<el-form-item label="上传人脸图片">
 								<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeAvatarUpload"
 								 :auto-upload="false" :on-success="handleAvatarSuccess" :on-exceed="handleExceed" :data="imgData" list-type="picture-card">
-									<el-image v-if="form.href" style="max-width:150px;max-height:150px;" :src="form.face_image"></el-image>
+									<img v-if="form.href" style="max-width:150px;max-height:150px;" :src="form.href" />
 									<el-button v-else size="small" type="primary">选择图片</el-button>
 								</el-upload>
 							</el-form-item>
@@ -80,7 +142,7 @@
 								<p><span>提示：</span>如有人脸照片会覆盖掉原有的人脸照片！</p>
 							</div> -->
 							<el-form-item label="批量上传图片">
-								<!-- 			<el-upload action="https://upload-z2.qiniup.com" ref="upload" :before-upload="beforeAvatarUpload" :auto-upload="false"
+								<!-- 				<el-upload action="https://upload-z2.qiniup.com" ref="upload" :before-upload="beforeAvatarUpload" :auto-upload="false"
 								 :on-success="handleAvatarSuccess" :on-remove="handleRemove" :on-exceed="handleExceed" :on-change="handleChange"
 								 :data="imgData" :file-list="fileList" multiple list-type="picture-card">
 									<el-button size="small" type="primary">选择图片</el-button>
@@ -117,8 +179,8 @@
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="name" label="姓名"></el-table-column>
 			<el-table-column prop="number" label="身份证号"></el-table-column>
-			<el-table-column prop="danger_type" label="告警分类"></el-table-column>
-			<el-table-column prop="alert_type" label="告警性质"></el-table-column>
+			<el-table-column prop="danger_type_string" label="告警分类"></el-table-column>
+			<el-table-column prop="alert_type_string" label="告警性质"></el-table-column>
 			<el-table-column prop="href" label="人脸图片">
 				<template slot-scope="scope">
 					<el-popover placement="bottom" title="" trigger="click">
@@ -129,9 +191,14 @@
 			</el-table-column>
 			<el-table-column label="操作" width="500px">
 				<template slot-scope="scope">
+					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="primary" size="mini" @click="noticeList(scope.$index, scope.row)">通知列表</el-button>
 					<!-- <el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">通知记录</el-button> -->
 					<el-button type="primary" size="mini" @click="snapLogs(scope.$index, scope.row)">抓拍记录</el-button>
+					<el-popconfirm style="margin-left: 10px;" title="此人是否要告警提示？" confirm-button-text='是' cancel-button-text='否'
+					 confirmButtonType="primary" cancelButtonType="info" @onConfirm="confirmAlert(scope.$index, scope.row)" @onCancel="cancelAlert(scope.$index, scope.row)">
+						<el-button slot="reference" size="mini" type="primary">是否告警</el-button>
+					</el-popconfirm>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -255,11 +322,50 @@
 				dangerNatureList: {}, // 可疑性质
 				nature: '',
 				dangerTypeList: {}, // 可疑分类
+
+				methodList: [{
+						name: '根据辖区选择',
+						value: 1
+					},
+					{
+						name: '根据部门选择',
+						value: 2
+					},
+					{
+						name: '根据姓名搜索',
+						value: 3
+					}
+				], // 根据辖区/部门/搜索姓名选择警员
+				way: '',
+				areaList: [], // 获取辖区
+				station: '',
+
+				departmentList: [], // 获取部门
+				levelOneList: [], //  选择二级部门,获取一级部门列表
+				levelTwoList: [],
+				levelThreeList: [],
+				levelFourList: [],
+				department: '',
+				department_one: '',
+				department_two: '',
+				department_three: '',
+				department_four: '',
+
+
+				policeList: [], // 获取警员列表
+				policeNameList: [], // 选中的警员
 			}
 		},
 		mounted() {
 			this.getDangerFaces();
 			this.getQiniuToken();
+			this.getLevelOne(); // 获取一级部门
+			this.getQiniuToken();
+			// 获取辖区
+			API.policeStations(1, 100).then(res => {
+				this.areaList = res.data;
+			})
+
 		},
 		methods: {
 			getDangerFaces() {
@@ -271,6 +377,141 @@
 				}).catch(err => {
 					self.loading = false;
 				})
+			},
+			// 根据辖区/部门/姓名选择
+			methodChange(val) {
+				var self = this;
+				self.station = '';
+				self.department = '';
+				self.department_one = '';
+				self.department_two = '';
+				self.department_three = '';
+				self.department_four = '';
+				self.policeList = [];
+				if (val == 3) {
+					this.getPolice(); // 获取警员列表
+				}
+			},
+			// 根据辖区获取警员列表
+			changeArea(val) {
+				var self = this;
+				self.policeList = [];
+				API.policemen(1, 1000000, val).then(res => {
+					var policeData = res.data;
+					for (let i = 0; i < policeData.length; i++) {
+						self.policeList.push({
+							key: policeData[i].number,
+							label: policeData[i].name
+						});
+					}
+					return self.policeList;
+				})
+			},
+			// 获取警员列表
+			getPolice() {
+				var self = this;
+				API.policemen(1, 1000000).then(res => {
+					var policeData = res.data;
+					for (let i = 0; i < policeData.length; i++) {
+						self.policeList.push({
+							key: policeData[i].number,
+							label: policeData[i].name,
+							phone: policeData[i].phone
+						});
+					}
+					return self.policeList;
+				})
+			},
+			// 获取一级部门
+			getLevelOne() {
+				var self = this
+				API.policeLevels(1, 10, 1, 1).then(res => {
+					self.levelOneList = res.data;
+				})
+			},
+			ChangeLevelOne(val) {
+				var self = this;
+				self.department = val;
+				self.policeList = [];
+				API.policemen(1, 1000000, '', val).then(res => {
+					var policeData = res.data;
+					for (let i = 0; i < policeData.length; i++) {
+						self.policeList.push({
+							key: policeData[i].phone,
+							label: policeData[i].name
+						});
+					}
+					return self.policeList;
+				})
+				API.policeLevels(1, 10, 2, val).then(res => {
+					self.levelTwoList = res.data;
+					self.department_two = ''
+					self.department_three = ''
+					self.department_four = ''
+				})
+			},
+			ChangeLevelTwo(val) {
+				var self = this;
+				self.department = val;
+				self.policeList = [];
+				API.policemen(1, 1000000, '', val).then(res => {
+					var policeData = res.data;
+					for (let i = 0; i < policeData.length; i++) {
+						self.policeList.push({
+							key: policeData[i].number,
+							label: policeData[i].name
+						});
+					}
+					return self.policeList;
+				})
+				API.policeLevels(1, 10, 3, val).then(res => {
+					self.levelThreeList = res.data;
+					self.department_three = '';
+					self.department_four = '';
+				})
+			},
+			ChangeLevelThree(val) {
+				var self = this;
+				self.department = val;
+				self.policeList = [];
+				API.policemen(1, 1000000, '', val).then(res => {
+					var policeData = res.data;
+					for (let i = 0; i < policeData.length; i++) {
+						self.policeList.push({
+							key: policeData[i].number,
+							label: policeData[i].name
+						});
+					}
+					return self.policeList;
+				})
+				API.policeLevels(1, 10, 4, val).then(res => {
+					self.levelFourList = res.data;
+					self.department_four = ''
+				})
+			},
+			ChangeLevelFour(val) {
+				var self = this;
+				self.department = val;
+				self.policeList = [];
+				API.policemen(1, 1000000, '', val).then(res => {
+					var policeData = res.data;
+					for (let i = 0; i < policeData.length; i++) {
+						self.policeList.push({
+							key: policeData[i].number,
+							label: policeData[i].name
+						});
+					}
+					return self.policeList;
+				})
+			},
+			// 重新筛选
+			resetSelect() {
+				var self = this;
+				self.department = '';
+				self.department_one = '';
+				self.department_two = '';
+				self.department_three = '';
+				self.department_four = '';
 			},
 			// 更换人脸
 			addDoubtable() {
@@ -298,6 +539,10 @@
 					this.form.other_string = '';
 				}
 			},
+			// 选择可疑分类
+			alertTypeChange(val) {
+				console.log(val)
+			},
 
 			// 人脸信息
 			beforeAvatarUpload(file, fileList) {
@@ -312,16 +557,20 @@
 				var self = this;
 				file.url = `${self.qiniuaddr}/${res.key}`;
 				self.form.href = file.url;
-				API.dangerFace(self.form).then((res) => {
-					self.$refs.upload.clearFiles()
-					self.$message.success("提交成功");
-					self.dialogPolice = false;
-					self.getDangerFaces();
-					self.form = {};
-				});
 			},
 			newDoubtablet() {
-				this.$refs.upload.submit();
+				var self = this;
+				self.$refs.upload.submit();
+				if (self.form.href) {
+					API.dangerFace(self.form).then((res) => {
+						self.$refs.upload.clearFiles()
+						self.$message.success("提交成功");
+						self.dialogDoubtable = false;
+						self.getDangerFaces();
+						self.form = {};
+					});
+				}
+
 			},
 			handleExceed(file, fileList) { //图片上传超过数量限制
 				var self = this;
@@ -336,6 +585,27 @@
 				this.$refs.upload.clearFiles()
 			},
 			// 操作
+			// 编辑
+			handleEdit(index, row) {
+				var self = this;
+				self.dialogDoubtable = true;
+				API.dangerTypes().then(res => {
+					self.dangerNatureList = res.type;
+					self.dangerTypeList = res.alert_type;
+				})
+				self.form = {
+					id: row.id,
+					href: row.href,
+					name: row.name,
+					number: row.number,
+					type: row.type,
+					alert_type: row.alert_type,
+					other_string: row.other_string,
+					notify_score: row.notify_score,
+					notify_user: row.notify_user,
+				};
+			},
+
 			// 通知列表
 			noticeList(index, row) {
 				var self = this;
@@ -374,6 +644,17 @@
 				// 	self.getDangerFaces();
 				// 	self.currentPage = 1;
 				// })
+			},
+
+			// 是否告警
+			// 确认
+			confirmAlert(index, row) {
+				var self = this;
+			},
+
+			// 否
+			cancelAlert(index, row) {
+				var self = this;
 			},
 
 			getQiniuToken() {

@@ -100,6 +100,18 @@ API.addressTypes = function(page, limit) {
 	})
 }
 
+
+
+// 获取出租屋地址经纬度
+API.addressesMap = function(page, limit, type) {
+	return axios.get(url.Addresses, {
+		page: page,
+		limit: limit,
+		type: type
+	})
+}
+
+
 // 人脸管理
 API.face = function(data) {
 	return axios.post(url.Face, data)
@@ -465,6 +477,11 @@ API.faceSwitches = function(page, limit) {
 		page: page,
 		limit: limit
 	})
+}
+
+// 统计
+API.statistical = function () {
+	return axios.get(url.Count)
 }
 
 
