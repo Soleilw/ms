@@ -358,7 +358,6 @@
 		},
 		mounted() {
 			this.getDangerFaces();
-			this.getQiniuToken();
 			this.getLevelOne(); // 获取一级部门
 			this.getQiniuToken();
 			// 获取辖区

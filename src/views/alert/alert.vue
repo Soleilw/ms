@@ -24,11 +24,10 @@
 				<div class="tip">
 					根据告警分类和时间筛选：
 				</div>
-				<el-select v-model="state" placeholder="请选择告警分类" filterable @change="stateChange">
-					<el-option v-for="(item, index) in stateList" :key="index" :label="item.label" :value="item.value">
-					</el-option>
+				<el-select v-model="alert_type" placeholder="请选择可疑分类" @change="alertTypeChange">
+					<el-option v-for="(name, value) in dangerTypeList" :key="name" :label="name" :value="value"></el-option>
 				</el-select>
-				<el-date-picker v-model="value1" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+				<el-date-picker v-model="date" @change="dateChange" :value-format="valueFormatTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
 				</el-date-picker>
 			</div>
 			<div class="btn">
@@ -169,6 +168,13 @@
 				],
 				tableData: [],
 
+				dangerTypeList: [], // 告警分类列表
+				alert_type: '',
+				date: '', //时间选中
+				start_date: '',
+				end_date: '',
+				valueFormatTime: 'yyyy-MM-dd HH:mm:ss',
+				
 				dialogProcess: false,
 				processForm: {
 					name: localStorage.getItem('username'),
@@ -191,6 +197,7 @@
 		},
 		mounted() {
 			this.getAlerts();
+			this.getAlertType();
 		},
 		methods: {
 			getAlerts() {
@@ -201,9 +208,35 @@
 					self.total = res.total;
 				})
 			},
+			// 获取告警分类
+			getAlertType() {
+				var self = this;
+				API.dangerTypes().then(res => {
+					self.dangerTypeList = res.alert_type;
+				})
+			},
+			alertTypeChange(val) {
+				var self = this;
+				API.alert(1, 10, self.state, self.name, '', val,self.start_date, self.end_date).then(res => {
+					self.tableData = res.data;
+					self.total = res.total;
+				})
+			},
+			
+			// 时间选中
+			dateChange(val) {
+				var self = this;
+				self.start_date = val[0];
+				self.end_date = val[1];
+				API.alert(1, 10, self.state, self.name, '', self.alert_type, val[0], val[1]).then(res => {
+					self.tableData = res.data;
+					self.total = res.total;
+				})
+			},
+			
 			stateChange(val) {
 				var self = this;
-				API.alert(1, 10, val).then(res => {
+				API.alert(1, 10, val, self.name, '', self.alert_type,self.start_date, self.end_date).then(res => {
 					self.tableData = res.data;
 					self.total = res.total;
 				})
@@ -212,7 +245,7 @@
 			// 搜索
 			search() {
 				var self = this;
-				API.alert(1, 10, self.state, self.name).then(res => {
+				API.alert(1, 10, self.state, self.name,'', self.alert_type,self.start_date, self.end_date).then(res => {
 					self.tableData = res.data;
 					self.total = res.total;
 				})
@@ -295,7 +328,7 @@
 			handleCurrentChange(val) {
 				var self = this;
 				self.current = val;
-				API.alert(val, self.size, self.state, self.name).then(res => {
+				API.alert(val, self.size, self.state, self.name,'', self.alert_type, self.start_date, self.end_date).then(res => {
 					self.tableData = res.data;
 					self.total = res.total;
 				})
@@ -304,7 +337,7 @@
 			handleSizeChange(val) {
 				var self = this;
 				self.size = val;
-				API.alert(self.current, val, self.state, self.name).then(res => {
+				API.alert(self.current, val, self.state, self.name,'', self.alert_type,self.start_date, self.end_date).then(res => {
 					self.tableData = res.data;
 					self.total = res.total;
 				})

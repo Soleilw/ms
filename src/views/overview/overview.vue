@@ -50,37 +50,23 @@
 				<h3>重点关注人员进出记录</h3>
 				<div class="record panel">
 					<div class="inner">
-						<div style="display: flex;justify-content: space-around;" v-for="(item, index) in recordData" :key="index">
-							<div style="width: 20%;">
-								<img :src="item.log.image" style="max-width:120px;max-height:120px;">
-							</div>
-							<div style="width: 20%;">
-								<div><span>姓名：</span>{{item.danger.name}}</div>
-								<div><span>设备名</span>{{item.log.device_uuid}}</div>
-							</div>
-							<div style="width: 60%;">
-								<div><span>抓拍地址</span>{{item.address}}</div>
-								<div><span>抓拍时间</span>{{item.log.timestamp}}</div>
-							</div>
+						<div style="display: flex;justify-content: center;align-items: center">
+							<div style="width: 25vw;padding: 10px 0;color: #fff">姓名</div>
+							<div style="width: 25vw;padding: 10px 0;color: #fff;">告警类型</div>
+							<div style="width: 25vw;padding: 10px 0;color: #fff;">告警类型</div>
+							<div style="width: 25vw;padding: 10px 0;color: #fff;">告警类型</div>
 						</div>
-						<!-- 			<div class="table">
-							<el-table :data="recordData" max-height="350" border :cell-style="getCellClass" :header-cell-style="getRowClass">
-								<el-table-column prop="danger.name" label="姓名"></el-table-column>
-								<el-table-column prop="danger.number" label="身份证号"></el-table-column>
-								<el-table-column prop="danger.href" label="照片">
-									<template slot-scope="scope">
-										<img slot="reference" :src="scope.row.danger.href" style="max-width:50px;max-height:50px;">
-									</template>
-								</el-table-column>
-								<el-table-column prop="score" label="相似度">
-								</el-table-column>
-								<el-table-column prop="log.image" label="抓拍照片">
-									<template slot-scope="scope">
-										<img slot="reference" :src="scope.row.log.image" style="max-width:50px;max-height:50px;">
-									</template>
-								</el-table-column>
-							</el-table>
-						</div> -->
+						<div style="height: 320px; overflow: hidden;" :class-option="recordDataStyle">
+							<vue-seamless-scroll :data="callData">
+								<div style="display: flex;justify-content: center;align-items: center" v-for="(item, index) in callData" :key="index">
+									<div style="width: 25vw;padding: 10px 0;color: #68d8fe;">{{item.danger.name}}</div>
+									<div style="width: 25vw;padding: 10px 0;color: #68d8fe;">{{item.alert_type}}</div>
+									<div style="width: 25vw;padding: 10px 0;color: #68d8fe;"><span v-if="item.state == 1">未处理</span>
+										<span v-if="item.state == 2">已处理</span></div>
+									<div style="width: 25vw;padding: 10px 0;color: #68d8fe;">{{item.danger_type}}</div>
+								</div>
+							</vue-seamless-scroll>
+						</div>
 
 					</div>
 				</div>
@@ -101,27 +87,14 @@
 						<div class="operation">
 							<!-- 天气 -->
 							<div>
-								<span>
-									广州市[选择城市]
-								</span>
-								<span>
-									温度 38°C
-								</span>
-								<span>
-									多云
-								</span>
-							</div>
-							<!-- 切换页面 -->
-							<div class="change">
-								<!-- 	<el-button size="mini">查看学校数据</el-button>
-								<el-button size="mini">查看出租屋数据</el-button> -->
-								<el-button size="mini" @click="toManage">进入后台管理</el-button>
+								<span style="color: #68d8fe;">{{ nowDate + ' ' + nowTime + ' ' + nowWeek }}</span>
 							</div>
 						</div>
 						<!-- 用户列表 -->
 						<div class="image">
 							<img src="../../assets/image/admin.png" alt="">
 							<div class="name">{{username}}</div>
+							<el-button size="mini" @click="toManage" type="primary">进入后台管理</el-button>
 						</div>
 					</div>
 				</div>
@@ -129,36 +102,24 @@
 				<div class="police panel">
 					<div class="inner">
 						<div style="height: 600px; overflow: hidden;">
-
-							<div style="display: flex;justify-content: space-around;color: #fff;" v-for="(item, index) in recordData" :key="index">
-								<div style="width: 28%;">
-									<img :src="item.log.image" style="max-width:120px;max-height:120px;">
+							<vue-seamless-scroll :data="recordData" :class-option="recordDataStyle">
+								<div style="display: flex;justify-content: center;color: #fff;padding: 10px 0;" v-for="(item, index) in recordData"
+								 :key="index">
+									<div style="width: 20vw">
+										<el-popover placement="top-start" title="" trigger="click">
+											<img :src="item.log.image" style="max-width:800px;max-height:800px;">
+											<img slot="reference" :src="item.log.image" style="max-width:150px;max-height:150px;margin-right: 10px;">
+										</el-popover>
+									</div>
+									<div style="display: flex;flex-direction: column; justify-content: space-between; margin-right: 10px; width: 80vw;">
+										<div><span style="color: #68d8fe;">姓名: {{item.danger.name}}</span></div>
+										<div><span>设备名: {{item.log.device_uuid}}</span></div>
+										<div> <span style="color: #68d8fe;">抓拍地址: {{item.address}}</span></div>
+										<div><span> 抓拍时间: {{item.log.timestamp}} </span> </div>
+									</div>
 								</div>
-								<div style="display: flex;flex-direction: column;  width: 40%;">
-									<div style="display: flex;justify-content: space-between;"><span style="width: 200px;">姓名：</span>{{item.danger.name}}</div>
-									<div style="display: flex;justify-content: space-between;"><span style="width: 200px;">设备名：</span>{{item.log.device_uuid}}</div>
-								</div>
-								<div style="display: flex;flex-direction: column;width: 34%;">
-									<div style="display: flex;justify-content: space-between;"><span span style="width: 250px;">抓拍地址：</span>{{item.address}}</div>
-									<div style="display: flex;justify-content: space-between;"><span span style="width: 250px;">抓拍时间：</span>{{item.log.timestamp}}</div>
-								</div>
-							</div>
+							</vue-seamless-scroll>
 						</div>
-
-						<!-- 				<div class="table">
-							<div>共{{}}条告警记录 查看更多...</div>
-							<el-table :data="callData" border :cell-style="getCellClass" :header-cell-style="getRowClass">
-								<el-table-column prop="danger.name" label="姓名"></el-table-column>
-								<el-table-column prop="alert_type" label="告警分类"></el-table-column>
-								<el-table-column prop="danger_type" label="危险类型"></el-table-column>
-								<el-table-column prop="state" label="处理状态">
-									<template slot-scope="scope">
-										<span v-if="scope.row.state == 1">未处理</span>
-										<span v-if="scope.row.state == 2">已处理</span>
-									</template>
-								</el-table-column>
-							</el-table>
-						</div> -->
 					</div>
 				</div>
 			</div>
@@ -169,6 +130,8 @@
 
 <script>
 	import API from '@/api/index.js'
+	import DATE from '@/utils/date.js'
+	import axios from 'axios'
 	import TMap from 'TMap'
 
 	var dotData = [{
@@ -196,37 +159,95 @@
 				tenantMenCount: '',
 				tenantWomenCount: '',
 
+				nowDate: "", // 当前日期
+				nowTime: "", // 当前时间
+				nowWeek: "", // 当前星期
 
 				username: localStorage.getItem('username'),
 				rent: '总',
 			}
 		},
+		computed: {
+			recordDataStyle() {
+				return {
+					step: .7,
+					hoverStop: true
+				}
+			}
+		},
 		mounted() {
 			this.getAlerts();
-			this.getDangerLogs();
 			this.getData();
 			// this.init();
+			this.getDangerLogs();
+			this.currentTime();
+
 		},
 		methods: {
 			// 进入后台
 			toManage() {
-				this.$router.replace("/");
+				this.$router.replace("/alert");
+			},
+			currentTime() {
+				setInterval(this.getDate, 500);
+			},
+			getDate() {
+				var self = this;
+				let yy = new Date().getFullYear();
+				let mm = new Date().getMonth() + 1;
+				let dd = new Date().getDate();
+				let week = new Date().getDay();
+				let hh = new Date().getHours();
+				let mf =
+					new Date().getMinutes() < 10 ?
+					"0" + new Date().getMinutes() :
+					new Date().getMinutes();
+				let ss = new Date().getSeconds();
+				switch (week) {
+					case 1:
+						self.nowWeek = "星期一";
+						break;
+					case 2:
+						self.nowWeek = "星期二";
+						break;
+					case 3:
+						self.nowWeek = "星期三";
+						break;
+					case 4:
+						self.nowWeek = "星期四";
+						break;
+					case 5:
+						self.nowWeek = "星期五";
+						break;
+					case 6:
+						self.nowWeek = "星期六";
+						break;
+					case 7:
+						self.nowWeek = "星期日";
+				}
+				self.nowTime = hh + ":" + mf + ":" + ss;
+				self.nowDate = yy + "-" + mm + "-" + dd;
 			},
 			// 获取告警处理
 			getAlerts() {
 				var self = this;
-				API.alert(1, 10).then(res => {
+				API.alert(1, 30).then(res => {
 					self.callData = res.data;
 					self.total = res.total;
+
 				})
 			},
 			// 获取重点人员进出记录
 			getDangerLogs() {
 				var self = this;
-				API.dangerLogs(self.current).then(res => {
+				API.dangerLogs(1, 30).then(res => {
 					self.recordData = res.data;
 					self.total = res.total;
+					self.recordData.forEach(item => {
+						item.log.timestamp = DATE.formatTime(item.log.timestamp, 'Y-M-D h:m:s')
+					})
 				})
+
 			},
 			// 获取后台的统计数据
 			getData() {
@@ -472,7 +493,7 @@
 
 			#geo {
 				width: 100%;
-				height: 45rem;
+				height: 47rem;
 			}
 		}
 	}
@@ -527,7 +548,7 @@
 
 			.image {
 				text-align: center;
-				margin-top: 20px;
+				// margin-top: 20px;
 			}
 
 			img {
@@ -541,6 +562,7 @@
 			.operation {
 				display: flex;
 				flex-direction: column;
+				justify-content: center;
 				align-items: center;
 
 

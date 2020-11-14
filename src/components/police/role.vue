@@ -394,7 +394,7 @@
 				checkAll: false,
 
 				permissionList: [ // 其他用户的权限（公安用）
-					// "overview", // 数据总览
+					"overview", // 数据总览
 
 					"address", // 地址管理页
 					"addressList", // 地址列表

@@ -126,7 +126,7 @@ API.faces = function(page, limit, name) {
 }
 
 // 搜索人脸
-API.searchFace = function (data) {
+API.searchFace = function(data) {
 	return axios.post(url.SearchImageFace, data)
 }
 
@@ -333,13 +333,16 @@ API.dangerLogs = function(page, limit, danger_id, address) {
 }
 
 // 获取可疑人脸报警
-API.alert = function(page, limit, state, search, dangers) {
+API.alert = function(page, limit, state, search, dangers, danger_type, start, end) {
 	return axios.get(url.DangerAlerts, {
 		page: page,
 		limit: limit,
 		state: state,
 		search: search,
-		dangers: dangers
+		dangers: dangers,
+		danger_type: danger_type,
+		start: start,
+		end: end
 	})
 }
 
@@ -352,7 +355,7 @@ API.handleAlerts = function(results) {
 
 // 处理告警
 API.dangerTypes = function() {
-	return axios.get(url.DangerTypes,{})
+	return axios.get(url.DangerTypes, {})
 }
 
 // 权限管理
@@ -390,12 +393,12 @@ API.user = function(data) {
 
 // 警务管理
 // 新增公安账号等级
-API.policeLevel = function (data) {
-	return axios.post(url.PoliceLevel,data)
+API.policeLevel = function(data) {
+	return axios.post(url.PoliceLevel, data)
 }
 
 // 获取公安账号等级
-API.policeLevels = function (page, limit, level, parent_id) {
+API.policeLevels = function(page, limit, level, parent_id) {
 	return axios.get(url.PoliceLevels, {
 		page: page,
 		limit: limit,
@@ -405,12 +408,12 @@ API.policeLevels = function (page, limit, level, parent_id) {
 }
 
 // 新增警员信息
-API.policeman = function (data) {
-	return axios.post(url.Policeman,data)
+API.policeman = function(data) {
+	return axios.post(url.Policeman, data)
 }
 
 // 获取警员信息
-API.policemen = function (page, limit, station_id, department_id, state, search) {
+API.policemen = function(page, limit, station_id, department_id, state, search) {
 	return axios.get(url.Policemen, {
 		page: page,
 		limit: limit,
@@ -422,8 +425,8 @@ API.policemen = function (page, limit, station_id, department_id, state, search)
 }
 
 // 审核警员信息
-API.audit = function (data) {
-	return axios.post(url.PassPoliceman,data)
+API.audit = function(data) {
+	return axios.post(url.PassPoliceman, data)
 }
 
 // 辖区管理
@@ -480,7 +483,7 @@ API.faceSwitches = function(page, limit) {
 }
 
 // 统计
-API.statistical = function () {
+API.statistical = function() {
 	return axios.get(url.Count)
 }
 

@@ -29,6 +29,9 @@ Vue.prototype.$echarts = echarts
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
 
+// 自动滚动
+import scroll from 'vue-seamless-scroll'
+Vue.use(scroll)
 
 router.beforeEach((to, from, next) => {
 	document.title = `${to.meta.title} - 公安后台系统`;
