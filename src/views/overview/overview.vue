@@ -73,9 +73,9 @@
 			</div>
 			<div class="column">
 				<!-- 地图 -->
-				<div class="map" v-loading="loading" element-loading-text="加载地图中">
+				<div class="map" >
 					<h3>出租屋地图分布</h3>
-					<div class="chart">
+					<div class="chart" v-loading="loading" element-loading-text="加载地图中">
 						<div id="geo" ref="geo"></div>
 					</div>
 				</div>
@@ -164,7 +164,6 @@
 				nowWeek: "", // 当前星期
 
 				username: localStorage.getItem('username'),
-				rent: '总',
 			}
 		},
 		computed: {
@@ -234,7 +233,7 @@
 				API.alert(1, 30).then(res => {
 					self.callData = res.data;
 					self.total = res.total;
-
+				
 				})
 			},
 			// 获取重点人员进出记录
@@ -331,7 +330,7 @@
 					var option = {
 						// 标题
 						title: {
-							text: self.rent + '出租屋男女比例',
+							text: '出租屋男女比例',
 							textStyle: {
 								fontSize: 20,
 								color: "#fff"

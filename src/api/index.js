@@ -333,16 +333,17 @@ API.dangerLogs = function(page, limit, danger_id, address) {
 }
 
 // 获取可疑人脸报警
-API.alert = function(page, limit, state, search, dangers, danger_type, start, end) {
+API.alert = function(page, limit, state, search, dangers, alert_type, start, end, danger_type) {
 	return axios.get(url.DangerAlerts, {
 		page: page,
 		limit: limit,
 		state: state,
 		search: search,
 		dangers: dangers,
-		danger_type: danger_type,
+		alert_type: alert_type,
 		start: start,
-		end: end
+		end: end,
+		danger_type: danger_type
 	})
 }
 
@@ -356,6 +357,11 @@ API.handleAlerts = function(results) {
 // 处理告警
 API.dangerTypes = function() {
 	return axios.get(url.DangerTypes, {})
+}
+
+// 改变告警状态
+API.notifyChange = function(data) {
+	return axios.post(url.ChangeDangerFace, data)
 }
 
 // 权限管理

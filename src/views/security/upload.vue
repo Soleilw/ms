@@ -39,7 +39,7 @@
 								<el-input v-model="form.notify_score" placeholder="请输入通知相似度(保留一位小数点,例如78.9)"></el-input>
 							</el-form-item>
 							<el-form-item label="通知列表">
-								<el-input type="textarea" v-model="form.notify_user" placeholder="请输入手机号码,多个手机号用逗号分隔(例如: +8613212341234,8613212341234)"></el-input>
+								<el-input type="textarea" @change="changeNotifyUser" v-model="form.notify_user" placeholder="请输入手机号码,多个手机号用逗号分隔(例如: +8613212341234,8613212341234)"></el-input>
 							</el-form-item>
 							<el-form-item label="选择警员">
 								<!-- 根据辖区/部门/姓名去选择 -->
@@ -57,7 +57,7 @@
 							</div>
 							<div v-if="way == 1 && station">
 								<el-form-item>
-									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']">
+									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']" @change="policeNameChange">
 										<span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
 									</el-transfer>
 								</el-form-item>
@@ -86,7 +86,7 @@
 							</div>
 							<div v-if="way == 2 && department">
 								<el-form-item>
-									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']">
+									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']" @change="policeNameChange">
 										<span slot-scope="{ option }">
 											{{ option.key }} - {{ option.label }}</span>
 									</el-transfer>
@@ -95,10 +95,9 @@
 							<!-- 根据姓名选择 -->
 							<div v-if="way == 3">
 								<el-form-item>
-									<el-transfer v-model="policeNameList" :data="policeList" filterable :titles="['姓名', '选中警员']" :button-texts="['到左边', '到右边']">
+									<el-transfer v-model="policeNameList" :data="policeList" filterable :titles="['姓名', '选中警员']" :button-texts="['到左边', '到右边']" @change="policeNameChange">
 										<span slot-scope="{ option }">
-											<span>{{ option.key }}</span>
-											<span class="small">{{ option.label }}</span>
+											<span>	{{ option.key }} - {{ option.label }}</span>
 										</span>
 									</el-transfer>
 								</el-form-item>
@@ -108,7 +107,7 @@
 							</div> -->
 							<el-form-item label="上传人脸图片">
 								<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeAvatarUpload"
-								 :auto-upload="false" :on-success="handleAvatarSuccess" :on-exceed="handleExceed" :data="imgData" list-type="picture-card">
+								 :auto-upload="false" :on-success="handleAvatarSuccess" :on-change="handleChange" :on-exceed="handleExceed" :data="imgData" list-type="picture-card">
 									<img v-if="form.href" style="max-width:150px;max-height:150px;" :src="form.href" />
 									<el-button v-else size="small" type="primary">选择图片</el-button>
 								</el-upload>
@@ -189,16 +188,18 @@
 					</el-popover>
 				</template>
 			</el-table-column>
+			<el-table-column prop="alert_type_string" label="告警状态">
+				<template slot-scope="scope">
+					<el-switch v-model="scope.row.notify" active-color="#003366" @change="notifyChange(scope.row.notify,scope.$index, scope.row)">
+					</el-switch>
+				</template>
+			</el-table-column>
 			<el-table-column label="操作" width="500px">
 				<template slot-scope="scope">
 					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="primary" size="mini" @click="noticeList(scope.$index, scope.row)">通知列表</el-button>
 					<!-- <el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">通知记录</el-button> -->
 					<el-button type="primary" size="mini" @click="snapLogs(scope.$index, scope.row)">抓拍记录</el-button>
-					<el-popconfirm style="margin-left: 10px;" title="此人是否要告警提示？" confirm-button-text='是' cancel-button-text='否'
-					 confirmButtonType="primary" cancelButtonType="info" @onConfirm="confirmAlert(scope.$index, scope.row)" @onCancel="cancelAlert(scope.$index, scope.row)">
-						<el-button slot="reference" size="mini" type="primary">是否告警</el-button>
-					</el-popconfirm>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -270,6 +271,7 @@
 	import md5 from 'blueimp-md5'
 	import axios from 'axios'
 	import DATE from '@/utils/date.js'
+	import Reg from '@/utils/Reg.js'
 
 	export default {
 		name: 'gradems',
@@ -287,6 +289,7 @@
 				fileName: '',
 				suffix: '',
 				qiniuaddr: "https://tu.fengniaotuangou.cn", // 七牛云图片外链地址
+				change_href: '', // 上传的本地图片
 				activeName: 'oneDoubtable',
 				form: {
 					href: '',
@@ -298,7 +301,10 @@
 					notify_score: '',
 					notify_user: '',
 				},
+				arr_police_name: '',
+				arr_notify_user: [], // 清空数组
 				tableData: [],
+				notify: false,
 				id: '',
 				dialogDel: false,
 				// 分页
@@ -351,7 +357,6 @@
 				department_three: '',
 				department_four: '',
 
-
 				policeList: [], // 获取警员列表
 				policeNameList: [], // 选中的警员
 			}
@@ -369,13 +374,42 @@
 		methods: {
 			getDangerFaces() {
 				var self = this;
-				API.dangerFaces(self.current).then(res => {
+				API.dangerFaces(self.current, 10).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
+					res.data.forEach(item => {
+						item.notify == 1 ? item.notify = true : item.notify = false;
+					})
 				}).catch(err => {
 					self.loading = false;
 				})
+			},
+			
+			// 改变告警状态
+			notifyChange(val, index, row) {
+				var self = this;
+				console.log(val, index, row)
+				let notifyData = {}
+				if(val ==  true) {
+					notifyData = {
+						id: row.id,
+						notify: 1
+					}
+					API.notifyChange(notifyData).then(res => {
+						self.$message.success("提交成功");
+						self.getDangerFaces();
+					})
+				} else {
+					notifyData = {
+						id: row.id,
+						notify: 2
+					}
+					API.notifyChange(notifyData).then(res => {
+						self.$message.success("提交成功");
+						self.getDangerFaces();
+					})
+				}
 			},
 			// 根据辖区/部门/姓名选择
 			methodChange(val) {
@@ -387,6 +421,7 @@
 				self.department_three = '';
 				self.department_four = '';
 				self.policeList = [];
+				self.policeNameList = [];
 				if (val == 3) {
 					this.getPolice(); // 获取警员列表
 				}
@@ -395,11 +430,12 @@
 			changeArea(val) {
 				var self = this;
 				self.policeList = [];
+				self.policeNameList = [];
 				API.policemen(1, 1000000, val).then(res => {
 					var policeData = res.data;
 					for (let i = 0; i < policeData.length; i++) {
 						self.policeList.push({
-							key: policeData[i].number,
+							key: '+86' + policeData[i].phone,
 							label: policeData[i].name
 						});
 					}
@@ -413,9 +449,8 @@
 					var policeData = res.data;
 					for (let i = 0; i < policeData.length; i++) {
 						self.policeList.push({
-							key: policeData[i].number,
+							key: '+86' + policeData[i].phone,
 							label: policeData[i].name,
-							phone: policeData[i].phone
 						});
 					}
 					return self.policeList;
@@ -432,11 +467,12 @@
 				var self = this;
 				self.department = val;
 				self.policeList = [];
+				self.policeNameList = [];
 				API.policemen(1, 1000000, '', val).then(res => {
 					var policeData = res.data;
 					for (let i = 0; i < policeData.length; i++) {
 						self.policeList.push({
-							key: policeData[i].phone,
+							key:'+86' +  policeData[i].phone,
 							label: policeData[i].name
 						});
 					}
@@ -453,11 +489,12 @@
 				var self = this;
 				self.department = val;
 				self.policeList = [];
+				self.policeNameList = [];
 				API.policemen(1, 1000000, '', val).then(res => {
 					var policeData = res.data;
 					for (let i = 0; i < policeData.length; i++) {
 						self.policeList.push({
-							key: policeData[i].number,
+							key:'+86' +  policeData[i].phone,
 							label: policeData[i].name
 						});
 					}
@@ -473,11 +510,12 @@
 				var self = this;
 				self.department = val;
 				self.policeList = [];
+				self.policeNameList = [];
 				API.policemen(1, 1000000, '', val).then(res => {
 					var policeData = res.data;
 					for (let i = 0; i < policeData.length; i++) {
 						self.policeList.push({
-							key: policeData[i].number,
+							key:'+86' +  policeData[i].phone,
 							label: policeData[i].name
 						});
 					}
@@ -492,11 +530,12 @@
 				var self = this;
 				self.department = val;
 				self.policeList = [];
+				self.policeNameList = [];
 				API.policemen(1, 1000000, '', val).then(res => {
 					var policeData = res.data;
 					for (let i = 0; i < policeData.length; i++) {
 						self.policeList.push({
-							key: policeData[i].number,
+							key: '+86' + policeData[i].phone,
 							label: policeData[i].name
 						});
 					}
@@ -512,7 +551,8 @@
 				self.department_three = '';
 				self.department_four = '';
 			},
-			// 更换人脸
+			
+			// 添加人脸
 			addDoubtable() {
 				var self = this;
 				self.dialogDoubtable = true;
@@ -530,6 +570,7 @@
 					notify_score: '',
 					notify_user: '',
 				};
+				self.arr_notify_user = '';
 			},
 
 			// 选择可疑性质
@@ -544,6 +585,10 @@
 			},
 
 			// 人脸信息
+			handleChange(file) {
+				var self = this;
+				self.change_href = URL.createObjectURL(file.raw);
+			},
 			beforeAvatarUpload(file, fileList) {
 				var self = this;
 				console.log(file, fileList)
@@ -556,18 +601,71 @@
 				var self = this;
 				file.url = `${self.qiniuaddr}/${res.key}`;
 				self.form.href = file.url;
-			},
-			newDoubtablet() {
-				var self = this;
-				self.$refs.upload.submit();
-				if (self.form.href) {
+				if(self.form.href) {
+					if(self.form.number) {
+						Reg.reg(self.form.number)
+					}
+					self.form.notify_user = self.arr_notify_user + ',' + self.arr_police_name;
+					console.log(self.form.notify_user)
 					API.dangerFace(self.form).then((res) => {
 						self.$refs.upload.clearFiles()
 						self.$message.success("提交成功");
 						self.dialogDoubtable = false;
 						self.getDangerFaces();
 						self.form = {};
+						self.arr_notify_user = '';
+						self.way = '';
+						self.station = '';
+						self.department = '';
+						self.department_one = '';
+						self.department_two = '';
+						self.department_three = '';
+						self.department_four = '';
+						self.policeList = [];
+						self.policeNameList = [];
 					});
+				}
+			},
+			// 选中警员
+			policeNameChange(val) {
+				this.arr_police_name= val.join(',')
+			},
+			// 输入文本域的值
+			changeNotifyUser(val) {
+				console.log(val,this.form.notify_user)
+				this.arr_notify_user = this.form.notify_user;
+			},
+			newDoubtablet() {
+				var self = this;
+				if (self.form.href) {
+					self.form.notify_user = self.arr_notify_user + ',' + self.arr_police_name;
+					console.log(self.form.notify_user)
+					API.dangerFace(self.form).then((res) => {
+						self.$refs.upload.clearFiles()
+						self.$message.success("提交成功");
+						self.dialogDoubtable = false;
+						self.getDangerFaces();
+						self.form = {};
+						self.arr_notify_user = '';
+						self.way = '';
+						self.station = '';
+						self.department = '';
+						self.department_one = '';
+						self.department_two = '';
+						self.department_three = '';
+						self.department_four = '';
+						self.policeList = [];
+						self.policeNameList = [];
+					});
+				} else {
+					if(self.form.number) {
+						Reg.reg(self.form.number)
+					}
+					if(self.change_href) {
+						self.$refs.upload.submit();
+					} else {
+						self.$message.error("请补充完整信息");
+					}
 				}
 
 			},
@@ -581,7 +679,17 @@
 
 			// 关闭表单
 			clearForm() {
-				this.$refs.upload.clearFiles()
+				var self = this;
+				self.$refs.upload.clearFiles();
+				self.way = '';
+				self.station = '';
+				self.department = '';
+				self.department_one = '';
+				self.department_two = '';
+				self.department_three = '';
+				self.department_four = '';
+				self.policeList = [];
+				self.policeNameList = [];
 			},
 			// 操作
 			// 编辑
@@ -603,6 +711,7 @@
 					notify_score: row.notify_score,
 					notify_user: row.notify_user,
 				};
+				self.arr_notify_user = row.notify_user
 			},
 
 			// 通知列表
@@ -645,16 +754,6 @@
 				// })
 			},
 
-			// 是否告警
-			// 确认
-			confirmAlert(index, row) {
-				var self = this;
-			},
-
-			// 否
-			cancelAlert(index, row) {
-				var self = this;
-			},
 
 			getQiniuToken() {
 				var self = this;
@@ -673,6 +772,9 @@
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
+					res.data.forEach(item => {
+						item.notify == 1 ? item.notify = true : item.notify = false;
+					})
 				}).catch(err => {
 					self.loading = false;
 				})
@@ -686,6 +788,9 @@
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
+					res.data.forEach(item => {
+						item.notify == 1 ? item.notify = true : item.notify = false;
+					})
 				}).catch(err => {
 					self.loading = false;
 				})

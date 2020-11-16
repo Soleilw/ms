@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading="loading" element-loading-text="获取数据中">
 		<div class="handle-box">
 			<div class="btn">
 				<div class="tip">
@@ -27,7 +27,8 @@
 				<el-select v-model="alert_type" placeholder="请选择可疑分类" @change="alertTypeChange">
 					<el-option v-for="(name, value) in dangerTypeList" :key="name" :label="name" :value="value"></el-option>
 				</el-select>
-				<el-date-picker v-model="date" @change="dateChange" :value-format="valueFormatTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+				<el-date-picker v-model="date" @change="dateChange" :value-format="valueFormatTime" type="datetimerange"
+				 range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
 				</el-date-picker>
 			</div>
 			<div class="btn">
@@ -147,10 +148,12 @@
 <script>
 	import API from '@/api//index.js'
 	import DATE from '@/utils/date.js'
+	import Reg from '@/utils/Reg.js'
 
 	export default {
 		data() {
 			return {
+				loading: true,
 				name: '', // 搜索
 				state: 1,
 				stateList: [{
@@ -174,7 +177,9 @@
 				start_date: '',
 				end_date: '',
 				valueFormatTime: 'yyyy-MM-dd HH:mm:ss',
-				
+
+				dangers: [],
+
 				dialogProcess: false,
 				processForm: {
 					name: localStorage.getItem('username'),
@@ -206,48 +211,71 @@
 					self.$refs.multipleTable.clearSelection();
 					self.tableData = res.data;
 					self.total = res.total;
+					self.loading = false;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 获取告警分类
 			getAlertType() {
 				var self = this;
+				self.loading = true;
 				API.dangerTypes().then(res => {
 					self.dangerTypeList = res.alert_type;
+					self.loading = false;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			alertTypeChange(val) {
 				var self = this;
-				API.alert(1, 10, self.state, self.name, '', val,self.start_date, self.end_date).then(res => {
+				self.loading = true;
+				API.alert(1, 10, self.state, self.name, self.dangers, val, self.start_date, self.end_date).then(res => {
 					self.tableData = res.data;
 					self.total = res.total;
+					self.loading = false;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
-			
+
 			// 时间选中
 			dateChange(val) {
 				var self = this;
+				self.loading = true;
 				self.start_date = val[0];
 				self.end_date = val[1];
-				API.alert(1, 10, self.state, self.name, '', self.alert_type, val[0], val[1]).then(res => {
+				API.alert(1, 10, self.state, self.name, self.dangers, self.alert_type, val[0], val[1]).then(res => {
 					self.tableData = res.data;
 					self.total = res.total;
+					self.loading = false;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
-			
+
 			stateChange(val) {
 				var self = this;
-				API.alert(1, 10, val, self.name, '', self.alert_type,self.start_date, self.end_date).then(res => {
+				self.loading = true;
+				API.alert(1, 10, val, self.name, self.dangers, self.alert_type, self.start_date, self.end_date).then(res => {
 					self.tableData = res.data;
 					self.total = res.total;
+					self.loading = false;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 
 			// 搜索
 			search() {
 				var self = this;
-				API.alert(1, 10, self.state, self.name,'', self.alert_type,self.start_date, self.end_date).then(res => {
+				self.loading = true;
+				API.alert(1, 10, self.state, self.name, self.dangers, self.alert_type, self.start_date, self.end_date).then(res => {
 					self.tableData = res.data;
 					self.total = res.total;
+					self.loading = false;
+				}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 处理告警
@@ -327,19 +355,29 @@
 			// 分页
 			handleCurrentChange(val) {
 				var self = this;
+				self.loading = true;
 				self.current = val;
-				API.alert(val, self.size, self.state, self.name,'', self.alert_type, self.start_date, self.end_date).then(res => {
-					self.tableData = res.data;
-					self.total = res.total;
+				API.alert(val, self.size, self.state, self.name, self.dangers, self.alert_type, self.start_date, self.end_date).then(
+					res => {
+						self.tableData = res.data;
+						self.total = res.total;
+						self.loading = false;
+					}).catch(err => {
+					self.loading = false;
 				})
 			},
 			// 每页多少条
 			handleSizeChange(val) {
 				var self = this;
+				self.loading = true;
 				self.size = val;
-				API.alert(self.current, val, self.state, self.name,'', self.alert_type,self.start_date, self.end_date).then(res => {
-					self.tableData = res.data;
-					self.total = res.total;
+				API.alert(self.current, val, self.state, self.name, self.dangers, self.alert_type, self.start_date, self.end_date).then(
+					res => {
+						self.tableData = res.data;
+						self.total = res.total;
+						self.loading = false;
+					}).catch(err => {
+					self.loading = false;
 				})
 			},
 		}

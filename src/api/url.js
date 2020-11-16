@@ -70,6 +70,7 @@ const url = {
 	'HandleAlerts': '/handle/alerts ', // 处理告警
 	'DangerTypes': '/danger/types', // 获取可疑类型已经告警类型
 	'SearchImageFace': '/search/image/face', // 获取可疑类型已经告警类型
+	'ChangeDangerFace': '/change/danger/face', // 改变告警状态
 	
 	// 警务管理
 	'PoliceLevel': '/police/level', // 新增部门等级
