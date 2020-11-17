@@ -121,26 +121,13 @@
 					</el-tab-pane>
 					<el-tab-pane label="批量上传可疑人脸" name="allDoubtable">
 						<el-form :model="form" label-width="100px">
-							<el-form-item label="可疑性质">
-								<!-- <el-select v-model="face_apk" placeholder="请选择可疑性质" @change="apkChange">
-									<el-option v-for="item in apkList" :key="item.id" :label="item.name" :value="item.id">
-									</el-option>
-								</el-select> -->
-							</el-form-item>
-							<el-form-item label="通知相似度">
-								<el-input v-model="form.notify_score" placeholder="请输入通知相似度(保留一位小数点,例如78.9)"></el-input>
-							</el-form-item>
-							<el-form-item label="通知列表">
-								<!-- <el-select v-model="face_apk" placeholder="请选择警员" @change="apkChange">
-									<el-option v-for="item in apkList" :key="item.id" :label="item.name" :value="item.id">
-									</el-option>
-								</el-select> -->
-								<el-input type="textarea" v-model="form.notify_user" placeholder="请输入手机号码,多个手机号用逗号分隔(例如: +8613212341234,8613212341234)"></el-input>
-							</el-form-item>
-							<!-- 	<div class="tips">
-								<p><span>提示：</span>如有人脸照片会覆盖掉原有的人脸照片！</p>
-							</div> -->
-							<el-form-item label="批量上传图片">
+							<el-form-item label="上传压缩包">
+								<el-upload action="https://api.fengniaotuangou.cn/import/danger/faces" ref="upload" :limit="1" :before-upload="piliangBeforeAvatarUpload"
+								 :on-success="piliangAvatarSuccess" :on-remove="piliangRemove" :on-exceed="piliangExceed" :on-error="piliangErr"
+								>
+									<el-button type="primary">选择压缩包上传</el-button>
+								</el-upload>
+								<!-- <el-progress v-if="hasFile === true" :text-inside="true" :stroke-width="15" :percentage="percentage"></el-progress> -->
 								<!-- 				<el-upload action="https://upload-z2.qiniup.com" ref="upload" :before-upload="beforeAvatarUpload" :auto-upload="false"
 								 :on-success="handleAvatarSuccess" :on-remove="handleRemove" :on-exceed="handleExceed" :on-change="handleChange"
 								 :data="imgData" :file-list="fileList" multiple list-type="picture-card">
@@ -160,11 +147,40 @@
 									<img class="pic-box" :src="change_href">
 								</div> -->
 							</el-form-item>
-							<div class="submit">
-								<el-form-item>
-									<el-button type="primary" @click="newDoubtablet">生成Excel表</el-button>
-								</el-form-item>
+							<el-form-item label="上传记录">
+								<el-button type="primary" @click="changeHistory">查看上传记录</el-button>
+							</el-form-item>
+						
+							<div class="box" v-show="history">
+								<div style="margin-bottom: 10px;">
+									<el-select v-model="historyState" placeholder="请选择处理状态" filterable @change="stateChange">
+										<el-option v-for="(item, index) in stateList" :key="index" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+								</div>
+								<el-table :data="historyDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
+									<el-table-column prop="id" label="ID"></el-table-column>
+									<el-table-column prop="file_name" label="文件名"></el-table-column>
+									<el-table-column prop="state" label="上传状态">
+										<template slot-scope="scope">
+											<span v-if="scope.row.state == 1">待执行</span>
+											<span v-if="scope.row.state == 2">成功</span>
+											<span v-if="scope.row.state == 3">失败</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="type" label="类型"></el-table-column>
+								</el-table>
+								<div class="block">
+									<el-pagination @current-change="historyCurrentChange" :current-page.sync="historyCurrent" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+									 :page-size="historySize" layout="sizes, prev, pager, next, jumper" @size-change="historySizeChange" :total="historyTotal">
+									</el-pagination>
+								</div>
 							</div>
+							<!-- <div class="submit">
+								<el-form-item>
+									<el-button type="primary" @click="newDoubtablet">提交</el-button>
+								</el-form-item>
+							</div> -->
 						</el-form>
 					</el-tab-pane>
 				</el-tabs>
@@ -359,6 +375,32 @@
 
 				policeList: [], // 获取警员列表
 				policeNameList: [], // 选中的警员
+				
+				// 批量上传
+				history: false, // 查看上传记录
+				historyDate: [],
+				historyCurrent: 1,
+				historySize: 10,
+				historyTotal: 0,
+				
+				historyState: 0,
+				stateList: [{
+						label: '全部',
+						value: 0
+					},
+					{
+						label: '待执行',
+						value: 1
+					},
+					{
+						label: '成功',
+						value: 2
+					},
+					{
+						label: '失败',
+						value: 3
+					}
+				],
 			}
 		},
 		mounted() {
@@ -753,7 +795,75 @@
 				// 	self.currentPage = 1;
 				// })
 			},
-
+			
+			// 批量上传
+			piliangRemove(file, fileList) {
+				var self = this;
+				self.hasFile = false;
+				self.percentage = 0;
+			},
+			piliangBeforeAvatarUpload(file) {
+				var self = this;
+				// self.fileName = md5(file.name);
+				// self.suffix = file.name.substring(file.name.lastIndexOf('.') + 1);
+			},
+			piliangAvatarSuccess(res, file) {
+				var self = this;
+				self.$message.success('上传成功')
+				API.importHistory(1, 10).then(res => {
+					this.historyDate = res.data;
+					this.historyTotal = res.total;
+				})
+			},
+			piliangExceed(file, fileList) { //图片上传超过数量限制
+				var self = this;
+				self.$message.error('只能上传一个文件');
+				self.hasFile = false;
+				self.percentage = 0
+				self.$refs.upload.clearFiles()
+			},
+			piliangErr(err, file, fileList) {
+				var self = this;
+				// self.hasFile = true;
+				let msg = JSON.parse(err.toString().replace(/Error:/, ''))
+				self.$message.error(msg.msg)
+				// self.percentage = (event.loaded / event.total * 100 | 0);
+			},
+			
+			// 查看批量上传历史开关
+			changeHistory() {
+				this.history = !this.history;
+				this.historyState = 0;
+				API.importHistory(1, 10, 0).then(res => {
+					this.historyDate = res.data;
+					this.historyTotal = res.total;
+				})
+			},
+			
+			stateChange(val) {
+				API.importHistory(1, 10, val).then(res => {
+					this.historyDate = res.data;
+					this.historyTotal = res.total;
+				})
+			},
+			
+			historyCurrentChange(val) {
+				var self = this;
+				self.historyCurrent = val;
+				API.importHistory(val, self.historySize, self.historyState).then(res => {
+					self.historyDate = res.data;
+					self.historyTotal = res.total;
+				})
+			},
+			
+			historySizeChange(val) {
+				var self = this;
+				self.historySize = val;
+				API.importHistory(self.historyCurrent, val, self.historyState).then(res => {
+					self.historyDate = res.data;
+					self.historyTotal = res.total;
+				})
+			},
 
 			getQiniuToken() {
 				var self = this;

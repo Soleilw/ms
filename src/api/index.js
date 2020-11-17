@@ -307,6 +307,15 @@ API.dangerFace = function(data) {
 	return axios.post(url.DangerFace, data)
 }
 
+// 查看批量上传人脸记录
+API.importHistory = function (page, limit, state) {
+	return axios.get(url.ImportTasks, {
+		page: page,
+		limit: limit,
+		state: state
+	})
+}
+
 // 删除可疑人脸
 API.delDangerFace = function(id) {
 	return axios.del(url.DelDangerFace, {
