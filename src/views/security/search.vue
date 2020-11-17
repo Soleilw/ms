@@ -62,11 +62,11 @@
 
 		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
-			<el-table-column prop="device.type" label="设备类型"></el-table-column>
-			<el-table-column prop="remark" label="设备地址"></el-table-column>
+			<el-table-column prop="device.uuid" label="设备名称"></el-table-column>
+			<el-table-column prop="device.remark" label="设备地址"></el-table-column>
 			<el-table-column prop="face.name" label="姓名"></el-table-column>
-			<el-table-column prop="number" label="身份证"></el-table-column>
-			<el-table-column prop="time" label="记录时间"></el-table-column>
+			<el-table-column prop="face.number" label="身份证"></el-table-column>
+			<el-table-column prop="updated_at" label="记录时间"></el-table-column>
 			<el-table-column prop="face.href" label="人脸库照片">
 				<template slot-scope="scope">
 					<div v-if="scope.row.face.href">
@@ -79,10 +79,19 @@
 						<span>--暂无图片--</span>
 					</div>
 				</template>
-				<template slot-scope="scope"><img :src="scope.row.href" style="max-width:180px;max-height:80px;" /></template>
 			</el-table-column>
 			<el-table-column prop="image" label="记录照片">
-				<template slot-scope="scope"><img :src="scope.row.image" style="max-width:180px;max-height:80px;" /></template>
+				<template slot-scope="scope">
+					<div v-if="scope.row.image">
+						<el-popover placement="top-start" title trigger="click">
+							<img :src="scope.row.image" style="max-width: 800px; max-height: 800px" />
+							<img slot="reference" :src="scope.row.image" style="max-width: 180px; max-height: 80px" />
+						</el-popover>
+					</div>
+					<div v-else>
+						<span>--暂无图片--</span>
+					</div>
+				</template>
 			</el-table-column>
 		</el-table>
 
@@ -132,6 +141,7 @@
 					match_score: ''
 				}, // 搜索人脸
 				tableDate: [],
+				searchData: null,
 				id: '',
 				dialogDel: false,
 
@@ -312,12 +322,18 @@
 				self.searchForm.image = file.url;
 				API.searchFace(self.searchForm).then((res) => {
 					self.$message.success("提交成功");
+					self.dialogDoubtable = false;
+					self.loading = true;
+					self.searchData = res;
 					API.searchFaceLogs(1, 10, res).then(res1 => {
+						self.loading = false;
 						self.$message.success("搜索成功");
-						self.tableDate = res.data;
-						self.dialogDoubtable = false;
+						self.tableDate = res1.data;
+						self.total = res1.total;
 						self.searchForm = {};
 						self.$refs.upload.clearFiles();
+					}).catch(err => {
+						self.loading = false;
 					})
 					self.dialogPolice = false;
 					self.searchForm = {};
@@ -361,10 +377,10 @@
 				var self = this;
 				self.loading = true;
 				self.current = val;
-				API.dangerFaces(val, self.size).then(res => {
+				API.searchFaceLogs(val, self.size, self.searchData).then(res1 => {
 					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
+					self.tableDate = res1.data;
+					self.total = res1.total;
 				}).catch(err => {
 					self.loading = false;
 				})
@@ -374,10 +390,10 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.dangerFaces(self.current, val).then(res => {
+				API.searchFaceLogs(self.current, val, self.searchData).then(res1 => {
 					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
+					self.tableDate = res1.data;
+					self.total = res1.total;
 				}).catch(err => {
 					self.loading = false;
 				})
