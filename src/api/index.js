@@ -331,6 +331,17 @@ API.dangerFaces = function(page, limit) {
 	})
 }
 
+// 后台证件核验记录
+API.personVerifies = function(page, limit, search, state) {
+	return axios.get(url.PersonVerifies, {
+		page: page,
+		limit: limit,
+		search: search,
+		state: state
+	})
+}
+
+
 // 获取可疑人脸日志
 API.dangerLogs = function(page, limit, danger_id, address) {
 	return axios.get(url.DangerLogs, {

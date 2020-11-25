@@ -289,6 +289,9 @@
 											<div class="level2">
 												<el-checkbox label="account" @change="oneChange">账号管理</el-checkbox>
 											</div>
+											<div class="level2">
+												<el-checkbox label="personVerifies" @change="oneChange">证件核验</el-checkbox>
+											</div>
 										</div>
 										<div class="tb set" style="width: 60%;">
 											<div class="level2">
@@ -302,6 +305,9 @@
 												<el-checkbox label="departmentDel" @change="oneChange" class="permission-span">删除</el-checkbox>
 												<el-checkbox label="departmentEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
 												<el-checkbox label="departmentGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												dd
 											</div>
 										</div>
 									</div>
@@ -804,6 +810,7 @@
 					"dangerGet", // 删除可疑人脸
 					"dangerLogGet", // 获取可疑日志列表
 					"dangerLogDel", // 删除可疑日志
+					"personVerifies",  // 证件核验
 
 
 					"permission", // 角色管理

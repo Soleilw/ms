@@ -65,7 +65,7 @@
 									<div class="tb" style="width: 20%;">
 										<div class="level1">
 											<el-checkbox label="police" @change="oneChange">
-												<span style="font-weight: bold;">警务管理</span>
+												<span style="font-weight: bold;">日常管理</span>
 											</el-checkbox>
 										</div>
 									</div>
@@ -78,6 +78,9 @@
 										</div>
 										<div class="level2">
 											<el-checkbox label="account" @change="oneChange">账号管理</el-checkbox>
+										</div>
+										<div class="level2">
+											<el-checkbox label="personVerifies" @change="oneChange">证件核验</el-checkbox>
 										</div>
 									</div>
 									<div class="tb set" style="width: 60%;">
@@ -92,6 +95,9 @@
 											<el-checkbox label="departmentDel" @change="oneChange" class="permission-span">删除</el-checkbox>
 											<el-checkbox label="departmentEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
 											<el-checkbox label="departmentGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+										</div>
+										<div class="level2">
+											暂无
 										</div>
 										<div class="level2">
 											暂无
@@ -454,6 +460,7 @@
 					"departmentGet",
 					"departmentEdit",
 					"departmentDel",
+					"personVerifies",  // 证件核验
 
 					"security", // 安防布控
 					"upload", // 上传可疑人脸

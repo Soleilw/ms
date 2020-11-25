@@ -69,9 +69,10 @@ const url = {
 	'DangerAlerts': '/danger/alerts', // 可疑人脸报警
 	'HandleAlerts': '/handle/alerts ', // 处理告警
 	'DangerTypes': '/danger/types', // 获取可疑类型已经告警类型
-	'SearchImageFace': '/search/image/face', // 获取可疑类型已经告警类型
+	'SearchImageFace': '/search/image/face', // 搜索人脸
 	'ChangeDangerFace': '/change/danger/face', // 改变告警状态
 	'ImportTasks': '/import/tasks', // 获取批量上传人脸记录
+	'PersonVerifies': '/person/verifies', // 后台证件核验记录
 	
 	// 警务管理
 	'PoliceLevel': '/police/level', // 新增部门等级

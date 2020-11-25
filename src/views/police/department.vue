@@ -79,7 +79,7 @@
 			</el-pagination>
 		</div>
 
-		<el-dialog title="添加警员" :visible.sync="dialogDepartment" width="60%" :close-on-click-modal="false">
+		<el-dialog title="添加部门" :visible.sync="dialogDepartment" width="60%" :close-on-click-modal="false">
 			<div class="box">
 				<el-form ref="form" :model="form" label-width="120px">
 					<el-form-item label="部门等级">
@@ -399,13 +399,4 @@
 </script>
 
 <style scoped>
-	.permission {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.permission-item {
-		margin: 10px;
-		padding: 0 10px;
-	}
 </style>

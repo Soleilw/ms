@@ -60,6 +60,15 @@ const dynamicRouter = [{
 				},
 			},
 			{
+				path: '/verifies',
+				name: 'personVerifies',
+				component: () => import('@/views/police/verifies'),
+				meta: {
+					title: '证件核验',
+					icon: 'el-icon-s-release'
+				},
+			},
+			{
 				path: '/address',
 				name: 'address',
 				component: () => import('@/views/address/index'),
