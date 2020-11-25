@@ -247,6 +247,17 @@
 									<div class="tb set" style="width: 60%;">
 									</div>
 								</div>
+								<div class="table">
+									<div class="tb" style="width: 20%;">
+										<el-checkbox label="alert" @change="oneChange">
+											<span style="font-weight: bold;">告警处理</span>
+										</el-checkbox>
+									</div>
+									<div class="tb tr" style="width: 20%;">
+									</div>
+									<div class="tb set" style="width: 60%;">
+									</div>
+								</div>
 					<!-- 			<div class="table">
 									<div class="tb" style="width: 20%;">
 										<el-checkbox label="policeList" @change="oneChange">

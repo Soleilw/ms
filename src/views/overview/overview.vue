@@ -5,17 +5,38 @@
 				<div class="overview panel">
 					<div class="inner">
 						<div class="item">
-							<h4>{{CZWCount}}</h4>
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								出租屋数
-							</span>
-						</div>
-						<div class="item">
 							<h4>{{deviceCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								设备总数
+							</span>
+						</div>
+						<div class="item">
+							<h4>{{CZWCount}}</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								出租屋总数
+							</span>
+						</div>
+						<div class="item">
+							<h4>{{XXCount}}</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								学校总数
+							</span>
+						</div>
+						<div class="item">
+							<h4>{{ZPDCount}}</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								抓拍点数
+							</span>
+						</div>
+						<div class="item">
+							<h4>{{tenantCount}}</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								租客总数
 							</span>
 						</div>
 						<div class="item">
@@ -26,10 +47,24 @@
 							</span>
 						</div>
 						<div class="item">
-							<h4>{{tenantCount}}</h4>
+							<h4>{{tenantMenCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
-								租客总数
+								男租客数
+							</span>
+						</div>
+						<div class="item">
+							<h4>{{tenantWomenCount}}</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								女租客数
+							</span>
+						</div>
+						<div class="item">
+							<h4>{{faceCount}}</h4>
+							<span>
+								<i class="icon-dot" style="color: #006cff"></i>
+								人脸总数
 							</span>
 						</div>
 					</div>
@@ -73,7 +108,7 @@
 			</div>
 			<div class="column">
 				<!-- 地图 -->
-				<div class="map" >
+				<div class="map">
 					<h3>出租屋地图分布</h3>
 					<div class="chart" v-loading="loading" element-loading-text="加载地图中">
 						<div id="geo" ref="geo"></div>
@@ -94,7 +129,14 @@
 						<div class="image">
 							<img src="../../assets/image/admin.png" alt="">
 							<div class="name">{{username}}</div>
-							<el-button size="mini" @click="toManage" type="primary">进入后台管理</el-button>
+							<div>
+								<span>
+									<el-button size="mini" @click="toManage" type="primary">进入后台管理</el-button>
+								</span>
+								<span>
+									<el-button size="mini" @click="loginOut" type="primary">重新登录</el-button>
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -158,6 +200,7 @@
 				tenantCount: '',
 				tenantMenCount: '',
 				tenantWomenCount: '',
+				faceCount: '',
 
 				nowDate: "", // 当前日期
 				nowTime: "", // 当前时间
@@ -186,6 +229,12 @@
 			// 进入后台
 			toManage() {
 				this.$router.replace("/alert");
+			},
+			// 重新登录
+			loginOut() {
+				window.location.reload()
+				localStorage.removeItem('username')
+				this.$router.replace('/login')
 			},
 			currentTime() {
 				setInterval(this.getDate, 500);
@@ -233,7 +282,7 @@
 				API.alert(1, 30).then(res => {
 					self.callData = res.data;
 					self.total = res.total;
-				
+
 				})
 			},
 			// 获取重点人员进出记录
@@ -260,6 +309,7 @@
 					this.tenantCount = res.tenantCount;
 					this.tenantMenCount = res.tenantMenCount;
 					this.tenantWomenCount = res.tenantWomenCount;
+					this.faceCount = res.faceCount;
 					this.renterSummary();
 				})
 				var type = ['CZW'];
@@ -416,11 +466,12 @@
 
 	// 概览区域
 	.overview {
-		height: 5rem;
+		height: 9rem;
 
 		.inner {
 			display: flex;
 			justify-content: space-between;
+			flex-wrap: wrap;
 		}
 
 		h4 {

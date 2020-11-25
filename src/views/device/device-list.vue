@@ -35,6 +35,9 @@
 					</el-option>
 				</el-select>
 			</div>
+			<div class="btn">
+				<el-button type="primary" @click="addDevice">重启队列</el-button>
+			</div>
 		</div>
 
 		<el-dialog title="添加设备" :visible.sync="dialogDevice">
