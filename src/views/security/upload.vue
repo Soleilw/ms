@@ -10,7 +10,7 @@
 
 		<el-dialog title="添加可疑人脸" :visible.sync="dialogDoubtable" :close-on-click-modal="false" width="80%" @close="clearForm">
 			<div class="box">
-				<el-tabs v-model="activeName">
+				<el-tabs v-model="activeName" @change="tabChange">
 					<el-tab-pane label="上传单个可疑人脸" name="oneDoubtable">
 						<el-form :model="form" label-width="120px">
 							<el-form-item label="姓名">
@@ -122,7 +122,7 @@
 					<el-tab-pane label="批量上传可疑人脸" name="allDoubtable">
 						<el-form :model="form" label-width="100px">
 							<el-form-item label="上传压缩包">
-								<el-upload action="https://api.fengniaotuangou.cn/import/danger/faces" ref="upload" :limit="1" :before-upload="piliangBeforeAvatarUpload"
+								<el-upload action="https://api.fengniaotuangou.cn/import/danger/faces" ref="piliangUpload" :limit="1" :before-upload="piliangBeforeAvatarUpload"
 								 :on-success="piliangAvatarSuccess" :on-remove="piliangRemove" :on-exceed="piliangExceed" :on-error="piliangErr"
 								>
 									<el-button type="primary">选择压缩包上传</el-button>
@@ -406,7 +406,6 @@
 		mounted() {
 			this.getDangerFaces();
 			this.getLevelOne(); // 获取一级部门
-			this.getQiniuToken();
 			// 获取辖区
 			API.policeStations(1, 100).then(res => {
 				this.areaList = res.data;
@@ -594,9 +593,20 @@
 				self.department_four = '';
 			},
 			
+			// 切换tab
+			tabChange(val) {
+				console.log(val)
+				if(val == 'oneDoubtable') {
+					this.getQiniuToken();
+				} else {
+					this.getQiniuToken();
+				}
+			},
+			
 			// 添加人脸
 			addDoubtable() {
 				var self = this;
+				self.getQiniuToken();
 				self.dialogDoubtable = true;
 				API.dangerTypes().then(res => {
 					self.dangerNatureList = res.type;
@@ -644,9 +654,9 @@
 				file.url = `${self.qiniuaddr}/${res.key}`;
 				self.form.href = file.url;
 				if(self.form.href) {
-					if(self.form.number) {
-						Reg.reg(self.form.number)
-					}
+					// if(self.form.number) {
+					// 	Reg.reg(self.form.number)
+					// }
 					self.form.notify_user = self.arr_notify_user + ',' + self.arr_police_name;
 					console.log(self.form.notify_user)
 					API.dangerFace(self.form).then((res) => {
@@ -700,9 +710,9 @@
 						self.policeNameList = [];
 					});
 				} else {
-					if(self.form.number) {
-						Reg.reg(self.form.number)
-					}
+					// if(self.form.number) {
+					// 	Reg.reg(self.form.number)
+					// }
 					if(self.change_href) {
 						self.$refs.upload.submit();
 					} else {
@@ -820,7 +830,7 @@
 				self.$message.error('只能上传一个文件');
 				self.hasFile = false;
 				self.percentage = 0
-				self.$refs.upload.clearFiles()
+				self.$refs.piliangUpload.clearFiles()
 			},
 			piliangErr(err, file, fileList) {
 				var self = this;
