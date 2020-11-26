@@ -49,20 +49,30 @@
 			<el-table-column prop="danger.number" label="身份证号"></el-table-column>
 			<el-table-column prop="danger.href" label="照片">
 				<template slot-scope="scope">
-					<el-popover placement="left" title="" trigger="click">
-						<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
-						<img slot="reference" :src="scope.row.danger.href" style="max-width:180px;max-height:80px;">
-					</el-popover>
+					<div v-if="scope.row.danger">
+						<el-popover placement="left" title="" trigger="click">
+							<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
+							<img slot="reference" :src="scope.row.danger.href" style="max-width:180px;max-height:80px;">
+						</el-popover>
+					</div>
+					<div v-else>
+						<span>--暂无图片--</span>
+					</div>
 				</template>
 			</el-table-column>
 			<el-table-column prop="score" label="相似度">
 			</el-table-column>
 			<el-table-column prop="log.image" label="抓拍照片">
 				<template slot-scope="scope">
-					<el-popover placement="bottom" title="" trigger="click">
-						<img :src="scope.row.log.image" style="max-width:800px;max-height:800px;" />
-						<img slot="reference" :src="scope.row.log.image" style="max-width:180px;max-height:80px;">
-					</el-popover>
+					<div v-if="scope.row.log.image">
+						<el-popover placement="bottom" title="" trigger="click">
+							<img :src="scope.row.log.image" style="max-width:800px;max-height:800px;" />
+							<img slot="reference" :src="scope.row.log.image" style="max-width:180px;max-height:80px;">
+						</el-popover>
+					</div>
+					<div v-else>
+						<span>--暂无图片--</span>
+					</div>
 				</template>
 			</el-table-column>
 			<el-table-column prop="address" label="抓拍地点">
