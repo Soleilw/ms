@@ -43,65 +43,45 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="720">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="danger.name" label="姓名"></el-table-column>
 			<el-table-column prop="danger.number" label="身份证号"></el-table-column>
 			<el-table-column prop="danger.href" label="照片">
 				<template slot-scope="scope">
-					<div v-if="scope.row.danger">
-						<el-popover placement="left" title="" trigger="click">
+					<div v-if="scope.row.danger" class="leftaa">
+						<el-image fit="cover"  :src="scope.row.danger.href" :preview-src-list="hrefList" @load="compareImage(scope.row.danger.href)" style="width: 100px; height: 100px;"></el-image>
+					<!-- 	<el-popover placement="left" title="" trigger="click">
 							<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
 							<img slot="reference" :src="scope.row.danger.href" style="max-width:180px;max-height:80px;">
-						</el-popover>
+						</el-popover> -->
 					</div>
 					<div v-else>
 						<span>--暂无图片--</span>
 					</div>
 				</template>
 			</el-table-column>
-			<el-table-column prop="score" label="相似度">
+			<el-table-column prop="score" label="相似度" width="100px">
 			</el-table-column>
 			<el-table-column prop="log.image" label="抓拍照片">
 				<template slot-scope="scope">
-					<div v-if="scope.row.log.image">
-						<el-popover placement="bottom" title="" trigger="click">
+					<div v-if="scope.row.log.image" class="leftbb" >
+						<el-image fit="cover" :src="scope.row.log.image" :preview-src-list="imageList" @load="compareImage2(scope.row.log.image)" style="width: 100px; height: 100px;"></el-image>
+					<!-- 	<el-popover placement="bottom" title="" trigger="click">
 							<img :src="scope.row.log.image" style="max-width:800px;max-height:800px;" />
 							<img slot="reference" :src="scope.row.log.image" style="max-width:180px;max-height:80px;">
-						</el-popover>
+						</el-popover> -->
 					</div>
 					<div v-else>
 						<span>--暂无图片--</span>
 					</div>
 				</template>
 			</el-table-column>
-			<el-table-column prop="address" label="抓拍地点">
+			<el-table-column prop="address" label="抓拍地点" width="400px">
 			</el-table-column>
 			<el-table-column prop="log.timestamp" label="抓拍时间">
 			</el-table-column>
-			<el-table-column label="操作">
-				<template slot-scope="scope">
-					<!-- <el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
-						<el-button slot="reference" size="mini" type="danger">删除</el-button>
-					</el-popconfirm> -->
-					<el-button type="primary" @click="compareImage(scope.row.danger.href, scope.row.log.image)">对比照片</el-button>
-				</template>
-			</el-table-column>
 		</el-table>
-
-		<el-dialog title="对比照片" :visible.sync="dialogCompare" :close-on-click-modal="false" width="60%">
-			<div class="box">
-				<div class="compare">
-					<div style="width: 500px; height: 600px;">
-						<el-image fit="cover" :src="compare_href" :preview-src-list="hrefList" style="max-width: 100%;max-height: 100%;"></el-image>
-					</div>
-					<div style="width: 800px; height: 700px;">
-					<el-image fit="cover" :src="compare_image" :preview-src-list="imageList" style="max-width: 100%;max-height: 100%;"></el-image>
-					</div>
-				</div>
-
-			</div>
-		</el-dialog>
 
 		<div class="block">
 			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
@@ -145,15 +125,15 @@
 				dialogDel: false,
 
 				dialogCompare: false, // 对比照片
-				compare_href: '',
-				compare_image: '',
 				hrefList: [],
 				imageList: [],
 
 				// 分页
 				current: 1, // 当前页
 				size: 10, // 每页出现几条
-				total: 0 // 总页数
+				total: 0, // 总页数
+
+				multiples: 1
 			}
 		},
 		mounted() {
@@ -161,6 +141,9 @@
 			this.getQiniuToken();
 		},
 		methods: {
+
+
+
 			showHref(val) {
 				val = true;
 				console.log(val)
@@ -269,12 +252,13 @@
 			},
 
 			// 对比图片
-			compareImage(href, image) {
+			compareImage(href) {
 				var self = this;
-				self.dialogCompare = true;
-				self.compare_href = href;
-				self.compare_image = image;
 				self.hrefList.push(href)
+			},
+			
+			compareImage2(image) {
+				var self = this;
 				self.imageList.push(image)
 			},
 
@@ -344,6 +328,6 @@
 	/* 对比照片 */
 	.compare {
 		display: flex;
-		justify-content: center;
+		justify-content: space-around;
 	}
 </style>

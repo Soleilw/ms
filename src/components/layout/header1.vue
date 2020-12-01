@@ -28,12 +28,16 @@
 					<el-badge :is-dot="alertListLength > 0 ? true : false" class="item"><img src="../../assets/image/alert.png" alt=""
 						 @click="toAlert"></el-badge>
 				</div>
-				<el-dropdown @command="handleCommand">
+				<el-dropdown @command="handleCommand" trigger="click">
 					<span class="el-dropdown-link">
 						{{username}}
 						<i class="el-icon-caret-bottom"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
+						<!-- <div style="padding: 10px;">
+							<el-switch active-text="开启告警" active-color="#003366" v-model="alertSwitch" @change="alertSwitchChange">
+							</el-switch>
+						</div> -->
 						<el-dropdown-item divided command="loginout">切换账号</el-dropdown-item>
 						<el-dropdown-item divided command="resetPassword">修改密码</el-dropdown-item>
 					</el-dropdown-menu>
@@ -67,7 +71,7 @@
 		</el-dialog>
 
 
-	<!-- 	<el-dialog title="告警提示" :visible.sync="dialogAlert" width="600px" :close-on-click-modal="false">
+		<!-- 	<el-dialog title="告警提示" :visible.sync="dialogAlert" width="600px" :close-on-click-modal="false">
 			<div class="box">
 				<div class="alert-info">您有 <span style="color: #ff6666;">{{alertListLength}}</span> 条告警信息未处理, <span class="link"
 					 @click="toAlert">立即处理</span></div>
@@ -86,6 +90,7 @@
 		mapState
 	} from 'vuex'
 
+	let alertTimer;
 	export default {
 		data() {
 			return {
@@ -99,6 +104,7 @@
 				alertListLength: 0, // 告警列表的长度变化就提示
 				username: localStorage.getItem('username'),
 				hasAlert: true, // 如果有告警信息就显示小红点
+				alertSwitch: true,
 			}
 		},
 		computed: {
@@ -186,18 +192,16 @@
 				// this.alertList = res.data
 				this.alertListLength = res.total;
 			})
-			this.getAlert()
+			setInterval(this.getAlert, 300000);
+			// alertTimer = setInterval(this.getAlert, 300000);
 		},
 		methods: {
 			// 获取告警信息
 			getAlert() {
-				setInterval(() => {
-					console.log(232323)
-					API.alert(1, 10, 1).then(res => {
-						// this.alertList = res.data
-						this.alertListLength = res.total;
-					})
-				}, 30000)
+				API.alert(1, 10, 1).then(res => {
+					// this.alertList = res.data
+					this.alertListLength = res.total;
+				})
 			},
 			// 去告警页面
 			toAlert() {
@@ -222,6 +226,15 @@
 					self.dialogResetPassWord = true;
 				}
 			},
+			// 告警开关
+			// alertSwitchChange(val) {
+			// 	if (val == true) {
+			// 		console.log(alertTimer)
+			// 	} else {
+			// 		console.log(alertTimer)
+			// 		clearInterval(alertTimer)
+			// 	}
+			// },
 			ChangePassword() {
 				var self = this;
 				if (self.pwdForm.new_password === self.pwdForm.confirm_password) {

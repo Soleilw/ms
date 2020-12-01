@@ -1,75 +1,101 @@
 <template>
 	<div v-loading="loading" element-loading-text="加载中">
-		<div class="handle-box">
-			<div class="btn">
-				<el-button type="primary" @click="addPolice">添加警员</el-button>
+		<div class="content-box">
+			<div class="content-box-left" style=" width: 15%;">
+				<div class="btn">
+					<el-button type="primary" @click="addPolice">添加警员</el-button>
+				</div>
+				<div class="btn">
+					<div class="tip">根据状态筛选：</div>
+				</div>
+				<div class="btn">
+					<el-select v-model="auditState" placeholder="请选择审核状态" @change="changeAudit">
+						<el-option v-for="item in auditList" :key="item.value" :label="item.label" :value="item.value"></el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<div class="tip">根据辖区筛选：</div>
+				</div>
+				<div class="btn">
+					<el-select v-model="station" placeholder="请选择辖区" @change="changeArea">
+						<el-option v-for="(item, index) in areaList" :key="index" :label="item.name" :value="item.id"></el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<div class="tip">根据部门筛选：</div>
+				</div>
+				<div class="btn">
+					<el-select v-model="department_one" placeholder="请选择所属的一级部门" @change="ChangeLevelOne" style="margin-right: 10px;">
+						<el-option v-for="(item, index)  in levelOneList" :key="index" :label="item.title" :value="item.id">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<el-select v-model="department_two" placeholder="请选择所属的二级部门" @change="ChangeLevelTwo" style="margin-right: 10px;">
+						<el-option v-for="(item, index)  in levelTwoList" :key="index" :label="item.title" :value="item.id">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<el-select v-model="department_three" placeholder="请选择所属的三级部门" @change="ChangeLevelThree" style="margin-right: 10px;">
+						<el-option v-for="(item, index)  in levelThreeList" :key="index" :label="item.title" :value="item.id">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<el-select v-model="department_four" placeholder="请选择所属的四级部门" @change="ChangeLevelFour" style="margin-right: 10px;">
+						<el-option v-for="(item, index)  in levelFourList" :key="index" :label="item.title" :value="item.id">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<el-button @click="resetSelect" type="primary">重新筛选</el-button>
+				</div>
 			</div>
-			<div class="btn">
-				<div class="tip">根据状态筛选：</div>
-				<el-select v-model="auditState" placeholder="请选择审核状态" @change="changeAudit">
-					<el-option v-for="item in auditList" :key="item.value" :label="item.label" :value="item.value"></el-option>
-				</el-select>
+
+			<div class="content-box-right" style=" width: 84%;">
+				<el-table :data="tableData" stripe="" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="750">
+					<el-table-column prop="station.name" label="所属辖区"></el-table-column>
+					<el-table-column prop="department.title" label="所属部门"></el-table-column>
+					<el-table-column prop="name" label="姓名"></el-table-column>
+					<el-table-column prop="phone" label="手机号" width="200px"></el-table-column>
+					<el-table-column prop="id_card" label="身份证号" width="200px"></el-table-column>
+					<el-table-column prop="number" label="工号"></el-table-column>
+					<el-table-column prop="state" label="审核状态">
+						<template slot-scope="scope">
+							<span v-if="scope.row.state == 1">待审核</span>
+							<span v-if="scope.row.state == 2" style="color: green;">已通过</span>
+							<span v-if="scope.row.state == 3" style="color: red;">未通过</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="face_image" label="人脸照片">
+						<template slot-scope="scope">
+							<el-popover placement="top-start" title="" trigger="click">
+								<img :src="scope.row.face_image" style="max-width:800px; max-height:800px;" />
+								<img slot="reference" :src="scope.row.face_image" style="max-width:150px;max-height:80px;">
+							</el-popover>
+						</template>
+					</el-table-column>
+					<el-table-column label="操作" width="200px" fixed="right">
+						<template slot-scope="scope">
+							<el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+							<el-button v-if="scope.row.state == 1" type="text" @click="handleAudit(scope.$index, scope.row)">审核</el-button>
+							<!-- <el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">短信推送结果</el-button> -->
+						</template>
+					</el-table-column>
+				</el-table>
+
+
+
+				<div class="block">
+					<el-pagination @current-change="handleCurrentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+					 :page-size="size" layout="sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange">
+					</el-pagination>
+				</div>
 			</div>
-			<div class="btn">
-				<div class="tip">根据辖区筛选：</div>
-				<el-select v-model="station" placeholder="请选择辖区" @change="changeArea">
-					<el-option v-for="(item, index) in areaList" :key="index" :label="item.name" :value="item.id"></el-option>
-				</el-select>
-			</div>
-			<div class="btn">
-				<div class="tip">根据部门筛选：</div>
-				<el-select v-model="department_one" placeholder="请选择所属的一级部门" @change="ChangeLevelOne" style="margin-right: 10px;">
-					<el-option v-for="(item, index)  in levelOneList" :key="index" :label="item.title" :value="item.id">
-					</el-option>
-				</el-select>
-				<el-select v-model="department_two" placeholder="请选择所属的二级部门" @change="ChangeLevelTwo" style="margin-right: 10px;">
-					<el-option v-for="(item, index)  in levelTwoList" :key="index" :label="item.title" :value="item.id">
-					</el-option>
-				</el-select>
-				<el-select v-model="department_three" placeholder="请选择所属的三级部门" @change="ChangeLevelThree" style="margin-right: 10px;">
-					<el-option v-for="(item, index)  in levelThreeList" :key="index" :label="item.title" :value="item.id">
-					</el-option>
-				</el-select>
-				<el-select v-model="department_four" placeholder="请选择所属的四级部门" @change="ChangeLevelFour" style="margin-right: 10px;">
-					<el-option v-for="(item, index)  in levelFourList" :key="index" :label="item.title" :value="item.id">
-					</el-option>
-				</el-select>
-			</div>
-			<div class="btn">
-				<el-button @click="resetSelect" type="primary">重新筛选</el-button>
-			</div>
+
 		</div>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
-			<el-table-column prop="station.name" label="所属辖区"></el-table-column>
-			<el-table-column prop="department.title" label="所属部门"></el-table-column>
-			<el-table-column prop="name" label="姓名"></el-table-column>
-			<el-table-column prop="phone" label="手机号"></el-table-column>
-			<el-table-column prop="id_card" label="身份证号" width="200px"></el-table-column>
-			<el-table-column prop="number" label="工号"></el-table-column>
-			<el-table-column prop="state" label="审核状态">
-				<template slot-scope="scope">
-					<span v-if="scope.row.state == 1">待审核</span>
-					<span v-if="scope.row.state == 2">已通过</span>
-					<span v-if="scope.row.state == 3">未通过</span>
-				</template>
-			</el-table-column>
-			<el-table-column prop="face_image" label="人脸照片">
-				<template slot-scope="scope">
-					<el-popover placement="top-start" title="" trigger="click">
-						<img :src="scope.row.face_image" style="max-width:800px; max-height:800px;" />
-						<img slot="reference" :src="scope.row.face_image" style="max-width:150px;max-height:80px;">
-					</el-popover>
-				</template>
-			</el-table-column>
-			<el-table-column label="操作" width="300px" fixed="right">
-				<template slot-scope="scope">
-					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button v-if="scope.row.state == 0" type="primary" size="mini" @click="handleAudit(scope.$index, scope.row)">审核</el-button>
-					<!-- <el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">短信推送结果</el-button> -->
-				</template>
-			</el-table-column>
-		</el-table>
 
 		<el-dialog :visible.sync="dialogAudit" title="审核" width="20%" align="center">
 			<div style="font-size: 20px; margin-bottom: 30px">是否通过审核</div>
@@ -79,11 +105,7 @@
 			</span>
 		</el-dialog>
 
-		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange">
-			</el-pagination>
-		</div>
+
 
 		<el-dialog title="添加警员" :visible.sync="dialogPolice" width="60%" :close-on-click-modal="false" @close="clearForm">
 			<div class="box">
@@ -128,10 +150,9 @@
 						<div style="display: flex;">
 							<el-image v-if="form.face_image" style="margin: 0 10px; max-width:150px;max-height:150px;" :src="form.face_image"></el-image>
 							<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeUpload"
-							 :auto-upload="false" :on-success="successUpload" :on-exceed="handleExceed"
-							 :data="imgData" list-type="picture-card">
-								<el-button  v-if="form.face_image" size="small" type="primary">更改照片</el-button>
-								<el-button  v-else size="small" type="primary">上传照片</el-button>
+							 :auto-upload="false" :on-success="successUpload" :on-exceed="handleExceed" :data="imgData" list-type="picture-card">
+								<el-button v-if="form.face_image" size="small" type="primary">更改照片</el-button>
+								<el-button v-else size="small" type="primary">上传照片</el-button>
 							</el-upload>
 						</div>
 					</el-form-item>
@@ -327,13 +348,7 @@
 
 			// 重新筛选
 			resetSelect() {
-				var self = this;
-				self.auditState = '';
-				self.station = '';
-				self.department_one = '';
-				self.department_two = '';
-				self.department_three = '';
-				self.department_four = '';
+				window.location.reload();
 			},
 
 			addPolice() {

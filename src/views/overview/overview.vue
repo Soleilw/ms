@@ -5,67 +5,67 @@
 				<div class="overview panel">
 					<div class="inner">
 						<div class="item">
-							<h4>{{deviceCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								设备总数
 							</span>
+							<h4>{{deviceCount}}</h4>
 						</div>
 						<div class="item">
-							<h4>{{CZWCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								出租屋总数
 							</span>
+							<h4>{{CZWCount}}</h4>
 						</div>
 						<div class="item">
-							<h4>{{XXCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								学校总数
 							</span>
+							<h4>{{XXCount}}</h4>
 						</div>
 						<div class="item">
-							<h4>{{ZPDCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								抓拍点数
 							</span>
+							<h4>{{ZPDCount}}</h4>
 						</div>
 						<div class="item">
-							<h4>{{tenantCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								租客总数
 							</span>
+							<h4>{{tenantCount}}</h4>
 						</div>
 						<div class="item">
-							<h4>{{householderCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								户主总数
 							</span>
+							<h4>{{householderCount}}</h4>
 						</div>
 						<div class="item">
-							<h4>{{tenantMenCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								男租客数
 							</span>
+							<h4>{{tenantMenCount}}</h4>
 						</div>
 						<div class="item">
-							<h4>{{tenantWomenCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								女租客数
 							</span>
+							<h4>{{tenantWomenCount}}</h4>
 						</div>
 						<div class="item">
-							<h4>{{faceCount}}</h4>
 							<span>
 								<i class="icon-dot" style="color: #006cff"></i>
 								人脸总数
 							</span>
+							<h4>{{faceCount}}</h4>
 						</div>
 					</div>
 				</div>
@@ -479,7 +479,7 @@
 			font-size: 1.167rem;
 			padding-left: 0.2rem;
 			color: #fff;
-			margin-bottom: 0.333rem
+			margin-top: 0.333rem
 		}
 
 		span {
@@ -543,7 +543,7 @@
 
 			#geo {
 				width: 100%;
-				height: 47rem;
+				height: 49rem;
 			}
 		}
 	}

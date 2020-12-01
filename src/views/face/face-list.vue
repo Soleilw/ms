@@ -1,19 +1,57 @@
 <template>
 	<div v-loading="loading" element-loading-text="获取数据中">
-		<div class="handle-box">
-			<div class="btn">
-				<el-button type="primary" @click="addFace">添加人脸</el-button>
-			</div>
-			<div class="btn">
+		<div class="content-box">
+			<div class="content-box-left" style=" width: 15%;">
+				<div class="btn">
+					<el-button type="primary" @click="addFace">添加人脸</el-button>
+				</div>
+				<div class="btn">
 				<div class="tip">根据姓名筛选：</div>
-				<div>
+				</div>
+				<div class="btn">
 					<el-input placeholder="请输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
 						<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
 					</el-input>
 				</div>
+				<div class="btn">
+					<el-button @click="resetSelect" type="primary">重新筛选</el-button>
+				</div>
+			</div>
+		
+			<div class="content-box-right" style=" width: 84%;">
+				
+				<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+					<el-table-column prop="id" label="ID"></el-table-column>
+					<el-table-column prop="name" label="名字"></el-table-column>
+					<el-table-column prop="face_id" label="人脸ID"></el-table-column>
+					<el-table-column prop="group" label="人脸组" width="200px"></el-table-column>
+					<el-table-column prop="number" label="学号/身份证号"></el-table-column>
+					<el-table-column prop="href" label="人脸图片">
+						<template slot-scope="scope">
+							<el-popover placement="top-start" title="" trigger="click">
+								<img :src="scope.row.href" style="max-width:800px;max-height:800px;" />
+								<img slot="reference" :src="scope.row.href" style="max-width:180px;max-height:80px;">
+							</el-popover>
+						</template>
+					</el-table-column>
+					<el-table-column prop="type" label="类型"></el-table-column>
+					<el-table-column label="操作">
+						<template slot-scope="scope">
+							<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+								<el-button slot="reference" type="text">删除</el-button>
+							</el-popconfirm>
+						</template>
+					</el-table-column>
+				</el-table>
+				
+				<div class="block">
+					<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 300, 500, 700, 900]"
+					 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
+					</el-pagination>
+				</div>
 			</div>
 		</div>
-
+		
 		<el-dialog title="添加人脸" :visible.sync="dialogFace">
 			<div class="box">
 				<el-form :model="form" label-width="100px">
@@ -59,35 +97,6 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
-			<el-table-column prop="id" label="ID"></el-table-column>
-			<el-table-column prop="name" label="名字"></el-table-column>
-			<el-table-column prop="face_id" label="人脸ID"></el-table-column>
-			<el-table-column prop="group" label="人脸组" width="200px"></el-table-column>
-			<el-table-column prop="number" label="学号/身份证号"></el-table-column>
-			<el-table-column prop="href" label="人脸图片">
-				<template slot-scope="scope">
-					<el-popover placement="top-start" title="" trigger="click">
-						<img :src="scope.row.href" style="max-width:800px;max-height:800px;" />
-						<img slot="reference" :src="scope.row.href" style="max-width:180px;max-height:80px;">
-					</el-popover>
-				</template>
-			</el-table-column>
-			<el-table-column prop="type" label="类型"></el-table-column>
-			<el-table-column label="操作">
-				<template slot-scope="scope">
-					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
-						<el-button slot="reference" size="mini" type="danger">删除</el-button>
-					</el-popconfirm>
-				</template>
-			</el-table-column>
-		</el-table>
-
-		<div class="block">
-			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 300, 500, 700, 900]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
-			</el-pagination>
-		</div>
 	</div>
 </template>
 
@@ -207,6 +216,12 @@
 			},
 			handleExceed(files, fileList) { //图片上传超过数量限制
 				this.$message.error('上传图片不能超过1张!');
+			},
+			
+			
+			// 重新筛选
+			resetSelect() {
+				window.location.reload();
 			},
 			// 分页
 			currentChange(val) {

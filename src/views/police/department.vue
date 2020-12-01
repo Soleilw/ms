@@ -1,37 +1,51 @@
 <template>
 	<div v-loading="loading" element-loading-text="加载中">
-		<div class="handle-box">
-			<div class="btn">
-				<el-button type="primary" @click="addDepartment">添加部门</el-button>
+		<div class="content-box">
+			<div class="content-box-left" style=" width: 15%;">
+				<div class="btn">
+					<el-button type="primary" @click="addDepartment">添加部门</el-button>
+				</div>
+				<div class="btn">
+					<div class="tip">根据部门筛选：</div>
+				</div>
+				<div class="btn">
+					<el-select v-model="search_level" placeholder="请选择部门等级" @change="search">
+						<el-option v-for="(item, index) in levelList" :key="index" :label="item.name" :value="item.id">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<el-button @click="resetSelect" type="primary">重新筛选</el-button>
+				</div>
 			</div>
-			<div class="btn">
-				<div class="tip">根据部门筛选：</div>
-				<el-select v-model="search_level" placeholder="请选择部门等级" @change="search">
-					<el-option v-for="(item, index) in levelList" :key="index" :label="item.name" :value="item.id">
-					</el-option>
-				</el-select>
+
+			<div class="content-box-right" style=" width: 84%;">
+				<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+					<el-table-column prop="level" label="部门等级">
+						<template slot-scope="scope">
+							<span v-if="scope.row.level == 1">一级部门</span>
+							<span v-if="scope.row.level == 2">二级部门</span>
+							<span v-if="scope.row.level == 3">三级部门</span>
+							<span v-if="scope.row.level == 4">四级部门</span>
+
+						</template>
+					</el-table-column>
+					<el-table-column prop="title" label="部门名称"></el-table-column>
+					<el-table-column label="操作" width="600px">
+						<template slot-scope="scope">
+							<el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+							<el-button type="text" @click="getBindPolice(scope.$index, scope.row)">查看绑定警员</el-button>
+							<!-- <el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">编辑名称</el-button> -->
+						</template>
+					</el-table-column>
+				</el-table>
+				<div class="block">
+					<el-pagination @current-change="handleCurrentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+					 :page-size="size" layout="sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange">
+					</el-pagination>
+				</div>
 			</div>
 		</div>
-
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
-			<el-table-column prop="level" label="部门等级">
-				<template slot-scope="scope">
-					<span v-if="scope.row.level == 1">一级部门</span>
-					<span v-if="scope.row.level == 2">二级部门</span>
-					<span v-if="scope.row.level == 3">三级部门</span>
-					<span v-if="scope.row.level == 4">四级部门</span>
-
-				</template>
-			</el-table-column>
-			<el-table-column prop="title" label="部门名称"></el-table-column>
-			<el-table-column label="操作" width="600px">
-				<template slot-scope="scope">
-					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="primary" size="mini" @click="getBindPolice(scope.$index, scope.row)">查看绑定警员</el-button>
-					<!-- <el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">编辑名称</el-button> -->
-				</template>
-			</el-table-column>
-		</el-table>
 
 		<el-dialog :visible.sync="dialogDel" title="删除角色" width="20%" align="center" :close-on-click-modal="false">
 			<div style="font-size: 20px; margin-bottom: 30px;">是否删除该账号</div>
@@ -65,7 +79,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			
+
 			<div class="block">
 				<el-pagination @current-change="policeCurrentChange" :current-page.sync="policeCurrent" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
 				 :page-size="policeSize" layout="sizes, prev, pager, next, jumper" :total="policeTotal" @size-change="policeSizeChange">
@@ -73,11 +87,7 @@
 			</div>
 		</el-dialog>
 
-		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange">
-			</el-pagination>
-		</div>
+
 
 		<el-dialog title="添加部门" :visible.sync="dialogDepartment" width="60%" :close-on-click-modal="false">
 			<div class="box">
@@ -347,7 +357,11 @@
 					self.current = 1
 				})
 			},
-
+			
+			// 重新筛选
+			resetSelect() {
+				window.location.reload();
+			},
 
 			// 分页
 			handleCurrentChange(val) {
@@ -375,7 +389,7 @@
 					self.loading = false;
 				})
 			},
-			
+
 			// 查看警员的分页
 			policeCurrentChange(val) {
 				let self = this;
@@ -385,11 +399,11 @@
 					self.policeTotal = res.total;
 				})
 			},
-			
+
 			policeSizeChange(val) {
 				let self = this;
 				self.policeSize = val;
-				API.policemen(self.policeCurrent, val , '', self.department_id, '').then(res => {
+				API.policemen(self.policeCurrent, val, '', self.department_id, '').then(res => {
 					self.policeData = res.data;
 					self.policeTotal = res.total;
 				})

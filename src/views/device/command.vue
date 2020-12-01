@@ -1,115 +1,124 @@
 <template>
 	<div v-loading="loading" element-loading-text="获取数据中">
-		<div class="handle-box">
-			<div class="btn">
-				<el-button type="primary" @click="addCommand">发送指令</el-button>
-			</div>
-			<el-dialog title="发送指令" :visible.sync="dialogCommand" @close="closeCommands">
+		<div class="content-box">
+			<div class="content-box-left">
 				<div class="btn">
-					<el-form :model="commandform" label-width="100px">
-						<el-form-item label="请选择类型">
-							<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
-								<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
-								</el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="请选择省市区">
-							<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
-						</el-form-item>
-						<el-form-item label="设备uuid">
-							<el-select v-model="command_uuid" placeholder="请选择uuid" filterable @change="uuidChange">
-								<el-option v-for="(item,index) in uuidList" :key="index" :label="item.uuid" :value="item.uuid">
-								</el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="指令">
-							<el-select v-model="command" @change="changeCommand">
-								<el-option v-for="(value, name) in commandList" :key="name" :label="value" :value="name"></el-option>
-							</el-select>
-						</el-form-item>
-						<!-- 发送密码 -->
-						<div v-if="command === 'setPassword' ">
-							<el-form-item label="密码">
-								<el-input v-model="commandform.new_password" placeholder="请输入密码"></el-input>
-							</el-form-item>
-						</div>
-						<!-- 发送删除 -->
-						<div v-if="command === 'deleteUser' ">
-							<el-form-item label="FACE_ID">
-								<el-input v-model="commandform.face_id" placeholder="请输入FACE_ID"></el-input>
-							</el-form-item>
-						</div>
-						<!-- 发送添加 -->
-						<div v-if="command === 'addUser' ">
-							<el-form-item label="FACE_ID">
-								<el-input v-model="commandform.face_id" placeholder="请输入FACE_ID"></el-input>
-							</el-form-item>
-						</div>
-						<!-- 人脸生效时间 -->
-						<div v-if="command === 'setUserAuthTime' ">
-							<el-form-item label="人脸生效时间">
-								<el-date-picker v-model="userAuthTime" type="datetimerange" range-separator="至" start-placeholder="开始日期"
-								 end-placeholder="结束日期" @change="chooseTime" :value-format="valueFormatTime">
-								</el-date-picker>
-							</el-form-item>
-							<el-form-item label="FACE_ID">
-								<el-input v-model="commandform.face_id" placeholder="请输入FACE_ID"></el-input>
-							</el-form-item>
-						</div>
-						<!-- 固件升级 -->
-						<div v-if="command === 'upgrade' ">
-							<el-form-item label="固件地址">
-								<el-input v-model="commandform.url"></el-input>
-							</el-form-item>
-						</div>
-						<div style="margin-left: 100px;">
-							<el-button type="primary" @click="sendCommand">发送</el-button>
-						</div>
-					</el-form>
+					<el-button type="primary" @click="addCommand">发送指令</el-button>
+				</div>
+				<div class="btn">
+					<div class="tip">根据设备号筛选：</div>
 				</div>
 
-			</el-dialog>
-			<div class="btn">
-				<div class="tip">根据设备号筛选：</div>
-				<div>
+				<div class="btn">
 					<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
 						<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
 					</el-input>
 				</div>
-			
+				<div class="btn">
+					<el-button @click="resetSelect" type="primary">重新筛选</el-button>
+				</div>
+			</div>
+
+			<div class="content-box-right">
+				<el-table :data="commandsData" stripe="" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" :max-height="700">
+					<el-table-column prop="id" label="ID"></el-table-column>
+					<el-table-column prop="device_uuid" label="设备ID" width="200px"></el-table-column>
+					<el-table-column prop="command" label="指令"></el-table-column>
+					<el-table-column prop="command_title" label="指令名字"></el-table-column>
+					<el-table-column prop="state" label="状态">
+						<template slot-scope="scope">
+							<span v-if="scope.row.state == '1'">已创建</span>
+							<span v-if="scope.row.state == '2'">已下发</span>
+							<span v-if="scope.row.state == '3'">成功</span>
+							<span v-if="scope.row.state == '4'">失败</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="created_at" label="下发时间" width="200px"></el-table-column>
+					<el-table-column prop="updated_at" label="更新时间" width="200px"></el-table-column>
+					<el-table-column label="操作" prop="data" width="100px">
+						<template slot-scope="scope">
+							<el-popover placement="right" width="800" trigger="click">
+								<el-row v-for="(value,name) in JSON.parse(scope.row.data)" :key="name" style="padding: 10px;">
+									{{name}}: {{value}}
+								</el-row>
+								<el-button type="text" slot="reference">查看内容</el-button>
+							</el-popover>
+						</template>
+					</el-table-column>
+				</el-table>
+				<div class="block">
+					<el-pagination @current-change="currentPage" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+					 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizePage" :total="total">
+					</el-pagination>
+				</div>
 			</div>
 		</div>
-		<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" :max-height="480">
-			<el-table-column prop="id" label="ID"></el-table-column>
-			<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
-			<el-table-column prop="command" label="指令"></el-table-column>
-			<el-table-column prop="command_title" label="指令名字"></el-table-column>
-			<el-table-column prop="state" label="状态">
-				<template slot-scope="scope">
-					<span v-if="scope.row.state == '1'">已创建</span>
-					<span v-if="scope.row.state == '2'">已下发</span>
-					<span v-if="scope.row.state == '3'">成功</span>
-					<span v-if="scope.row.state == '4'">失败</span>
-				</template>
-			</el-table-column>
-			<el-table-column prop="created_at" label="下发时间"></el-table-column>
-			<el-table-column prop="updated_at" label="更新时间"></el-table-column>
-			<el-table-column label="操作" prop="data" width="200px">
-				<template slot-scope="scope">
-					<el-popover placement="right" width="800" trigger="click">
-						<el-row v-for="(value,name) in JSON.parse(scope.row.data)" :key="name" style="padding: 10px;">
-							{{name}}: {{value}}
-						</el-row>
-						<el-button slot="reference">查看内容</el-button>
-					</el-popover>
-				</template>
-			</el-table-column>
-		</el-table>
-		<div class="block">
-			<el-pagination @current-change="currentPage" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizePage" :total="total">
-			</el-pagination>
-		</div>
+
+		<el-dialog title="发送指令" :visible.sync="dialogCommand" @close="closeCommands">
+			<div class="btn">
+				<el-form :model="commandform" label-width="100px">
+					<el-form-item label="请选择类型">
+						<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
+							<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
+							</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="请选择省市区">
+						<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
+					</el-form-item>
+					<el-form-item label="设备uuid">
+						<el-select v-model="command_uuid" placeholder="请选择uuid" filterable @change="uuidChange">
+							<el-option v-for="(item,index) in uuidList" :key="index" :label="item.uuid" :value="item.uuid">
+							</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="指令">
+						<el-select v-model="command" @change="changeCommand">
+							<el-option v-for="(value, name) in commandList" :key="name" :label="value" :value="name"></el-option>
+						</el-select>
+					</el-form-item>
+					<!-- 发送密码 -->
+					<div v-if="command === 'setPassword' ">
+						<el-form-item label="密码">
+							<el-input v-model="commandform.new_password" placeholder="请输入密码"></el-input>
+						</el-form-item>
+					</div>
+					<!-- 发送删除 -->
+					<div v-if="command === 'deleteUser' ">
+						<el-form-item label="FACE_ID">
+							<el-input v-model="commandform.face_id" placeholder="请输入FACE_ID"></el-input>
+						</el-form-item>
+					</div>
+					<!-- 发送添加 -->
+					<div v-if="command === 'addUser' ">
+						<el-form-item label="FACE_ID">
+							<el-input v-model="commandform.face_id" placeholder="请输入FACE_ID"></el-input>
+						</el-form-item>
+					</div>
+					<!-- 人脸生效时间 -->
+					<div v-if="command === 'setUserAuthTime' ">
+						<el-form-item label="人脸生效时间">
+							<el-date-picker v-model="userAuthTime" type="datetimerange" range-separator="至" start-placeholder="开始日期"
+							 end-placeholder="结束日期" @change="chooseTime" :value-format="valueFormatTime">
+							</el-date-picker>
+						</el-form-item>
+						<el-form-item label="FACE_ID">
+							<el-input v-model="commandform.face_id" placeholder="请输入FACE_ID"></el-input>
+						</el-form-item>
+					</div>
+					<!-- 固件升级 -->
+					<div v-if="command === 'upgrade' ">
+						<el-form-item label="固件地址">
+							<el-input v-model="commandform.url"></el-input>
+						</el-form-item>
+					</div>
+					<div style="margin-left: 100px;">
+						<el-button type="primary" @click="sendCommand">发送</el-button>
+					</div>
+				</el-form>
+			</div>
+
+		</el-dialog>
 	</div>
 </template>
 
@@ -335,6 +344,7 @@
 							uuid: self.command_uuid,
 							command: self.command,
 						}
+						console.log(self.def_commandform)
 				}
 			},
 			// 发送指令
@@ -457,6 +467,10 @@
 				self.command = '';
 			},
 
+	// 重新筛选
+			resetSelect() {
+				window.location.reload();
+			},
 			// 分页
 			currentPage(val) {
 				var self = this;

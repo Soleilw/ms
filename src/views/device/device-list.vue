@@ -1,42 +1,116 @@
 <template>
 	<div v-loading="loading" element-loading-text="获取数据中">
-		<div class="handle-box">
-			<div class="btn">
-				<el-button type="primary" @click="addDevice">添加设备</el-button>
-			</div>
-			<div class="btn">
-				<div class="tip">根据设备号筛选：</div>
-				<div>
+		<div class="content-box">
+			<div class="content-box-left">
+				<div class="btn">
+					<el-button type="primary" @click="addDevice">添加设备</el-button>
+				</div>
+				<div class="btn">
+					<div class="tip">根据设备号筛选：</div>
+				</div>
+				<div class="btn">
 					<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
 						<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
 					</el-input>
 				</div>
-				
+				<div class="btn">
+					<div class="tip">根据类型筛选：</div>
+				</div>
+				<div class="btn">
+					<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
+						<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<div class="tip">根据省市区筛选：</div>
+				</div>
+				<div class="btn">
+					<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
+				</div>
+				<div class="btn">
+					<el-select v-model="area_address_id" placeholder="请选择地址" filterable @change="areaAddressChange">
+						<el-option v-for="(item, index) in area_address_List" :key="index" :label="item.address" :value="item.id">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<div class="tip">根据状态筛选：</div>
+				</div>
+				<div class="btn">
+					<el-select v-model="deviceState" placeholder="请选择状态" filterable @change="deviceStateChange">
+						<el-option v-for="(item, index) in deviceStateList" :key="index" :label="item.online" :value="item.offline">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<el-button type="primary" @click="resetSelect">重新筛选</el-button>
+				</div>
+				<div class="btn">
+					<!-- <el-button type="primary" @click="addDevice">重启队列</el-button> -->
+				</div>
 			</div>
-			<div class="btn">
-				<div class="tip">根据类型筛选：</div>
-				<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
-					<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
-					</el-option>
-				</el-select>
+		
+			<div class="content-box-right" >
+			<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+				<el-table-column prop="id" label="ID" width="80px"></el-table-column>
+				<el-table-column prop="address.address" label="地址" width="400px"></el-table-column>
+				<el-table-column prop="uuid" label="uuid" width="200px"></el-table-column>
+				<el-table-column prop="type_string" label="类型" width="150px"></el-table-column>
+				<el-table-column prop="direction" label="方向"></el-table-column>
+				<el-table-column prop="ip" label="IP地址" width="200px"></el-table-column>
+				<el-table-column prop="version" label="版本"></el-table-column>
+				<el-table-column prop="remark" label="备注" width="500px"></el-table-column>
+				<el-table-column prop="online" label="状态">
+					<template slot-scope="scope">
+						<span v-if="scope.row.online == 1">在线</span>
+						<span v-if="scope.row.online == 2">离线</span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="last_login" label="最后登录时间" width="150px"></el-table-column>
+				<el-table-column label="操作" width="150px" fixed="right">
+					<template slot-scope="scope">
+						<el-dropdown>
+							<el-button type="primary">
+								操作<i class="el-icon-arrow-down el-icon--right"></i>
+							</el-button>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item>
+									<el-button type="text" @click="handleExit(scope.$index, scope.row)">编辑</el-button>
+								</el-dropdown-item>
+								<el-dropdown-item>
+									<el-button type="text" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
+								</el-dropdown-item>
+								<el-dropdown-item>
+									<el-button v-if="scope.row.type == 4 || scope.row.type == 1" type="text" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
+								</el-dropdown-item>
+								<el-dropdown-item>
+									<el-button type="text" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
+								</el-dropdown-item>
+								<el-dropdown-item>
+									<el-button type="text" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
+								</el-dropdown-item>
+								<el-dropdown-item>
+									<el-button type="text" @click="handleShowCommands (scope.$index, scope.row)">查看指令</el-button>
+								</el-dropdown-item>
+								<el-dropdown-item>
+									<el-button type="text" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
+								</el-dropdown-item>
+								<el-dropdown-item>
+									<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+										<el-button slot="reference" type="text">删除</el-button>
+									</el-popconfirm>
+								</el-dropdown-item>
+							</el-dropdown-menu>
+						</el-dropdown>
+					</template>
+				</el-table-column>
+			</el-table>
+			<div class="block">
+				<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+				 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
+				</el-pagination>
 			</div>
-			<div class="btn">
-				<div class="tip">根据省市区筛选：</div>
-				<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
-				<el-select v-model="area_address_id" placeholder="请选择地址" filterable @change="areaAddressChange">
-					<el-option v-for="(item, index) in area_address_List" :key="index" :label="item.address" :value="item.id">
-					</el-option>
-				</el-select>
-			</div>
-			<div class="btn">
-				<div class="tip">根据状态筛选：</div>
-				<el-select v-model="deviceState" placeholder="请选择状态" filterable @change="deviceStateChange">
-					<el-option v-for="(item, index) in deviceStateList" :key="index" :label="item.online" :value="item.offline">
-					</el-option>
-				</el-select>
-			</div>
-			<div class="btn">
-				<el-button type="primary" @click="addDevice">重启队列</el-button>
 			</div>
 		</div>
 
@@ -119,65 +193,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
-			<el-table-column prop="id" label="ID" width="80px"></el-table-column>
-			<el-table-column prop="address.address" label="地址" width="400px"></el-table-column>
-			<el-table-column prop="uuid" label="uuid" width="200px"></el-table-column>
-			<el-table-column prop="type_string" label="类型" width="150px"></el-table-column>
-			<el-table-column prop="direction" label="方向"></el-table-column>
-			<el-table-column prop="ip" label="IP地址" width="200px"></el-table-column>
-			<el-table-column prop="version" label="版本"></el-table-column>
-			<el-table-column prop="remark" label="备注" width="500px"></el-table-column>
-			<el-table-column prop="online" label="状态">
-				<template slot-scope="scope">
-					<span v-if="scope.row.online == 1">在线</span>
-					<span v-if="scope.row.online == 2">离线</span>
-				</template>
-			</el-table-column>
-			<el-table-column prop="last_login" label="最后登录时间" width="150px"></el-table-column>
-			<el-table-column label="操作" width="150px" fixed="right">
-				<template slot-scope="scope">
-					<el-dropdown>
-						<el-button type="primary">
-							操作<i class="el-icon-arrow-down el-icon--right"></i>
-						</el-button>
-						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item>
-								<el-button size="mini" type="primary" @click="handleExit(scope.$index, scope.row)">编辑</el-button>
-							</el-dropdown-item>
-							<el-dropdown-item>
-								<el-button size="mini" type="primary" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
-							</el-dropdown-item>
-							<el-dropdown-item>
-								<el-button v-if="scope.row.type == 4 || scope.row.type == 1" size="mini" type="primary" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
-							</el-dropdown-item>
-							<el-dropdown-item>
-								<el-button size="mini" type="primary" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
-							</el-dropdown-item>
-							<el-dropdown-item>
-								<el-button size="mini" type="primary" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
-							</el-dropdown-item>
-							<el-dropdown-item>
-								<el-button size="mini" type="primary" @click="handleShowCommands (scope.$index, scope.row)">查看指令</el-button>
-							</el-dropdown-item>
-							<el-dropdown-item>
-								<el-button size="mini" type="primary" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
-							</el-dropdown-item>
-							<el-dropdown-item>
-								<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
-									<el-button slot="reference" size="mini" type="danger">删除</el-button>
-								</el-popconfirm>
-							</el-dropdown-item>
-						</el-dropdown-menu>
-					</el-dropdown>
-				</template>
-			</el-table-column>
-		</el-table>
-		<div class="block">
-			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
-			</el-pagination>
-		</div>
+		
 
 		<!-- 查看日志 -->
 		<el-dialog title="查看日志" :visible.sync="dialogLogs" width="80%">
@@ -1263,6 +1279,11 @@
 						self.totalUserListPage = res.total;
 					})
 				})
+			},
+			
+			// 重新筛选
+			resetSelect() {
+				window.location.reload();
 			},
 			// 设备列表的分页
 			currentChange(val) {

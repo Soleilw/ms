@@ -1,62 +1,100 @@
 <template>
 	<div v-loading="loading" element-loading-text="获取数据中">
-		<div class="handle-box">
-			<div class="btn">
-				<div class="tip">
-					根据姓名筛选：
+		<div class="content-box">
+			<div class="content-box-left" style=" width: 25%; border-right: 1px #ccc solid;">
+				<div class="btn">
+					<div class="tip">
+						根据姓名筛选：
+					</div>
 				</div>
-				<div>
-					<el-input placeholder="输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
-						<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
-					</el-input>
+				<div class="btn">
+					<div>
+						<el-input placeholder="输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
+							<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
+						</el-input>
+					</div>
+				</div>
+				<div class="btn">
+					<div class="tip">
+						根据处理状态筛选：
+					</div>
+				</div>
+				<div class="btn">
+					<el-select v-model="state" placeholder="请选择处理状态" filterable @change="stateChange">
+						<el-option v-for="(item, index) in stateList" :key="index" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<div class="tip">
+						根据告警分类和时间筛选：
+					</div>
+				</div>
+				<div class="btn">
+					<el-select v-model="alert_type" placeholder="请选择可疑分类" @change="alertTypeChange">
+						<el-option v-for="(name, value) in dangerTypeList" :key="name" :label="name" :value="value"></el-option>
+					</el-select>
+				</div>
+				<div class="btn">
+					<el-date-picker v-model="date" @change="dateChange" :value-format="valueFormatTime" type="datetimerange"
+					 range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+					</el-date-picker>
+				</div>
+				<div class="btn">
+					<el-button type="primary" @click="resetSelect">重新筛选</el-button>
 				</div>
 			</div>
-			<div class="btn">
-				<div class="tip">
-					根据处理状态筛选：
+
+			<div class="content-box-right">
+				<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="680"
+				 ref="multipleTable" @selection-change="handleSelectionChange" :row-key="(row) => row.id">
+					<el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
+					<el-table-column prop="id" label="ID"></el-table-column>
+					<el-table-column prop="danger.name" label="姓名" width="100px"></el-table-column>
+					<el-table-column prop="danger.number" label="身份证号" width="200px"></el-table-column>
+					<el-table-column prop="danger.href" label="照片">
+						<template slot-scope="scope">
+							<div v-if="scope.row.danger" class="leftaa">
+								<el-popover placement="left" title="" trigger="click">
+									<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
+									<img slot="reference" :src="scope.row.danger.href" style="max-width:180px;max-height:80px;">
+								</el-popover>
+							</div>
+							<div v-else>
+								<span>--暂无图片--</span>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column prop="address.address" label="所出现地址" width="300px"></el-table-column>
+					<el-table-column prop="alert_type" label="告警分类"></el-table-column>
+					<el-table-column prop="danger_type" label="危险类型"></el-table-column>
+					<el-table-column prop="state" label="处理状态">
+						<template slot-scope="scope">
+							<span v-if="scope.row.state == 1">未处理</span>
+							<span v-if="scope.row.state == 2">已处理</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="操作" width="200px" fixed="right">
+						<template slot-scope="scope">
+							<el-button type="text" @click="handleProcess(scope.$index, scope.row)">立即处理</el-button>
+							<el-button type="text" @click="handleDetail(scope.$index, scope.row)">查看详情</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+
+				<div class="btn">
+					<el-button type="primary" @click="batchOpen">批量处理</el-button>
 				</div>
-				<el-select v-model="state" placeholder="请选择处理状态" filterable @change="stateChange">
-					<el-option v-for="(item, index) in stateList" :key="index" :label="item.label" :value="item.value">
-					</el-option>
-				</el-select>
-			</div>
-			<div class="btn">
-				<div class="tip">
-					根据告警分类和时间筛选：
+
+				<div class="block">
+					<el-pagination @current-change="handleCurrentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+					 :page-size="size" layout="sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange">
+					</el-pagination>
 				</div>
-				<el-select v-model="alert_type" placeholder="请选择可疑分类" @change="alertTypeChange">
-					<el-option v-for="(name, value) in dangerTypeList" :key="name" :label="name" :value="value"></el-option>
-				</el-select>
-				<el-date-picker v-model="date" @change="dateChange" :value-format="valueFormatTime" type="datetimerange"
-				 range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-				</el-date-picker>
 			</div>
-			<div class="btn">
-				<el-button type="primary" @click="batchOpen">批量处理</el-button>
-			</div>
+
 		</div>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620" ref="multipleTable"
-		 @selection-change="handleSelectionChange" :row-key="(row) => row.id">
-			<el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
-			<el-table-column prop="id" label="ID" width="100px"></el-table-column>
-			<el-table-column prop="danger.name" label="姓名" width="200px"></el-table-column>
-			<el-table-column prop="address.address" label="所出现地址"></el-table-column>
-			<el-table-column prop="alert_type" label="告警分类" width="100px"></el-table-column>
-			<el-table-column prop="danger_type" label="危险类型" width="100px"></el-table-column>
-			<el-table-column prop="state" label="处理状态" width="100px">
-				<template slot-scope="scope">
-					<span v-if="scope.row.state == 1">未处理</span>
-					<span v-if="scope.row.state == 2">已处理</span>
-				</template>
-			</el-table-column>
-			<el-table-column label="操作" width="300px">
-				<template slot-scope="scope">
-					<el-button type="primary" @click="handleProcess(scope.$index, scope.row)">立即处理</el-button>
-					<el-button type="primary" @click="handleDetail(scope.$index, scope.row)">查看详情</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
 
 		<el-dialog :visible.sync="dialogProcess" title="告警处理" :close-on-click-modal="false">
 			<div class="box">
@@ -64,12 +102,6 @@
 					<el-form-item label="处理人">
 						<el-input v-model="processForm.name" disabled></el-input>
 					</el-form-item>
-					<!-- 	<el-form-item label="处理状态">
-						<el-radio-group v-model="processForm.state" @change="stateRadio">
-							<el-radio :label="1">待处理</el-radio>
-							<el-radio :label="2">已处理</el-radio>
-						</el-radio-group>
-					</el-form-item> -->
 					<el-form-item label="备注">
 						<el-input type="textarea" v-model="processForm.remark" placeholder="非必填"></el-input>
 					</el-form-item>
@@ -91,11 +123,13 @@
 					<el-table-column prop="danger.notify_score" label="相似度"></el-table-column>
 					<el-table-column prop="danger.href" label="人脸库照片">
 						<template slot-scope="scope">
-							<div v-if="scope.row.danger.href">
-								<el-popover placement="top-start" title="" trigger="click">
+							<div v-if="scope.row.danger.href" class="leftaa">
+								<el-image fit="fill" :src="scope.row.danger.href" :preview-src-list="hrefList" @load="compareImage(scope.row.danger.href)"
+								 style="width: 100%; height: 100%"></el-image>
+								<!-- <el-popover placement="top-start" title="" trigger="click">
 									<img :src="scope.row.danger.href" style="max-width:800px;max-height:800px;" />
 									<img slot="reference" :src="scope.row.danger.href" style="max-width:180px;max-height:80px;">
-								</el-popover>
+								</el-popover> -->
 							</div>
 							<div v-else>
 								<span>--暂无图片--</span>
@@ -104,11 +138,13 @@
 					</el-table-column>
 					<el-table-column prop="log.image" label="抓拍原图">
 						<template slot-scope="scope">
-							<div v-if="scope.row.log.image">
-								<el-popover placement="top-start" title="" trigger="click">
+							<div v-if="scope.row.log.image" class="leftbb">
+								<!-- 	<el-popover placement="top-start" title="" trigger="click">
 									<img :src="scope.row.log.image" style="max-width:800px;max-height:800px;" />
 									<img slot="reference" :src="scope.row.log.image" style="max-width:180px;max-height:80px;">
-								</el-popover>
+								</el-popover> -->
+								<el-image fit="fill" :src="scope.row.log.image" :preview-src-list="imageList" @load="compareImage2(scope.row.log.image)"
+								style="width: 100%; height: 100%"></el-image>
 							</div>
 							<div v-else>
 								<span>--暂无图片--</span>
@@ -118,11 +154,13 @@
 
 					<el-table-column prop="log.catch_faces[0].face_img" label="抓拍照片">
 						<template slot-scope="scope">
-							<div v-if="scope.row.log.catch_faces.length > 0">
-								<el-popover placement="top-start" title="" trigger="click">
-									<img :src="'data:image/png;base64,' + scope.row.log.catch_faces[0].face_img" style="max-width:800px;max-height:800px;" />
-									<img slot="reference" :src="'data:image/png;base64,' +scope.row.log.catch_faces[0].face_img" style="max-width:180px;max-height:80px;">
-								</el-popover>
+							<div v-if="scope.row.log.catch_faces.length > 0" class="leftbb">
+								<el-image fit="fill" :src="scope.row.log.catch_faces[0].face_img" :preview-src-list="catchFacesList" @load="compareImage3(scope.row.log.catch_faces[0].face_img)"
+								 style="width: 100%; height: 100%"></el-image>
+								<!-- <el-popover placement="top-start" title="" trigger="click">
+									<img :src="scope.row.log.catch_faces[0].face_img" style="max-width:800px;max-height:800px;" />
+									<img slot="reference" :src="scope.row.log.catch_faces[0].face_img" style="max-width:180px;max-height:80px;">
+								</el-popover> -->
 							</div>
 							<div v-else>
 								<span>--暂无图片--</span>
@@ -135,11 +173,6 @@
 			</div>
 		</el-dialog>
 
-		<div class="block">
-			<el-pagination @current-change="handleCurrentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" :total="total" @size-change="handleSizeChange">
-			</el-pagination>
-		</div>
 
 
 	</div>
@@ -148,7 +181,6 @@
 <script>
 	import API from '@/api//index.js'
 	import DATE from '@/utils/date.js'
-	import Reg from '@/utils/Reg.js'
 
 	export default {
 		data() {
@@ -192,6 +224,10 @@
 				dialogDetail: false, // 查看详情
 				DetailForm: [],
 
+
+				hrefList: [],
+				imageList: [],
+				catchFacesList: [],
 
 				// 分页
 				current: 1,
@@ -352,6 +388,26 @@
 				this.dialogDetail = true;
 			},
 
+			// 对比图片
+			compareImage(href) {
+				var self = this;
+				self.hrefList.push(href)
+			},
+
+			compareImage2(image) {
+				var self = this;
+				self.imageList.push(image)
+			},
+
+			compareImage3(val) {
+				var self = this;
+				self.catchFacesList.push(val)
+			},
+			
+			// 重新筛选
+			resetSelect() {
+				window.location.reload();
+			},
 			// 分页
 			handleCurrentChange(val) {
 				var self = this;

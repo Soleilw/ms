@@ -57,7 +57,8 @@
 							</div>
 							<div v-if="way == 1 && station">
 								<el-form-item>
-									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']" @change="policeNameChange">
+									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']"
+									 @change="policeNameChange">
 										<span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
 									</el-transfer>
 								</el-form-item>
@@ -86,7 +87,8 @@
 							</div>
 							<div v-if="way == 2 && department">
 								<el-form-item>
-									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']" @change="policeNameChange">
+									<el-transfer filterable v-model="policeNameList" :data="policeList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']"
+									 @change="policeNameChange">
 										<span slot-scope="{ option }">
 											{{ option.key }} - {{ option.label }}</span>
 									</el-transfer>
@@ -95,9 +97,10 @@
 							<!-- 根据姓名选择 -->
 							<div v-if="way == 3">
 								<el-form-item>
-									<el-transfer v-model="policeNameList" :data="policeList" filterable :titles="['姓名', '选中警员']" :button-texts="['到左边', '到右边']" @change="policeNameChange">
+									<el-transfer v-model="policeNameList" :data="policeList" filterable :titles="['姓名', '选中警员']" :button-texts="['到左边', '到右边']"
+									 @change="policeNameChange">
 										<span slot-scope="{ option }">
-											<span>	{{ option.key }} - {{ option.label }}</span>
+											<span> {{ option.key }} - {{ option.label }}</span>
 										</span>
 									</el-transfer>
 								</el-form-item>
@@ -107,7 +110,8 @@
 							</div> -->
 							<el-form-item label="上传人脸图片">
 								<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeAvatarUpload"
-								 :auto-upload="false" :on-success="handleAvatarSuccess" :on-change="handleChange" :on-exceed="handleExceed" :data="imgData" list-type="picture-card">
+								 :auto-upload="false" :on-success="handleAvatarSuccess" :on-change="handleChange" :on-exceed="handleExceed"
+								 :data="imgData" list-type="picture-card">
 									<img v-if="form.href" style="max-width:150px;max-height:150px;" :src="form.href" />
 									<el-button v-else size="small" type="primary">选择图片</el-button>
 								</el-upload>
@@ -122,9 +126,9 @@
 					<el-tab-pane label="批量上传可疑人脸" name="allDoubtable">
 						<el-form :model="form" label-width="100px">
 							<el-form-item label="上传压缩包">
-								<el-upload action="https://api.fengniaotuangou.cn/import/danger/faces" ref="piliangUpload" :limit="1" :before-upload="piliangBeforeAvatarUpload"
-								 :on-success="piliangAvatarSuccess" :on-remove="piliangRemove" :on-exceed="piliangExceed" :on-error="piliangErr"
-								>
+								<el-upload action="https://api.fengniaotuangou.cn/import/danger/faces" ref="piliangUpload" :limit="1"
+								 :before-upload="piliangBeforeAvatarUpload" :on-success="piliangAvatarSuccess" :on-remove="piliangRemove"
+								 :on-exceed="piliangExceed" :on-error="piliangErr">
 									<el-button type="primary">选择压缩包上传</el-button>
 								</el-upload>
 								<!-- <el-progress v-if="hasFile === true" :text-inside="true" :stroke-width="15" :percentage="percentage"></el-progress> -->
@@ -150,7 +154,7 @@
 							<el-form-item label="上传记录">
 								<el-button type="primary" @click="changeHistory">查看上传记录</el-button>
 							</el-form-item>
-						
+
 							<div class="box" v-show="history">
 								<div style="margin-bottom: 10px;">
 									<el-select v-model="historyState" placeholder="请选择处理状态" filterable @change="stateChange">
@@ -212,10 +216,10 @@
 			</el-table-column>
 			<el-table-column label="操作" width="500px">
 				<template slot-scope="scope">
-					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="primary" size="mini" @click="noticeList(scope.$index, scope.row)">通知列表</el-button>
+					<el-button type="text"  @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button type="text"  @click="noticeList(scope.$index, scope.row)">通知列表</el-button>
 					<!-- <el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">通知记录</el-button> -->
-					<el-button type="primary" size="mini" @click="snapLogs(scope.$index, scope.row)">抓拍记录</el-button>
+					<el-button type="text"  @click="snapLogs(scope.$index, scope.row)">抓拍记录</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -375,14 +379,14 @@
 
 				policeList: [], // 获取警员列表
 				policeNameList: [], // 选中的警员
-				
+
 				// 批量上传
 				history: false, // 查看上传记录
 				historyDate: [],
 				historyCurrent: 1,
 				historySize: 10,
 				historyTotal: 0,
-				
+
 				historyState: 0,
 				stateList: [{
 						label: '全部',
@@ -426,13 +430,13 @@
 					self.loading = false;
 				})
 			},
-			
+
 			// 改变告警状态
 			notifyChange(val, index, row) {
 				var self = this;
 				console.log(val, index, row)
 				let notifyData = {}
-				if(val ==  true) {
+				if (val == true) {
 					notifyData = {
 						id: row.id,
 						notify: 1
@@ -513,7 +517,7 @@
 					var policeData = res.data;
 					for (let i = 0; i < policeData.length; i++) {
 						self.policeList.push({
-							key:'+86' +  policeData[i].phone,
+							key: '+86' + policeData[i].phone,
 							label: policeData[i].name
 						});
 					}
@@ -535,7 +539,7 @@
 					var policeData = res.data;
 					for (let i = 0; i < policeData.length; i++) {
 						self.policeList.push({
-							key:'+86' +  policeData[i].phone,
+							key: '+86' + policeData[i].phone,
 							label: policeData[i].name
 						});
 					}
@@ -556,7 +560,7 @@
 					var policeData = res.data;
 					for (let i = 0; i < policeData.length; i++) {
 						self.policeList.push({
-							key:'+86' +  policeData[i].phone,
+							key: '+86' + policeData[i].phone,
 							label: policeData[i].name
 						});
 					}
@@ -592,17 +596,12 @@
 				self.department_three = '';
 				self.department_four = '';
 			},
-			
+
 			// 切换tab
 			tabChange(val) {
-				console.log(val)
-				if(val == 'oneDoubtable') {
-					this.getQiniuToken();
-				} else {
-					this.getQiniuToken();
-				}
+				this.getQiniuToken();
 			},
-			
+
 			// 添加人脸
 			addDoubtable() {
 				var self = this;
@@ -653,7 +652,7 @@
 				var self = this;
 				file.url = `${self.qiniuaddr}/${res.key}`;
 				self.form.href = file.url;
-				if(self.form.href) {
+				if (self.form.href) {
 					// if(self.form.number) {
 					// 	Reg.reg(self.form.number)
 					// }
@@ -680,11 +679,11 @@
 			},
 			// 选中警员
 			policeNameChange(val) {
-				this.arr_police_name= val.join(',')
+				this.arr_police_name = val.join(',')
 			},
 			// 输入文本域的值
 			changeNotifyUser(val) {
-				console.log(val,this.form.notify_user)
+				console.log(val, this.form.notify_user)
 				this.arr_notify_user = this.form.notify_user;
 			},
 			newDoubtablet() {
@@ -713,7 +712,7 @@
 					// if(self.form.number) {
 					// 	Reg.reg(self.form.number)
 					// }
-					if(self.change_href) {
+					if (self.change_href) {
 						self.$refs.upload.submit();
 					} else {
 						self.$message.error("请补充完整信息");
@@ -805,7 +804,7 @@
 				// 	self.currentPage = 1;
 				// })
 			},
-			
+
 			// 批量上传
 			piliangRemove(file, fileList) {
 				var self = this;
@@ -839,7 +838,7 @@
 				self.$message.error(msg.msg)
 				// self.percentage = (event.loaded / event.total * 100 | 0);
 			},
-			
+
 			// 查看批量上传历史开关
 			changeHistory() {
 				this.history = !this.history;
@@ -849,14 +848,14 @@
 					this.historyTotal = res.total;
 				})
 			},
-			
+
 			stateChange(val) {
 				API.importHistory(1, 10, val).then(res => {
 					this.historyDate = res.data;
 					this.historyTotal = res.total;
 				})
 			},
-			
+
 			historyCurrentChange(val) {
 				var self = this;
 				self.historyCurrent = val;
@@ -865,7 +864,7 @@
 					self.historyTotal = res.total;
 				})
 			},
-			
+
 			historySizeChange(val) {
 				var self = this;
 				self.historySize = val;

@@ -1,21 +1,56 @@
 <template>
 	<div v-loading="loading" element-loading-text="获取数据中">
-		<div class="handle-box">
-			<div class="btn">
-				<el-button type="primary" @click="addAddress">添加地址</el-button>
-			</div>
-			<div class="btn">
-				<div class="tip">根据地址筛选：</div>
-				<div>
+		<div class="content-box">
+			<div class="content-box-left">
+				<div class="btn">
+					<el-button type="primary" @click="addAddress">添加地址</el-button>
+				</div>
+				<div class="btn">
+					<div class="tip">根据地址筛选：</div>
+				</div>
+				<div class="btn">
 					<el-input placeholder="输入姓名" v-model="name" class="input-with-select" @keyup.enter.native="search(name)">
 						<el-button slot="append" icon="el-icon-search" @click="search(name)"></el-button>
 					</el-input>
 				</div>
+				<div class="btn">
+					<div class="tip">根据地区筛选：</div>
+				</div>
+				<div class="btn">
+					<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="areaProChange" :props="props"></el-cascader>
+				</div>
+				<div class="btn">
+					<el-button @click="resetSelect" type="primary">重新筛选</el-button>
+				</div>
 			</div>
-			<div class="btn">
-				<div class="tip">根据地区筛选：</div>
-				<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="areaProChange" :props="props"></el-cascader>
+
+			<div class="content-box-right">
+				<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+					<el-table-column prop="id" label="ID" width="100px"></el-table-column>
+					<el-table-column prop="project_id" label="项目ID" width="100px"></el-table-column>
+					<el-table-column prop="address" label="地址" width="400px"></el-table-column>
+					<el-table-column prop="stations" label="所在辖区" width="200px"></el-table-column>
+					<el-table-column prop="contact" label="联系方式" width="400px"></el-table-column>
+					<el-table-column prop="address_uuid" label="address_uuid" width="200px"></el-table-column>
+					<el-table-column label="操作" width="200px" fixed="right">
+						<template slot-scope="scope">
+							<el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+							<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary"
+							 style="margin-left: 10px;">
+								<el-button slot="reference" type="text">删除</el-button>
+							</el-popconfirm>
+						</template>
+					</el-table-column>
+				</el-table>
+
+				<div class="block">
+					<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[20, 50, 100, 150, 200, 250, 300]"
+					 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
+					</el-pagination>
+				</div>
+
 			</div>
+
 		</div>
 
 		<el-dialog title="添加地址" :visible.sync="dialogAddress" :close-on-click-modal="false" width="80%">
@@ -106,28 +141,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
-			<el-table-column prop="id" label="ID" width="100px"></el-table-column>
-			<el-table-column prop="project_id" label="项目ID" width="100px"></el-table-column>
-			<el-table-column prop="address" label="地址" width="400px"></el-table-column>
-			<el-table-column prop="stations" label="所在辖区" width="200px"></el-table-column>
-			<el-table-column prop="contact" label="联系方式" width="400px"></el-table-column>
-			<el-table-column prop="address_uuid" label="address_uuid" width="200px"></el-table-column>
-			<el-table-column label="操作" width="200px" fixed="right">
-				<template slot-scope="scope">
-					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">
-						<el-button slot="reference" size="mini" type="danger">删除</el-button>
-					</el-popconfirm>
-				</template>
-			</el-table-column>
-		</el-table>
 
-		<div class="block">
-			<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
-			</el-pagination>
-		</div>
 	</div>
 </template>
 
@@ -173,7 +187,7 @@
 
 				tableData: [],
 				current: 1,
-				size: 10,
+				size: 20,
 				total: 0,
 
 				pro_city_area: [], // 根据省市区搜索
@@ -277,7 +291,7 @@
 			},
 			getAddress() {
 				var self = this;
-				API.addresses(1, 10).then(res => {
+				API.addresses(1, 20).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
@@ -419,6 +433,11 @@
 
 			communityChange(val) {
 				this.form.area_id = val;
+			},
+			
+			// 重新筛选
+			resetSelect() {
+				window.location.reload();
 			},
 
 			// 分页

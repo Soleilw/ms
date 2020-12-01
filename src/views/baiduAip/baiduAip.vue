@@ -30,7 +30,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
+		<el-table :data="tableData" border stripe :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="name" label="名称"></el-table-column>
 			<el-table-column prop="remark" label="备注"></el-table-column>
@@ -41,7 +41,7 @@
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
-						<el-button slot="reference" size="mini" type="danger">删除</el-button>
+						<el-button slot="reference" size="mini" type="text">删除</el-button>
 					</el-popconfirm>
 				</template>
 			</el-table-column>
