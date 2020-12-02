@@ -34,7 +34,7 @@
 						<i class="el-icon-caret-bottom"></i>
 					</span>
 					<el-dropdown-menu slot="dropdown">
-						<!-- <div style="padding: 10px;">
+				<!-- 		<div style="padding: 10px;">
 							<el-switch active-text="开启告警" active-color="#003366" v-model="alertSwitch" @change="alertSwitchChange">
 							</el-switch>
 						</div> -->
@@ -105,6 +105,7 @@
 				username: localStorage.getItem('username'),
 				hasAlert: true, // 如果有告警信息就显示小红点
 				alertSwitch: true,
+				alertTimer: null // 定时器名称
 			}
 		},
 		computed: {
@@ -168,22 +169,25 @@
 		},
 		watch: {
 			'alertListLength': function() {
-				let tip = '<div class="alert-info">您有 <span style="color: #ff6666;">' + this.alertListLength +
-					'</span> 条告警信息未处理, <a style="cursor: pointer; text-decoration: underline; color: #3399cc;">立即处理</a></div> '
-				let notify = this.$notify({
-					title: '告警提示',
-					dangerouslyUseHTMLString: true,
-					message: tip,
-					duration: 5000,
-					offset: 100,
-					type: 'warning'
-				});
-				notify.$el.querySelector('a').onclick = () => {
-					this.toAlert();
-					// 点击后关闭notify 不需要的话可删掉
-					notify.close();
-				};
-				this.aplayAudio();
+				console.log(this.alertListLength)
+				if(this.alertListLength > 0) {
+					let tip = '<div class="alert-info">您有 <span style="color: #ff6666;">' + this.alertListLength +
+						'</span> 条告警信息未处理, <a style="cursor: pointer; text-decoration: underline; color: #3399cc;">立即处理</a></div> '
+					let notify = this.$notify({
+						title: '告警提示',
+						dangerouslyUseHTMLString: true,
+						message: tip,
+						duration: 5000,
+						offset: 100,
+						type: 'warning'
+					});
+					notify.$el.querySelector('a').onclick = () => {
+						this.toAlert();
+						// 点击后关闭notify 不需要的话可删掉
+						notify.close();
+					};
+					this.aplayAudio();
+				}
 			}
 		},
 		mounted() {
@@ -192,16 +196,19 @@
 				// this.alertList = res.data
 				this.alertListLength = res.total;
 			})
-			setInterval(this.getAlert, 300000);
-			// alertTimer = setInterval(this.getAlert, 300000);
+			this.getAlert();
+			
 		},
 		methods: {
 			// 获取告警信息
 			getAlert() {
-				API.alert(1, 10, 1).then(res => {
-					// this.alertList = res.data
-					this.alertListLength = res.total;
-				})
+				var self  = this;
+			 	self.alertTimer =  setInterval(() => {
+					API.alert(1, 10, 1).then(res => {
+						// this.alertList = res.data
+						this.alertListLength = res.total;
+					})
+				}, 300000);
 			},
 			// 去告警页面
 			toAlert() {
@@ -227,14 +234,20 @@
 				}
 			},
 			// 告警开关
-			// alertSwitchChange(val) {
-			// 	if (val == true) {
-			// 		console.log(alertTimer)
-			// 	} else {
-			// 		console.log(alertTimer)
-			// 		clearInterval(alertTimer)
-			// 	}
-			// },
+			alertSwitchChange(val) {
+				var self = this;
+				if (val == true) {
+					API.alert(1, 10, 1).then(res => {
+						console.log(12121)
+						// this.alertList = res.data
+						self.alertListLength = res.total;
+					})
+					this.getAlert();
+				} else {
+					console.log(self.alertTimer)
+					clearInterval(self.alertTimer)
+				}
+			},
 			ChangePassword() {
 				var self = this;
 				if (self.pwdForm.new_password === self.pwdForm.confirm_password) {

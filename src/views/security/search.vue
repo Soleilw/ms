@@ -60,7 +60,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
+		<el-table :data="tableData" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="device.uuid" label="设备名称"></el-table-column>
 			<el-table-column prop="device.remark" label="设备地址"></el-table-column>
@@ -69,7 +69,7 @@
 			<el-table-column prop="updated_at" label="记录时间"></el-table-column>
 			<el-table-column prop="face.href" label="人脸库照片">
 				<template slot-scope="scope">
-					<div v-if="scope.row.face.href">
+					<div v-if="scope.row.face">
 						<el-popover placement="top-start" title trigger="click">
 							<img :src="scope.row.face.href" style="max-width: 800px; max-height: 800px" />
 							<img slot="reference" :src="scope.row.face.href" style="max-width: 180px; max-height: 80px" />
@@ -140,7 +140,7 @@
 					image: '',
 					match_score: ''
 				}, // 搜索人脸
-				tableDate: [],
+				tableData: [],
 				searchData: null,
 				id: '',
 				dialogDel: false,
@@ -325,10 +325,11 @@
 					self.dialogDoubtable = false;
 					self.loading = true;
 					self.searchData = res;
-					API.searchFaceLogs(1, 10, res).then(res1 => {
+					self.current = 1;
+					API.searchFaceLogs(self.current, 10, res).then(res1 => {
 						self.loading = false;
 						self.$message.success("搜索成功");
-						self.tableDate = res1.data;
+						self.tableData = res1.data;
 						self.total = res1.total;
 						self.searchForm = {};
 						self.$refs.upload.clearFiles();
@@ -379,7 +380,7 @@
 				self.current = val;
 				API.searchFaceLogs(val, self.size, self.searchData).then(res1 => {
 					self.loading = false;
-					self.tableDate = res1.data;
+					self.tableData = res1.data;
 					self.total = res1.total;
 				}).catch(err => {
 					self.loading = false;
@@ -392,7 +393,7 @@
 				self.size = val;
 				API.searchFaceLogs(self.current, val, self.searchData).then(res1 => {
 					self.loading = false;
-					self.tableDate = res1.data;
+					self.tableData = res1.data;
 					self.total = res1.total;
 				}).catch(err => {
 					self.loading = false;
