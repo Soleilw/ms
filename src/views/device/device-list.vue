@@ -52,7 +52,7 @@
 			</div>
 		
 			<div class="content-box-right" >
-			<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+			<el-table :data="tableDate" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
 				<el-table-column prop="id" label="ID" width="80px"></el-table-column>
 				<el-table-column prop="address.address" label="地址" width="400px"></el-table-column>
 				<el-table-column prop="uuid" label="uuid" width="200px"></el-table-column>

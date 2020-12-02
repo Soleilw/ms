@@ -24,10 +24,10 @@
 			</div>
 		
 			<div class="content-box-right">
-				<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="720">
+				<el-table :data="tableData" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="720">
 					<el-table-column prop="id" label="ID"></el-table-column>
 					<el-table-column prop="name" label="姓名"></el-table-column>
-					<el-table-column prop="number" label="身份证号"></el-table-column>
+					<el-table-column prop="number" label="身份证号" width="200px"></el-table-column>
 					<el-table-column prop="remark" label="备注" width="400px"></el-table-column>
 					<el-table-column prop="number" label="工号" width="200px"></el-table-column>
 					<el-table-column prop="state" label="检索状态">

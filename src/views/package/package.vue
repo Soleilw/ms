@@ -7,7 +7,7 @@
 		</div>
 
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}">
+		<el-table :data="tableDate" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}">
 			<el-table-column prop="id" label="APKID"></el-table-column>
 			<el-table-column prop="name" label="名称"></el-table-column>
 			<el-table-column prop="description" label="描述"></el-table-column>

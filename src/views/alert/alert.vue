@@ -46,7 +46,7 @@
 			</div>
 
 			<div class="content-box-right">
-				<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="680"
+				<el-table :data="tableData" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="680"
 				 ref="multipleTable" @selection-change="handleSelectionChange" :row-key="(row) => row.id">
 					<el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
 					<el-table-column prop="id" label="ID"></el-table-column>

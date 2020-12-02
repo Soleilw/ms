@@ -6,7 +6,7 @@
 			</div>
 		</div>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620">
+		<el-table :data="tableData" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="username" label="账号"></el-table-column>
 			<el-table-column prop="role" label="角色名"></el-table-column>

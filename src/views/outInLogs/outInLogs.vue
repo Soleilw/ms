@@ -42,7 +42,7 @@
 			</div>
 
 			<div class="content-box-right">
-				<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+				<el-table :data="faceLogsTable" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
 					<el-table-column prop="id" label="ID"></el-table-column>
 					<el-table-column prop="device_uuid" label="设备ID" width="300px"></el-table-column>
 					<el-table-column prop="device.remark" label="备注" width="200px"></el-table-column>

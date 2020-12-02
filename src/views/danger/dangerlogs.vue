@@ -43,7 +43,7 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="720">
+		<el-table :data="tableDate" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="720">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="danger.name" label="姓名"></el-table-column>
 			<el-table-column prop="danger.number" label="身份证号"></el-table-column>

@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="content-box-right" style=" width: 84%;">
-				<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+				<el-table :data="tableData" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
 					<el-table-column prop="face_id" label="人脸ID" width="200px"></el-table-column>
 					<el-table-column prop="group" label="人脸组" width="200px"></el-table-column>
 					<el-table-column prop="face.name" label="姓名" width="100px"></el-table-column>

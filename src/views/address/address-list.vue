@@ -25,7 +25,7 @@
 			</div>
 
 			<div class="content-box-right">
-				<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+				<el-table :data="tableData" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
 					<el-table-column prop="id" label="ID" width="100px"></el-table-column>
 					<el-table-column prop="project_id" label="项目ID" width="100px"></el-table-column>
 					<el-table-column prop="address" label="地址" width="400px"></el-table-column>

@@ -6,7 +6,7 @@
 			</div>
 		</div>
 
-		<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
+		<el-table :data="tableData" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620">
 			<el-table-column prop="id" label="ID"></el-table-column>
 			<el-table-column prop="department.title" label="所属部门"></el-table-column>
 			<el-table-column prop="station.name" label="所属辖区"></el-table-column>
@@ -15,9 +15,9 @@
 			<el-table-column prop="role" label="角色名"></el-table-column>
 			<el-table-column label="操作" width="300px">
 				<template slot-scope="scope">
-					<el-button type="primary" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">重置密码</el-button>
-					<el-button type="primary" size="mini" @click="loginLogs(scope.$index, scope.row)">登录记录</el-button>
+					<el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button type="text" @click="handleReset(scope.$index, scope.row)">重置密码</el-button>
+					<el-button type="text" @click="loginLogs(scope.$index, scope.row)">登录记录</el-button>
 					<!-- <el-button type="danger" size="mini" @click="handleDel(scope.$index, scope.row)">删除</el-button> -->
 				</template>
 			</el-table-column>

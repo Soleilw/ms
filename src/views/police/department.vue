@@ -20,7 +20,7 @@
 			</div>
 
 			<div class="content-box-right" style=" width: 84%;">
-				<el-table :data="tableData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+				<el-table :data="tableData" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
 					<el-table-column prop="level" label="部门等级">
 						<template slot-scope="scope">
 							<span v-if="scope.row.level == 1">一级部门</span>
