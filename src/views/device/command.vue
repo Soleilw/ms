@@ -414,7 +414,6 @@
 			// 发送指令
 			sendCommand() {
 				var self = this;
-				self.$refs.upload.submit();
 				if (self.command) {
 					switch (self.command) {
 						case "setPassword":
