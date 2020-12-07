@@ -14,6 +14,14 @@
 					</el-input>
 				</div>
 				<div class="btn">
+					<div class="tip">根据地址筛选：</div>
+				</div>
+				<div class="btn">
+					<el-input placeholder="输入姓名" v-model="address_name" class="input-with-select" @keyup.enter.native="addressSearch(address_name)">
+						<el-button slot="append" icon="el-icon-search" @click="addressSearch(address_name)"></el-button>
+					</el-input>
+				</div>
+				<div class="btn">
 					<div class="tip">根据类型筛选：</div>
 				</div>
 				<div class="btn">
@@ -613,7 +621,9 @@
 					}
 				},
 				area_address_List: [], //选择省市区后获取地址列表
-				area_address_id: ''
+				area_address_id: '',
+				
+				address_name: '', // 根据地址搜索
 
 			}
 		},
@@ -640,7 +650,7 @@
 			proChange(val) {
 				var self = this;
 				self.pro_city_area_id = val[3];
-				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id).then(res => {
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState,self.address_name).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -657,7 +667,19 @@
 
 			areaAddressChange(val) {
 				var self = this;
-				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, val).then(res => {
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, val,self.deviceState,self.address_name).then(res => {
+					self.loading = false;
+					self.tableDate = res.data;
+					self.total = res.total;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+			
+			// 根据地址搜索
+			addressSearch(val) {
+				var self = this;
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id,self.deviceState,val).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -670,7 +692,7 @@
 			search() {
 				var self = this;
 				self.loading = true;
-				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id).then(res => {
+				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState,self.address_name).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -682,7 +704,7 @@
 			typeChange(val) {
 				var self = this;
 				self.loading = true;
-				API.devices(1, self.size, val, self.uuid, self.pro_city_area_id).then(res => {
+				API.devices(1, self.size, val, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState,self.address_name).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -697,7 +719,7 @@
 			deviceStateChange(val) {
 				var self = this;
 				self.loading = true;
-				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, val).then(res => {
+				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, val,self.address_name).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -1290,7 +1312,7 @@
 				var self = this;
 				self.current = val;
 				self.loading = true;
-				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState).then(
+				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,self.address_name).then(
 					res => {
 						self.loading = false;
 						self.tableDate = res.data;
@@ -1304,7 +1326,7 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState)
+				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,self.address_name)
 					.then(res => {
 						self.loading = false;
 						self.tableDate = res.data;

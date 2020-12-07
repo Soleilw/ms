@@ -183,7 +183,7 @@ API._device = function(uuid) {
 // 获取设备
 // 获取人脸组
 // 地址搜索
-API.devices = function(page, limit, type, uuid, area_id, address_id, online) {
+API.devices = function(page, limit, type, uuid, area_id, address_id, online, address) {
 	return axios.get(url.Devices, {
 		page: page,
 		limit: limit,
@@ -191,7 +191,8 @@ API.devices = function(page, limit, type, uuid, area_id, address_id, online) {
 		uuid: uuid,
 		area_id: area_id,
 		address_id: address_id,
-		online: online
+		online: online,
+		address:address
 	})
 }
 
