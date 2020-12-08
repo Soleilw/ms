@@ -170,7 +170,8 @@
 											<div class="level2">
 												<el-checkbox label="deviceAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
 												<el-checkbox label="deviceDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-												<el-checkbox label="deviceGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+												<el-checkbox label="deviceGet" @change="oneChange" class="permission-span">查看所有</el-checkbox>
+												<el-checkbox label="deviceGetStation" @change="oneChange" class="permission-span">查看辖区</el-checkbox>
 											</div>
 											<div class="level2">
 												暂无
@@ -222,8 +223,9 @@
 												<el-checkbox label="dangerGet" @change="oneChange" class="permission-span">查看</el-checkbox>
 											</div>
 											<div class="level2">
-												<el-checkbox label="dangerLogGet" @change="oneChange" class="permission-span">新增</el-checkbox>
 												<el-checkbox label="dangerLogDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+												<el-checkbox label="dangerLogGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+												<el-checkbox label="dangerLogGetStation" @change="oneChange" class="permission-span">查看辖区</el-checkbox>
 											</div>
 
 										</div>
@@ -793,6 +795,7 @@
 					"deviceAdd", // 添加设备
 					"deviceGet", // 获取设备
 					"deviceDel", // 删除设备
+					"deviceGetStation", // 查看辖区设备
 
 					"package", // 包管理页
 					"apkAdd", // 添加安装包
@@ -811,6 +814,7 @@
 					"dangerLogGet", // 获取可疑日志列表
 					"dangerLogDel", // 删除可疑日志
 					"personVerifies",  // 证件核验
+					"dangerLogGetStation", 
 
 
 					"permission", // 角色管理

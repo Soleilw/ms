@@ -133,6 +133,25 @@
 								<div class="table">
 									<div class="tb" style="width: 20%;">
 										<div class="level1">
+											<el-checkbox label="device" @change="oneChange">
+												<span style="font-weight: bold;">设备管理</span>
+											</el-checkbox>
+										</div>
+									</div>
+									<div class="tb tr" style="width: 20%;">
+										<div class="level2">
+											<el-checkbox label="deviceList" @change="oneChange">设备列表</el-checkbox>
+										</div>
+									</div>
+									<div class="tb set" style="width: 60%;">
+										<div class="level2">
+											<el-checkbox label="deviceGetStation" @change="oneChange" class="permission-span">查看本辖区</el-checkbox>
+										</div>
+									</div>
+								</div>
+								<div class="table">
+									<div class="tb" style="width: 20%;">
+										<div class="level1">
 											<el-checkbox label="address" @change="oneChange">
 												<span style="font-weight: bold;">地址管理</span>
 											</el-checkbox>
@@ -159,7 +178,7 @@
 										</div>
 									</div>
 								</div>
-							<!-- 	<div class="table">
+								<!-- 	<div class="table">
 									<div class="tb" style="width: 20%;">
 										<div class="level1">
 											<el-checkbox label="face" @change="oneChange">
@@ -236,8 +255,9 @@
 											<el-checkbox label="dangerGet" @change="oneChange" class="permission-span">查看</el-checkbox>
 										</div>
 										<div class="level2">
-											<el-checkbox label="dangerLogGet" @change="oneChange" class="permission-span">新增</el-checkbox>
 											<el-checkbox label="dangerLogDel" @change="oneChange" class="permission-span">删除</el-checkbox>
+											<el-checkbox label="dangerLogGet" @change="oneChange" class="permission-span">查看所有</el-checkbox>
+											<el-checkbox label="dangerLogGetStation" @change="oneChange" class="permission-span">查看本辖区</el-checkbox>
 										</div>
 
 									</div>
@@ -264,7 +284,7 @@
 									<div class="tb set" style="width: 60%;">
 									</div>
 								</div>
-					<!-- 			<div class="table">
+								<!-- 			<div class="table">
 									<div class="tb" style="width: 20%;">
 										<el-checkbox label="policeList" @change="oneChange">
 											<span style="font-weight: bold;">警员管理</span>
@@ -430,13 +450,13 @@
 					// "faceGet", // 获取人脸
 					// "faceDel", // 删除人脸
 
-					// "device", // 设备管理页
-					// "deviceList", // 设备列表
+					"device", // 设备管理页
+					"deviceList", // 设备列表
 					// "command", // 指令管理
 					// "deviceAdd", // 添加设备
 					// "deviceGet", // 获取设备
 					// "deviceDel", // 删除设备
-
+					"deviceGetStation",
 
 					"danger", // 可疑管理页
 					"doubtable", // 可疑人脸子页
@@ -446,6 +466,7 @@
 					"dangerGet", // 删除可疑人脸
 					"dangerLogGet", // 获取可疑日志列表
 					"dangerLogDel", // 删除可疑日志
+					"dangerLogGetStation",
 
 
 					"police", // 警务管理
@@ -460,7 +481,7 @@
 					"departmentGet",
 					"departmentEdit",
 					"departmentDel",
-					"personVerifies",  // 证件核验
+					"personVerifies", // 证件核验
 
 					"security", // 安防布控
 					"upload", // 上传可疑人脸
