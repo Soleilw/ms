@@ -357,9 +357,12 @@
 												<span style="font-weight: bold;">告警处理</span>
 											</el-checkbox>
 										</div>
-										<div class="tb tr" style="width: 20%;">
-										</div>
+										<div class="tb tr" style="width: 20%;"></div>
 										<div class="tb set" style="width: 60%;">
+											<div class="level2">
+												<el-checkbox label="alertGet" @change="oneChange" class="permission-span">查看所有</el-checkbox>
+												<el-checkbox label="alertGetStation" @change="oneChange" class="permission-span">查看辖区</el-checkbox>
+											</div>
 										</div>
 									</div>
 									<div class="table">
@@ -854,6 +857,8 @@
 					"generate", // 搜索人脸
 					
 					"alert", // 告警处理
+					"alertGet",
+					"alertGetStation",
 					
 					"area", // 辖区管理
 					"areaList",
