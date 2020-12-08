@@ -50,7 +50,7 @@
 								<div class="th" style="width: 60%;">操作</div>
 							</div>
 							<el-checkbox-group v-model="form.permissions">
-								<!-- <div class="table">
+								<div class="table">
 									<div class="tb" style="width: 20%;">
 										<div class="level1">
 											<el-checkbox label="overview" @change="oneChange">
@@ -60,7 +60,7 @@
 									</div>
 									<div class="tb tr" style="width: 20%;"></div>
 									<div class="tb tr" style="width: 60%;"></div>
-								</div> -->
+								</div>
 								<div class="table">
 									<div class="tb" style="width: 20%;">
 										<div class="level1">

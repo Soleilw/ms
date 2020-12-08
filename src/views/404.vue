@@ -7,7 +7,7 @@
 			<!-- <p>Page Not Found</p> -->
 			<p>你页面走丢了~</p>
 			<p>
-				<router-link to="/overview"><el-button type="primary">返回首页</el-button></router-link>
+				<router-link to="/alert"><el-button type="primary">返回首页</el-button></router-link>
 			</p>
 		</div>
 	</div>

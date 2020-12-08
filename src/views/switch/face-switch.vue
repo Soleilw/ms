@@ -100,7 +100,7 @@
 				var self = this;
 				self.dialogSwitch = true;
 				self.form = {
-					switch_title: '',
+					switch_title: '人脸开关',
 					version: '',
 					switch_value: ''
 				}

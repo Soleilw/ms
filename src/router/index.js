@@ -32,7 +32,7 @@ export const DynamicRoutes = [{
 		path: '',
 		component: () => import('@/components/layout/Home.vue'),
 		name: 'container',
-		redirect: 'overview',
+		redirect: 'alert',
 		// meta: {
 		// 	requiresAuth: true,
 		// 	title: '进出记录管理'

@@ -134,7 +134,7 @@
 							</el-upload>
 						</el-form-item>
 					</div>
-					<div  class="submit">
+					<div class="submit">
 						<el-button type="primary" @click="sendCommand">发送</el-button>
 					</div>
 				</el-form>
@@ -474,18 +474,18 @@
 						case 'setScreenSave':
 							console.log(self.screenFrom)
 							console.log(self.submitChanner)
-							if(self.submitChanner) {
+							if (self.submitChanner) {
 								self.$refs.upload.submit();
 								API.sendDeviceCommand(self.screenFrom).then(res => {
 									self.$message.success("发送成功");
 									self.command_uuid = '';
 									self.command = '';
 									self.screenTime = '',
-									self.intervalTime = 0, // 间隔时间
-									self.leaveTime = '',
-									self.screenFrom = {},
-									self.screenSaverList = [],
-									self.dialogCommand = false;
+										self.intervalTime = 0, // 间隔时间
+										self.leaveTime = '',
+										self.screenFrom = {},
+										self.screenSaverList = [],
+										self.dialogCommand = false;
 									self.getCommands();
 								})
 							} else {
@@ -494,10 +494,10 @@
 									self.command_uuid = '';
 									self.command = '';
 									self.screenTime = '',
-									self.intervalTime = 0, // 间隔时间
-									self.leaveTime = '',
-									self.screenFrom = {},
-									self.dialogCommand = false;
+										self.intervalTime = 0, // 间隔时间
+										self.leaveTime = '',
+										self.screenFrom = {},
+										self.dialogCommand = false;
 									self.getCommands();
 								})
 							}
@@ -570,7 +570,7 @@
 			// 移除照片
 			handleRemove(file, fileList) {
 				console.log(file, fileList)
-				if(fileList.length == 0) {
+				if (fileList.length == 0) {
 					self.submitChanner = false;
 				}
 			},
@@ -578,7 +578,7 @@
 			handleChange(file, fileList) {
 				var self = this;
 				console.log(file, fileList)
-				if(fileList.length > 0) {
+				if (fileList.length > 0) {
 					self.submitChanner = true;
 				}
 			},
@@ -595,8 +595,8 @@
 				var _screenSaverList = [];
 				if (self.imgData.key) {
 					self.screenSaverList.push(`${self.qiniuaddr}/${self.imgData.key}`)
-					for(var i = 0; i < self.screenSaverList.length; i++) {
-						if(_screenSaverList.indexOf(self.screenSaverList[i]) === -1) {
+					for (var i = 0; i < self.screenSaverList.length; i++) {
+						if (_screenSaverList.indexOf(self.screenSaverList[i]) === -1) {
 							_screenSaverList.push(self.screenSaverList[i])
 						}
 					}
@@ -621,7 +621,7 @@
 				var self = this;
 				console.log(111, res)
 				console.log(222, fileList)
-				
+
 				// for (let i = 0; i < self.screenSaverList.length; i++) {
 				// 	if (i == 0) {
 				// 		self.screenFrom.image_1 = self.screenSaverList[i]
