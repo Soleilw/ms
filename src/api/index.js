@@ -267,6 +267,13 @@ API.sendDeviceCommand = function(data) {
 	return axios.post(url.SendDeviceCommand, data)
 }
 
+// 重启指令队列
+API.resetCommand = function(uuid) {
+	return axios.get(url.DeviceCommands, {
+		uuid:uuid
+	})
+}
+
 // 查看人像
 API.catchFace = function(id) {
 	return axios.get(url.CatchFaces, {

@@ -58,69 +58,81 @@
 					<!-- <el-button type="primary" @click="addDevice">重启队列</el-button> -->
 				</div>
 			</div>
-		
-			<div class="content-box-right" >
-			<el-table :data="tableDate" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
-				<el-table-column prop="id" label="ID" width="80px"></el-table-column>
-				<el-table-column prop="address.address" label="地址" width="400px"></el-table-column>
-				<el-table-column prop="uuid" label="uuid" width="200px"></el-table-column>
-				<el-table-column prop="type_string" label="类型" width="150px"></el-table-column>
-				<el-table-column prop="direction" label="方向"></el-table-column>
-				<el-table-column prop="ip" label="IP地址" width="200px"></el-table-column>
-				<el-table-column prop="version" label="版本"></el-table-column>
-				<el-table-column prop="remark" label="备注" width="500px"></el-table-column>
-				<el-table-column prop="online" label="状态">
-					<template slot-scope="scope">
-						<span v-if="scope.row.online == 1">在线</span>
-						<span v-if="scope.row.online == 2">离线</span>
-					</template>
-				</el-table-column>
-				<el-table-column prop="last_login" label="最后登录时间" width="150px"></el-table-column>
-				<el-table-column label="操作" width="150px" fixed="right">
-					<template slot-scope="scope">
-						<el-dropdown>
-							<el-button type="primary">
-								操作<i class="el-icon-arrow-down el-icon--right"></i>
-							</el-button>
-							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item>
-									<el-button type="text" @click="handleExit(scope.$index, scope.row)">编辑</el-button>
-								</el-dropdown-item>
-								<el-dropdown-item>
-									<el-button type="text" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
-								</el-dropdown-item>
-								<el-dropdown-item>
-									<el-button v-if="scope.row.type == 4 || scope.row.type == 1" type="text" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
-								</el-dropdown-item>
-								<el-dropdown-item>
-									<el-button type="text" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
-								</el-dropdown-item>
-								<el-dropdown-item>
-									<el-button type="text" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
-								</el-dropdown-item>
-								<el-dropdown-item>
-									<el-button type="text" @click="handleShowCommands (scope.$index, scope.row)">查看指令</el-button>
-								</el-dropdown-item>
-								<el-dropdown-item>
-									<el-button type="text" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
-								</el-dropdown-item>
-								<el-dropdown-item>
-									<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
-										<el-button slot="reference" type="text">删除</el-button>
-									</el-popconfirm>
-								</el-dropdown-item>
-							</el-dropdown-menu>
-						</el-dropdown>
-					</template>
-				</el-table-column>
-			</el-table>
-			<div class="block">
-				<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-				 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
-				</el-pagination>
-			</div>
+
+			<div class="content-box-right">
+				<el-table :data="tableDate" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+					<el-table-column prop="id" label="ID" width="80px"></el-table-column>
+					<el-table-column prop="address.address" label="地址" width="400px"></el-table-column>
+					<el-table-column prop="uuid" label="uuid" width="200px"></el-table-column>
+					<el-table-column prop="type_string" label="类型" width="150px"></el-table-column>
+					<el-table-column prop="direction" label="方向"></el-table-column>
+					<el-table-column prop="ip" label="IP地址" width="200px"></el-table-column>
+					<el-table-column prop="version" label="版本"></el-table-column>
+					<el-table-column prop="remark" label="备注" width="500px"></el-table-column>
+					<el-table-column prop="online" label="状态">
+						<template slot-scope="scope">
+							<span v-if="scope.row.online == 1">在线</span>
+							<span v-if="scope.row.online == 2">离线</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="last_login" label="最后登录时间" width="150px"></el-table-column>
+					<el-table-column label="操作" width="150px" fixed="right">
+						<template slot-scope="scope">
+							<el-dropdown>
+								<el-button type="primary">
+									操作<i class="el-icon-arrow-down el-icon--right"></i>
+								</el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item>
+										<el-button type="text" @click="handleExit(scope.$index, scope.row)">编辑</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button type="text" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button v-if="scope.row.type == 4 || scope.row.type == 1" type="text" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button  v-if="scope.row.type == 4 || scope.row.type == 1 || scope.row.type == 5 || scope.row.type == 6"
+										 type="text" @click="resetCommandList(scope.$index, scope.row)">重启指令队列</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button type="text" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button type="text" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button type="text" @click="handleShowCommands (scope.$index, scope.row)">查看指令</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button type="text" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+											<el-button slot="reference" type="text">删除</el-button>
+										</el-popconfirm>
+									</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+						</template>
+					</el-table-column>
+				</el-table>
+				<div class="block">
+					<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
+					 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
+					</el-pagination>
+				</div>
 			</div>
 		</div>
+		
+		<el-dialog title="重启指令队列" :visible.sync="dialogResetCommand" width="20%" align="center">
+			<div style="font-size: 20px; margin-bottom: 30px">是否重启指令队列</div>
+			<span>
+				<el-button type="primary" @click="toResetCommand">重启</el-button>
+				<el-button type="danger" @click="dialogResetCommand = false">取消</el-button>
+			</span>
+		</el-dialog>
 
 		<el-dialog title="添加设备" :visible.sync="dialogDevice">
 			<div class="box">
@@ -201,7 +213,7 @@
 			</div>
 		</el-dialog>
 
-		
+
 
 		<!-- 查看日志 -->
 		<el-dialog title="查看日志" :visible.sync="dialogLogs" width="80%">
@@ -622,8 +634,11 @@
 				},
 				area_address_List: [], //选择省市区后获取地址列表
 				area_address_id: '',
-				
+
 				address_name: '', // 根据地址搜索
+				
+				dialogResetCommand: false, // 重启指令队列
+				reset_device_uuid: '',
 
 			}
 		},
@@ -650,7 +665,8 @@
 			proChange(val) {
 				var self = this;
 				self.pro_city_area_id = val[3];
-				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState,self.address_name).then(res => {
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState, self
+					.address_name).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
@@ -667,64 +683,69 @@
 
 			areaAddressChange(val) {
 				var self = this;
-				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, val,self.deviceState,self.address_name).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-				}).catch(err => {
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, val, self.deviceState, self.address_name).then(
+					res => {
+						self.loading = false;
+						self.tableDate = res.data;
+						self.total = res.total;
+					}).catch(err => {
 					self.loading = false;
 				})
 			},
-			
+
 			// 根据地址搜索
 			addressSearch(val) {
 				var self = this;
-				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id,self.deviceState,val).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-				}).catch(err => {
-					self.loading = false;
-				})
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState, val)
+					.then(res => {
+						self.loading = false;
+						self.tableDate = res.data;
+						self.total = res.total;
+					}).catch(err => {
+						self.loading = false;
+					})
 			},
 
 			// 搜索
 			search() {
 				var self = this;
 				self.loading = true;
-				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState,self.address_name).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-					self.$message.success('搜索成功!');
-				}).catch(err => {
-					self.loading = false;
-				})
+				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState, self.address_name)
+					.then(res => {
+						self.loading = false;
+						self.tableDate = res.data;
+						self.total = res.total;
+						self.$message.success('搜索成功!');
+					}).catch(err => {
+						self.loading = false;
+					})
 			},
 			typeChange(val) {
 				var self = this;
 				self.loading = true;
-				API.devices(1, self.size, val, self.uuid, self.pro_city_area_id,self.area_address_id,self.deviceState,self.address_name).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-					self.current = 1;
-					self.$message.success('搜索成功！');
-				}).catch(err => {
-					self.loading = false;
-				})
+				API.devices(1, self.size, val, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState, self.address_name)
+					.then(res => {
+						self.loading = false;
+						self.tableDate = res.data;
+						self.total = res.total;
+						self.current = 1;
+						self.$message.success('搜索成功！');
+					}).catch(err => {
+						self.loading = false;
+					})
 			},
 
 			// 根据设备状态搜索
 			deviceStateChange(val) {
 				var self = this;
 				self.loading = true;
-				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, val,self.address_name).then(res => {
-					self.loading = false;
-					self.tableDate = res.data;
-					self.total = res.total;
-					self.$message.success('搜索成功!');
-				}).catch(err => {
+				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, val, self.address_name).then(
+					res => {
+						self.loading = false;
+						self.tableDate = res.data;
+						self.total = res.total;
+						self.$message.success('搜索成功!');
+					}).catch(err => {
 					self.loading = false;
 				})
 			},
@@ -1303,6 +1324,21 @@
 				})
 			},
 			
+			// 重启指令队列
+			resetCommandList(index, row) {
+				let self = this;
+				self.reset_device_uuid = row.uuid;
+				self.dialogResetCommand = true;
+			},
+			
+			toResetCommand() {
+				let self = this;
+				API.resetCommand(self.reset_device_uuid).then((res) => {
+					self.$message.success("重启成功");
+					self.dialogResetCommand = false;
+				});
+			},
+
 			// 重新筛选
 			resetSelect() {
 				window.location.reload();
@@ -1312,7 +1348,8 @@
 				var self = this;
 				self.current = val;
 				self.loading = true;
-				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,self.address_name).then(
+				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,
+					self.address_name).then(
 					res => {
 						self.loading = false;
 						self.tableDate = res.data;
@@ -1326,7 +1363,8 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,self.address_name)
+				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,
+						self.address_name)
 					.then(res => {
 						self.loading = false;
 						self.tableDate = res.data;
