@@ -53,7 +53,7 @@ const url = {
 	"Commands": '/commands', // 查看指令列表
 	"SendDeviceCommand": 'send/device/command', // 发送指令
 	"CatchFaces": '/catch/faces', // 查看人像
-	"DeviceCommands": '/device/commands', // 重启指令队列
+	"RestartDeviceCommands": 'restart/device/commands', // 重启指令队列
 	
 	// apk管理
 	'Apk': '/apk', // 创建apk

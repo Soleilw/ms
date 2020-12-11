@@ -269,7 +269,7 @@ API.sendDeviceCommand = function(data) {
 
 // 重启指令队列
 API.resetCommand = function(uuid) {
-	return axios.get(url.DeviceCommands, {
+	return axios.get(url.RestartDeviceCommands, {
 		uuid:uuid
 	})
 }
