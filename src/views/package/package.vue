@@ -480,7 +480,7 @@
 						break;
 					case 2:
 						var formData_2 = {
-							
+							version_id: self.sendForm.version_id,
 							type: 2,
 							addresses: self.sendForm.addresses
 						}

@@ -217,7 +217,7 @@
 
 		<!-- 查看日志 -->
 		<el-dialog title="查看日志" :visible.sync="dialogLogs" width="80%">
-			<el-table :data="logstable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" v-loading="logLoading"
+			<el-table :data="logstable" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" v-loading="logLoading"
 			 element-loading-text="获取数据中">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="uuid" label="设备ID"></el-table-column>
@@ -257,7 +257,7 @@
 
 		<!-- 查看进出记录 -->
 		<el-dialog title="查看进出记录" :visible.sync="dialogShowRecord" width="80%">
-			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" max-height="620"
+			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620"
 			 v-loading="faceLoading" element-loading-text="获取数据中">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
@@ -283,7 +283,7 @@
 
 		<!-- 查看人脸组 -->
 		<el-dialog title="查看人脸组" :visible.sync="dialogFaceGroup" width="80%">
-			<el-table :data="facetable" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table :data="facetable" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_id" label="设备ID"></el-table-column>
 				<el-table-column prop="group_id" label="人脸组ID"></el-table-column>
@@ -300,7 +300,7 @@
 		<!-- 查看心跳 -->
 		<el-dialog :title="'设备：' + uuid" :visible.sync="dialogHeart" :fullscreen="true">
 			<div id="heartChart" ref="heartChart" style="width: 100%;height:600px;"></div>
-			<el-table :data="arr" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}">
+			<el-table :data="arr" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="time" label="时间"></el-table-column>
@@ -429,7 +429,7 @@
 
 			</div>
 
-			<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" :max-height="480">
+			<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" :max-height="480">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="command" label="指令"></el-table-column>
@@ -449,7 +449,7 @@
 		<!-- 查看用户-->
 		<el-dialog title="查看用户" :visible.sync="dialogUserList" width="80%">
 			<div style="margin-bottom: 20px;">总人数：{{totalUserListPage}}人</div>
-			<el-table :data="userListData" border :header-cell-style="{background:'#f0f0f0', color: '#2a9f93'}" :max-height="600">
+			<el-table :data="userListData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" :max-height="600">
 				<el-table-column type="index" width="50" label="序号">
 				</el-table-column>
 				<el-table-column prop="name" label="姓名"></el-table-column>
