@@ -140,6 +140,10 @@
 					self.index = 'police-list';
 					return 'police-list'
 				}
+				if (self.$route.path.split('/')[1] == 'screen-saver') {
+					self.index = 'police-list';
+					return 'police-list'
+				}
 				if (self.$route.path.split('/')[1] == 'upload') {
 					self.index = 'upload'
 					return 'upload'
@@ -164,6 +168,7 @@
 					self.index = 'alert'
 					return 'alert'
 				}
+				
 			},
 			...mapState(['collapse', 'crumbList'])
 		},

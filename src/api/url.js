@@ -80,7 +80,10 @@ const url = {
 	'PoliceLevels': '/police/levels', // 获取部门等级
 	'Policeman': '/policeman', // 新增警员信息
 	'Policemen': '/policemen', // 获取警员信息
-	'PassPoliceman': '/pass/policeman ', // 警员审核
+	'PassPoliceman': '/pass/policeman', // 警员审核
+	'screenSaver': '/screen/saver', // 添加屏保/删除屏保
+	'screenSavers': '/screen/savers', // 查看屏保
+	'publishScreenSavers': '/publish/screen/saver', // 发布屏保
 	
 	// 上传人脸
 	'UploadFace': '/upload/face', // 上传人脸

@@ -1,12 +1,12 @@
 const dynamicRouter = [{
-	    path: '/overview',
-	    name: 'overview',
-	    component: () => import('@/views/overview/overview'),
-	    meta: {
-	        title: '数据总览',
-	        icon: 'el-icon-menu'
-	    }
-	},{
+		path: '/overview',
+		name: 'overview',
+		component: () => import('@/views/overview/overview'),
+		meta: {
+			title: '数据总览',
+			icon: 'el-icon-menu'
+		}
+	}, {
 		path: '/baiduaip',
 		name: 'baiduaip',
 		component: () => import('@/views/baiduAip/baiduAip'),
@@ -25,13 +25,13 @@ const dynamicRouter = [{
 		}
 	},
 	{
-	    path: '/police',
-	    name: 'police',
-	    component: () => import('@/views/police/index'),
-	    meta: {
-	        title: '日常管理',
-	        icon: 'el-icon-setting'
-	    },
+		path: '/police',
+		name: 'police',
+		component: () => import('@/views/police/index'),
+		meta: {
+			title: '日常管理',
+			icon: 'el-icon-setting'
+		},
 		children: [{
 				path: '/police-list',
 				name: 'policeList',
@@ -97,15 +97,16 @@ const dynamicRouter = [{
 				]
 			},
 			{
-			    path: '/outInLogs',
-			    name: 'outInLogs',
-			    component: () => import('@/views/outInLogs/outInLogs'),
-			    meta: {
-			        title: '进出记录管理',
-			        icon: 'el-icon-setting'
-			    }
+				path: '/outInLogs',
+				name: 'outInLogs',
+				component: () => import('@/views/outInLogs/outInLogs'),
+				meta: {
+					title: '进出记录管理',
+					icon: 'el-icon-setting'
+				}
 			},
-		{
+
+			{
 				path: '/area-list',
 				name: 'areaList',
 				component: () => import('@/views/area/area-list'),
@@ -113,17 +114,26 @@ const dynamicRouter = [{
 					title: '辖区管理',
 					icon: 'el-icon-map-location'
 				}
-			}
+			},
+			{
+				path: '/screen-saver',
+				name: 'screenSaver',
+				component: () => import('@/views/police/screen-saver'),
+				meta: {
+					title: '屏保管理',
+					icon: 'el-icon-s-release'
+				},
+			},
 		]
 	},
 	{
-	    path: '/security',
-	    name: 'security',
-	    component: () => import('@/views/security/index'),
-	    meta: {
-	        title: '安防布控',
-	        icon: 'el-icon-setting'
-	    },
+		path: '/security',
+		name: 'security',
+		component: () => import('@/views/security/index'),
+		meta: {
+			title: '安防布控',
+			icon: 'el-icon-setting'
+		},
 		children: [{
 				path: '/upload',
 				name: 'upload',
@@ -154,13 +164,13 @@ const dynamicRouter = [{
 		]
 	},
 	{
-	    path: '/statistical',
-	    name: 'statistical',
-	    component: () => import('@/views/statistical/index'),
-	    meta: {
-	        title: '统计',
-	        icon: 'el-icon-setting'
-	    },
+		path: '/statistical',
+		name: 'statistical',
+		component: () => import('@/views/statistical/index'),
+		meta: {
+			title: '统计',
+			icon: 'el-icon-setting'
+		},
 		children: [{
 				path: '/data',
 				name: 'data',
@@ -182,13 +192,13 @@ const dynamicRouter = [{
 		]
 	},
 	{
-	    path: '/alert',
-	    name: 'alert',
-	    component: () => import('@/views/alert/alert'),
-	    meta: {
-	        title: '告警处理',
-	        icon: 'el-icon-setting'
-	    }
+		path: '/alert',
+		name: 'alert',
+		component: () => import('@/views/alert/alert'),
+		meta: {
+			title: '告警处理',
+			icon: 'el-icon-setting'
+		}
 	},
 	// {
 	// 	path: '/address',
@@ -407,15 +417,14 @@ const dynamicRouter = [{
 			icon: 'el-icon-picture-outline',
 		},
 		children: [{
-				path: '/info-list',
-				name: 'infoList',
-				component: () => import('@/views/information/info-list'),
-				meta: {
-					title: '资讯列表',
-					icon: 'el-icon-warning'
-				}
+			path: '/info-list',
+			name: 'infoList',
+			component: () => import('@/views/information/info-list'),
+			meta: {
+				title: '资讯列表',
+				icon: 'el-icon-warning'
 			}
-		]
+		}]
 	},
 	{
 		path: '/switch', // 资讯管理
@@ -426,24 +435,23 @@ const dynamicRouter = [{
 			icon: 'el-icon-key',
 		},
 		children: [{
-				path: '/face-switch',
-				name: 'faceSwitch',
-				component: () => import('@/views/switch/face-switch'),
-				meta: {
-					title: '开关列表',
-					icon: 'el-icon-warning'
-				}
+			path: '/face-switch',
+			name: 'faceSwitch',
+			component: () => import('@/views/switch/face-switch'),
+			meta: {
+				title: '开关列表',
+				icon: 'el-icon-warning'
 			}
-		]
+		}]
 	},
 	{
-	    path: '/permission',
-	    name: 'permission',
-	    component: () => import('@/views/permission/index'),
-	    meta: {
-	        title: '权限管理',
-	        icon: 'el-icon-setting'
-	    },
+		path: '/permission',
+		name: 'permission',
+		component: () => import('@/views/permission/index'),
+		meta: {
+			title: '权限管理',
+			icon: 'el-icon-setting'
+		},
 		children: [{
 				path: '/roles',
 				name: 'roles',

@@ -463,6 +463,30 @@ API.audit = function(data) {
 	return axios.post(url.PassPoliceman, data)
 }
 
+// 屏保管理
+// 添加屏保
+API.screenSaver = function(data) {
+	return axios.post(url.screenSaver, data)
+}
+
+// 获取屏保
+API.screenSavers = function(page, limit) {
+	return axios.get(url.screenSavers, {
+		page: page,
+		limit: limit
+	})
+}
+
+// 删除屏保
+API.delScreenSaver = function(id) {
+	return axios.del(url.screenSaver, {id,id})
+}
+
+// 发布屏保
+API.issueScreenSaver = function(data) {
+	return axios.post(url.publishScreenSavers, data)
+}
+
 // 辖区管理
 // 添加公安辖区
 API.policeStation = function(data) {

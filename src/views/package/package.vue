@@ -7,7 +7,7 @@
 		</div>
 
 
-		<el-table :data="tableDate" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}">
+		<el-table :data="tableData" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}">
 			<el-table-column prop="id" label="APKID"></el-table-column>
 			<el-table-column prop="name" label="名称"></el-table-column>
 			<el-table-column prop="description" label="描述"></el-table-column>
@@ -100,7 +100,7 @@
 					</el-table-column>
 				</el-table>
 
-				<el-dialog title="发布" :visible.sync="dialogSend" :modal="false">
+				<el-dialog title="发布" :visible.sync="dialogSend" :modal="false" width="80%">
 					<div class="box">
 						<el-form :model="sendForm" label-width="100px">
 							<!-- <el-form-item label="选择APK">
@@ -124,13 +124,17 @@
 							<div v-if="sendForm.type === 2 && hasAddress">
 								<el-form-item label="选择地址">
 									<!-- <el-checkbox v-model="checkAll" @change="handleCheckAllAddress">全选</el-checkbox> -->
-									<div class="facebox">
+									<el-transfer filterable v-model="sendForm.addresses" :data="addressList" :titles="['id-地址', '选中地址']" :button-texts="['取消', '确定']"  @change="handleCheckAllAddress">
+										<span slot-scope="{ option }">
+											{{ option.key }} - {{ option.label }}</span>
+									</el-transfer>
+								<!-- 	<div class="facebox">
 										<div v-for="(item,index) in addressList" :key="index">
 											<el-checkbox-group v-model="sendForm.addresses" class="facebox-item">
 												<el-checkbox :label="item.id" @change="handleCheckAllAddress">{{item.address}}</el-checkbox>
 											</el-checkbox-group>
 										</div>
-									</div>
+									</div> -->
 								</el-form-item>
 							</div>
 							<div v-if="sendForm.type === 3">
@@ -143,14 +147,18 @@
 							</div>
 							<div v-if="sendForm.type === 3 && hasAddress">
 								<el-form-item label="选择地址">
+									<el-transfer filterable v-model="sendForm.addresses" :data="addressList" :titles="['id-地址', '选中地址']" :button-texts="['取消', '确定']"  @change="handleCheckAllAddress">
+										<span slot-scope="{ option }">
+											{{ option.key }} - {{ option.label }}</span>
+									</el-transfer>
 									<!-- <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox> -->
-									<div class="facebox">
+								<!-- 	<div class="facebox">
 										<div v-for="(item,index) in addressList" :key="index">
 											<el-checkbox-group v-model="sendForm.addresses" class="facebox-item">
 												<el-checkbox :label="item.id" @change="handleCheckAllAddress">{{item.address}}</el-checkbox>
 											</el-checkbox-group>
 										</div>
-									</div>
+									</div> -->
 								</el-form-item>
 							</div>
 							<div v-if="hasType">
@@ -161,13 +169,17 @@
 								</el-form-item>
 
 								<el-form-item label="选择设备">
-									<div class="facebox">
+									<el-transfer v-loading="dialogLoading" element-loading-text="获取数据中" filterable v-model="sendForm.devices" :data="deviceList" :titles="['uuid-备注', '选中地址']" :button-texts="['取消', '确定']">
+										<span slot-scope="{ option }">
+											{{ option.key }} - {{ option.label }}</span>
+									</el-transfer>
+							<!-- 		<div class="facebox">
 										<div v-for="(item,index) in deviceList" :key="index">
 											<el-checkbox-group v-model="sendForm.devices" class="facebox-item">
 												<el-checkbox :label="item.id">{{item.uuid}} / {{item.remark ? item.remark : '无'}}</el-checkbox>
 											</el-checkbox-group>
 										</div>
-									</div>
+									</div> -->
 								</el-form-item>
 							</div>
 
@@ -213,7 +225,7 @@
 					description: '',
 				},
 				dialogVersion: false,
-				tableDate: [],
+				tableData: [],
 				// 分页
 				current: 1, // 当前页
 				size: 10, // 每页出现几条
@@ -272,6 +284,7 @@
 				checkAll: false,
 				hasType: false,
 				deviceList: [],
+				dialogLoading: false,
 				// 分页
 				currentVersion: 1, // 当前页
 				sizeVersion: 10, // 每页出现几条
@@ -287,9 +300,9 @@
 		methods: {
 			getApk() {
 				var self = this;
-				API.apks(self.current).then(res => {
+				API.apks(1,10).then(res => {
 					self.loading = false;
-					self.tableDate = res.data;
+					self.tableData = res.data;
 					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
@@ -312,7 +325,7 @@
 				var self = this;
 				self.dialogShowVersion = true;
 				self.versionForm.apk_id = row.id
-				API.apkVersions(self.current, 10, self.versionForm.apk_id).then(res => {
+				API.apkVersions(1, 10, self.versionForm.apk_id).then(res => {
 					self.versionLoading = false;
 					self.versionTableData = res.data;
 					self.totalVersionPage = res.total;
@@ -341,7 +354,7 @@
 				self.size = val;
 				API.apks(self.current, val).then(res => {
 					self.loading = false;
-					self.tableDate = res.data;
+					self.tableData = res.data;
 					self.total = res.total;
 				}).catch(err => {
 					self.loading = false;
@@ -350,7 +363,7 @@
 
 			getApkVersion() {
 				var self = this;
-				API.apkVersions(self.currentPage, 10, self.versionForm.apk_id).then(res => {
+				API.apkVersions(1, 10, self.versionForm.apk_id).then(res => {
 					self.versionTableData = res.data;
 					self.totalVersionPage = res.total;
 				})
@@ -370,7 +383,7 @@
 				var self = this;
 				API.apkVersion(self.versionForm).then(res => {
 					self.$message.success("提交成功");
-					API.apkVersions(self.currentPage, 10, self.versionForm.apk_id).then(res => {
+					API.apkVersions(1, 10, self.versionForm.apk_id).then(res => {
 						self.versionTableData = res.data;
 						self.totalVersionPage = res.total;
 					})
@@ -426,7 +439,7 @@
 			},
 			getProject() {
 				var self = this;
-				API.projects(self.currentPage).then(res => {
+				API.projects(1,100).then(res => {
 					self.projectList = res.data;
 				})
 			},
@@ -441,8 +454,20 @@
 			// 获取地址
 			getAddress(val) {
 				var self = this;
-				API.addresses(self.currentPage, 1000, val).then(res => {
-					self.addressList = res.data;
+				self.dialogLoading = true;
+				API.addresses(1, 100000, val).then(res => {
+					let _addressList = res.data;
+					for (let i = 0; i < _addressList.length; i++) {
+						self.addressList.push({
+							key: _addressList[i].id,
+							label: _addressList[i].address
+						});
+					}
+					console.log(self.addressList)
+					self.dialogLoading = false;
+					return self.addressList;
+				}).catch(err => {
+					self.dialogLoading = false;
 				})
 			},
 
@@ -460,8 +485,21 @@
 			},
 			getDevice(val) {
 				var self = this;
-				API._devices(val, self.sendForm.addresses, 100).then(res => {
-					self.deviceList = res.data
+				self.dialogLoading = true;
+				API._devices(val, self.sendForm.addresses, 10000000).then(res => {
+					self.deviceList = [];
+					let _deviceList = res.data;
+					for (let i = 0; i < _deviceList.length; i++) {
+						self.deviceList.push({
+							key: _deviceList[i].id,
+							label: _deviceList[i].uuid + _deviceList[i].remark
+						});
+					}
+					console.log(self.deviceList)
+					self.dialogLoading = false;
+					return self.deviceList;
+				}).catch(err => {
+					self.dialogLoading = false;
 				})
 			},
 			newSend() {

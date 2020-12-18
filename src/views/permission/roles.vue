@@ -294,6 +294,9 @@
 											<div class="level2">
 												<el-checkbox label="personVerifies" @change="oneChange">证件核验</el-checkbox>
 											</div>
+											<div class="level2">
+												<el-checkbox label="screenSaver" @change="oneChange">屏保设置</el-checkbox>
+											</div>
 										</div>
 										<div class="tb set" style="width: 60%;">
 											<div class="level2">
@@ -307,6 +310,12 @@
 												<el-checkbox label="departmentDel" @change="oneChange" class="permission-span">删除</el-checkbox>
 												<el-checkbox label="departmentEdit" @change="oneChange" class="permission-span">编辑</el-checkbox>
 												<el-checkbox label="departmentGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+											</div>
+											<div class="level2">
+												dd
+											</div>
+											<div class="level2">
+												dd
 											</div>
 											<div class="level2">
 												dd
@@ -847,6 +856,7 @@
 					"departmentGet",
 					"departmentEdit",
 					"departmentDel",
+					"screenSaver",// 屏保设置
 					
 					"security", // 安防布控
 					"upload", // 上传可疑人脸
