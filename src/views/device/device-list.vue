@@ -198,6 +198,12 @@
 							<el-radio :label="3">关闭</el-radio>
 						</el-radio-group>
 					</el-form-item>
+					<el-form-item label="访客码">
+						<el-radio-group v-model="visitorCode">
+							<el-radio :label="1">开启</el-radio>
+							<el-radio :label="2">关闭</el-radio>
+						</el-radio-group>
+					</el-form-item>
 					<el-form-item label="选择方向">
 						<el-select v-model="form.direction" placeholder="请选择地址">
 							<el-option v-for="item in directionList" :key="item.id" :label="item.direction" :value="item.id">
@@ -521,6 +527,7 @@
 					direction: '出'
 				}],
 				hotness: 1,
+				visitorCode: 1, // 是否开启访客码
 				form: {
 					name: '',
 					address_id: '',
@@ -894,6 +901,17 @@
 			// 添加新的AIP
 			newDevice() {
 				var self = this;
+				switch (self.visitorCode) {
+					case 1:
+						self.form.configs.push({
+							passcode: 'open'
+						})
+						break;
+					case 2:
+						self.form.configs.push({
+							passcode: 'close'
+						})
+				}
 				switch (self.hotness) {
 					case 1:
 						self.form.configs.push({
@@ -953,6 +971,7 @@
 					self.form.uuid = res.uuid;
 					self.form.configs = [];
 					self.hotness = res.configs.heatvision;
+					self.passcode = res.configs.passcode;
 					self.form.direction = res.direction;
 					self.form.remark = res.remark;
 					self.form.face_groups = res.face_group;
@@ -979,6 +998,13 @@
 							break;
 						case 'none':
 							self.hotness = 3
+					}
+					switch (res.configs.passcode) {
+						case 'open':
+							self.visitorCode = 1
+							break;
+						case 'close':
+							self.visitorCode = 2
 					}
 				})
 
