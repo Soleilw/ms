@@ -463,6 +463,12 @@ API.audit = function(data) {
 	return axios.post(url.PassPoliceman, data)
 }
 
+
+API.delPolice = function(id) {
+	return axios.del(url.Policeman, {
+		id: id
+	})
+}
 // 屏保管理
 // 添加屏保
 API.screenSaver = function(data) {

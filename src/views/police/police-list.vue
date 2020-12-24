@@ -81,6 +81,9 @@
 							<el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 							<el-button v-if="scope.row.state == 1" type="text" @click="handleAudit(scope.$index, scope.row)">审核</el-button>
 							<!-- <el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">短信推送结果</el-button> -->
+							<el-popconfirm title="是否要删除该警员信息" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">
+								<el-button slot="reference" type="text">删除</el-button>
+							</el-popconfirm>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -464,19 +467,23 @@
 					password: '123456'
 				}
 			},
+			// 操作
+			handleDel(index, row) {
+				var self = this;
+				console.log(row)
+				var id = row.id
+				API.delPolice(id).then(res => {
+					self.$message.success('删除成功');
+					self.getPolice();
+					self.current = 1;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
 
 			// 关闭表单
 			clearForm() {
 				this.$refs.upload.clearFiles()
-			},
-			handleDel(index, row) {
-				var self = this;
-				// API.delDangerFace(self.id).then(res => {
-				// 	self.$message.success('删除成功')
-				// 	self.dialogDel = false;
-				// 	self.getDangerFaces();
-				// 	self.currentPage = 1;
-				// })
 			},
 
 			getQiniuToken() {
