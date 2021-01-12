@@ -551,5 +551,9 @@ API.statistical = function() {
 	return axios.get(url.Count)
 }
 
+// 当天开门记录
+API.currentDay = function() {
+	return axios.get(url.CountOpenRecord)
+}
 
 export default API

@@ -112,7 +112,8 @@ const url = {
 	'FaceSwicth': '/face/switch', // 新增资讯
 	
 	// 统计
-	'Count': 'count' // 统计
+	'Count': 'count' ,// 统计
+	'CountOpenRecord': '/count/open/record', // 当天开门记录
 }
 
 module.exports = url;

@@ -166,7 +166,42 @@
 				</div>
 			</div>
 		</div>
-
+		<h3>当天开门记录</h3>
+		<div class="open panel">
+			<div class="open-left" style="width: 30vw;">
+				<el-table :data="currentDayOpen" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+					<el-table-column prop="id" label="ID" width="100px"></el-table-column>
+					<el-table-column prop="address" label="地址"></el-table-column>
+					<el-table-column prop="records.length" label="开门的次数" width="100px"></el-table-column>
+					<el-table-column label="操作" fixed="right" width="100px">
+						<template slot-scope="scope">
+							<el-button type="text" @click="showSpecific(scope.$index, scope.row)">具体查看</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
+			<div class="open-right" style="width: 60vw;">
+				<el-table :data="specificOpen"  stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700" >
+					<el-table-column prop="id" label="ID"></el-table-column>
+					<el-table-column prop="name" label="姓名"></el-table-column>
+					<el-table-column prop="number" label="身份证"></el-table-column>
+					<el-table-column prop="sex" label="性别">
+						<template slot-scope="scope">
+							<span v-if="scope.row.sex == 1">男</span>
+							<span v-if="scope.row.sex == 2">女</span>
+						</template>
+					</el-table-column>
+					<el-table-column prop="href" label="人脸图片" width="200px">
+						<template slot-scope="scope">
+							<el-popover placement="top-start" title="" trigger="click">
+								<img :src="scope.row.href" style="max-width:800px; max-height:800px;" />
+								<img slot="reference" :src="scope.row.href" style="max-width:180px;max-height:80px;">
+							</el-popover>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -205,6 +240,9 @@
 				nowDate: "", // 当前日期
 				nowTime: "", // 当前时间
 				nowWeek: "", // 当前星期
+				
+				currentDayOpen: [],
+				specificOpen: [],
 
 				username: localStorage.getItem('username'),
 			}
@@ -223,6 +261,7 @@
 			// this.init();
 			this.getDangerLogs();
 			this.currentTime();
+			this.getCurrentDay()
 
 		},
 		methods: {
@@ -440,6 +479,19 @@
 					};
 					rents.setOption(option);
 				})
+			},
+			
+			// 当天开门记录
+			getCurrentDay() {
+				API.currentDay().then(res => {
+					this.currentDayOpen = res.countData; 
+				})
+			},
+			
+			// 具体查看
+			showSpecific(index, row) {
+				this.specificOpen = row.records;
+				console.log(row.records)
 			}
 		}
 	}
@@ -448,13 +500,14 @@
 <style scoped lang="scss">
 	#wrap {
 		width: 100%;
-		height: 100%;
+		min-height: 100%;
 		background-color: #101129;
 	}
 
 	.viewport {
 		/* 限定大小 */
 		display: flex;
+		flex-wrap: wrap;
 		min-width: 1024px;
 		max-width: 1920px;
 		min-height: 780px;
@@ -491,11 +544,11 @@
 	.column {
 		flex: 3;
 		position: relative;
-
-		h3 {
-			font-size: 24px;
-			color: #fff;
-		}
+	}
+	
+	h3 {
+		font-size: 24px;
+		color: #fff;
 	}
 
 	.column:nth-child(2) {
@@ -543,7 +596,7 @@
 
 			#geo {
 				width: 100%;
-				height: 49rem;
+				height: 51rem;
 			}
 		}
 	}
@@ -626,7 +679,7 @@
 
 	// 报警
 	.police {
-		height: 40rem;
+		height: 43rem;
 		margin-top: 1rem;
 	}
 
@@ -643,5 +696,14 @@
 	.table /deep/ .el-table--enable-row-transition .el-table__body td,
 	.el-table .cell {
 		background-color: transparent;
+	}
+	
+	.open {
+		display: flex;
+		padding-bottom: 100px;
+		
+		div {
+			margin-right: 10px;
+		}
 	}
 </style>
