@@ -116,7 +116,8 @@
 											<div class="level2">
 												<el-checkbox label="addressAdd" @change="oneChange" class="permission-span">新增</el-checkbox>
 												<el-checkbox label="addressDel" @change="oneChange" class="permission-span">删除</el-checkbox>
-												<el-checkbox label="addressGet" @change="oneChange" class="permission-span">查看</el-checkbox>
+												<el-checkbox label="addressGet" @change="oneChange" class="permission-span">查看所有</el-checkbox>
+												<el-checkbox label="addressGetStation" @change="oneChange" class="permission-span">查看辖区</el-checkbox>
 											</div>
 											<div class="level2">
 												暂无
@@ -793,6 +794,7 @@
 					"addressAdd", // 添加地址
 					"addressGet", // 获取地址
 					"addressDel", // 删除地址
+					"addressGetStation", // 查看辖区
 
 					"face", // 人脸管理页
 					"faceList",
@@ -825,8 +827,8 @@
 					"dangerGet", // 删除可疑人脸
 					"dangerLogGet", // 获取可疑日志列表
 					"dangerLogDel", // 删除可疑日志
-					"personVerifies",  // 证件核验
-					"dangerLogGetStation", 
+					"personVerifies", // 证件核验
+					"dangerLogGetStation",
 
 
 					"permission", // 角色管理
@@ -843,7 +845,7 @@
 					"manageResetPwd", // 重置密码
 
 					"outInLogs", // 进出记录管理页
-					
+
 					"police", // 警务管理
 					"policeList", // 警员管理
 					"department", // 部门管理
@@ -856,20 +858,20 @@
 					"departmentGet",
 					"departmentEdit",
 					"departmentDel",
-					"screenSaver",// 屏保设置
-					
+					"screenSaver", // 屏保设置
+
 					"security", // 安防布控
 					"upload", // 上传可疑人脸
 					"search", // 搜索人脸
-					
+
 					"statistical", // 搜索人脸
 					"data", // 搜索人脸
 					"generate", // 搜索人脸
-					
+
 					"alert", // 告警处理
 					"alertGet",
 					"alertGetStation",
-					
+
 					"area", // 辖区管理
 					"areaList",
 
