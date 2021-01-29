@@ -1,207 +1,205 @@
 <template>
 	<div id="wrap">
-		<div class="viewport">
-			<div class="column">
-				<div class="overview panel">
-					<div class="inner">
-						<div class="item">
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								设备总数
-							</span>
-							<h4>{{deviceCount}}</h4>
+		<div class="o-header">
+			<div class="logo">
+				<!-- logo -->
+				<div class="o-logo">
+					<img src="../../assets/image/badges-2.png" alt="">
+				</div>
+				<div class="o-title">
+					公安安全管理系统
+				</div>
+			</div>
+			<div class="o-user">
+				<!-- 时间 -->
+				<div class="o-time">
+					{{ nowDate + ' ' + nowTime + ' ' + nowWeek }}
+				</div>
+				<!-- 用户名 -->
+				<el-dropdown size="small" type="primary" @command="handleCommand" class="o-dropdown">
+					<span style="font-size: 24px;color: #ffffff;">{{username}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item divided command="toManage">进入后台管理</el-dropdown-item>
+						<el-dropdown-item divided command="loginOut">重新登录</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+			</div>
+		</div>
+		<div class="o-main">
+			<div class="o-main-left">
+				<div class="o-box">
+					<div class="o-tabs">
+						<div class="o-tabs-item">
+							<img :src="active == 'ditu' ? require(`@/assets/image/map2.png`) : require(`@/assets/image/map1.png`)" alt=""
+							 @click="clickTab('ditu')">
 						</div>
-						<div class="item">
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								出租屋总数
-							</span>
-							<h4>{{CZWCount}}</h4>
+						<div class="o-tabs-item">
+							<img :src="active == 'gaojing' ? require(`@/assets/image/gaojing2.png`) : require(`@/assets/image/gaojing1.png`)"
+							 alt="" @click="clickTab('gaojing')">
 						</div>
-						<div class="item">
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								学校总数
-							</span>
-							<h4>{{XXCount}}</h4>
-						</div>
-						<div class="item">
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								抓拍点数
-							</span>
-							<h4>{{ZPDCount}}</h4>
-						</div>
-						<div class="item">
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								租客总数
-							</span>
-							<h4>{{tenantCount}}</h4>
-						</div>
-						<div class="item">
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								户主总数
-							</span>
-							<h4>{{householderCount}}</h4>
-						</div>
-						<div class="item">
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								男租客数
-							</span>
-							<h4>{{tenantMenCount}}</h4>
-						</div>
-						<div class="item">
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								女租客数
-							</span>
-							<h4>{{tenantWomenCount}}</h4>
-						</div>
-						<div class="item">
-							<span>
-								<i class="icon-dot" style="color: #006cff"></i>
-								人脸总数
-							</span>
-							<h4>{{faceCount}}</h4>
+						<div class="o-tabs-item">
+							<img :src="active == 'kaimen' ? require(`@/assets/image/kaimen2.png`) : require(`@/assets/image/kaimen1.png`)"
+							 alt="" @click="clickTab('kaimen')">
 						</div>
 					</div>
 				</div>
-				<div class="summary">
-					<!-- 单个出租屋男女比例 -->
-					<div class="rent-people panel">
-						<div class="inner">
-							<!-- 		<div class="search-input">
-								<el-input placeholder="请输入要查询的出租屋" size="mini">
-									<el-button slot="append" icon="el-icon-search"></el-button>
-								</el-input>
-							</div> -->
-							<div id="rents"></div>
-						</div>
-					</div>
+				<!-- 数据显示 -->
+				<!-- 地图 -->
+				<div v-if="active == 'ditu'" class="o-chart" v-loading="loading" element-loading-text="加载地图中">
+					<div id="geo" ref="geo"></div>
 				</div>
-				<h3>重点关注人员进出记录</h3>
-				<div class="record panel">
-					<div class="inner">
-						<div style="display: flex;justify-content: center;align-items: center">
-							<div style="width: 25vw;padding: 10px 0;color: #fff">姓名</div>
-							<div style="width: 25vw;padding: 10px 0;color: #fff;">告警类型</div>
-							<div style="width: 25vw;padding: 10px 0;color: #fff;">告警类型</div>
-							<div style="width: 25vw;padding: 10px 0;color: #fff;">告警类型</div>
+				<!-- 重点人员进出记录 -->
+				<div class="render" v-show="active == 'gaojing'">
+					<div class="alert-box">
+						<vue-seamless-scroll :data="recordData" :class-option="recordDataStyle">
+							<div class="alert-box-item" v-for="(item, index) in recordData" :key="index">
+								<div class="item-image">
+									<el-popover placement="top-start" title="" trigger="click">
+										<img :src="item.log.image" style="max-width:800px;max-height:800px;">
+										<img slot="reference" :src="item.log.image" style="max-width:150px;max-height:150px;margin-right: 10px;">
+									</el-popover>
+								</div>
+								<div class="item-info">
+									<div><span style="color: #68d8fe;">姓名: {{item.danger.name}}</span></div>
+									<div><span>设备名: {{item.log.device_uuid}}</span></div>
+									<div> <span style="color: #68d8fe;">抓拍地址: {{item.address}}</span></div>
+									<div><span> 抓拍时间: {{item.log.timestamp}} </span> </div>
+								</div>
+							</div>
+						</vue-seamless-scroll>
+					</div>
+					<div class="in-out">
+						<div class="in-out-title">
+							<div>姓名</div>
+							<div>告警类型</div>
+							<div>处理情况</div>
+							<div>危险类型</div>
+							<div>所出现地址</div>
 						</div>
-						<div style="height: 320px; overflow: hidden;" :class-option="recordDataStyle">
+						<div style="height: 80vh; overflow: hidden;" :class-option="recordDataStyle">
 							<vue-seamless-scroll :data="callData">
 								<div style="display: flex;justify-content: center;align-items: center" v-for="(item, index) in callData" :key="index">
-									<div style="width: 25vw;padding: 10px 0;color: #68d8fe;">{{item.danger.name}}</div>
-									<div style="width: 25vw;padding: 10px 0;color: #68d8fe;">{{item.alert_type}}</div>
-									<div style="width: 25vw;padding: 10px 0;color: #68d8fe;"><span v-if="item.state == 1">未处理</span>
+									<div style="width: 12vw;padding: 10px 0;color: #68d8fe;">{{item.danger.name}}</div>
+									<div style="width: 12vw;padding: 10px 0;color: #68d8fe;">{{item.alert_type}}</div>
+									<div style="width: 12vw;padding: 10px 0;color: #68d8fe;"><span v-if="item.state == 1">未处理</span>
 										<span v-if="item.state == 2">已处理</span></div>
-									<div style="width: 25vw;padding: 10px 0;color: #68d8fe;">{{item.danger_type}}</div>
+									<div style="width: 11vw;padding: 10px 0;color: #68d8fe;">{{item.danger_type}}</div>
+									<div style="width: 12vw;padding: 10px 0;color: #68d8fe;">{{item.address.address}}</div>
 								</div>
 							</vue-seamless-scroll>
 						</div>
+					</div>
+				</div>
+				<div class="render" v-show="active == 'kaimen'">
+					<div class="render-table">
+						<el-table :data="currentDayOpen" max-height="760">
+							<el-table-column prop="id" label="ID" width="100px"></el-table-column>
+							<el-table-column prop="address" label="地址"></el-table-column>
+							<el-table-column prop="records.length" label="开门的次数" width="100px"></el-table-column>
+							<el-table-column label="操作" width="100px">
+								<template slot-scope="scope">
+									<el-button type="text" @click="showSpecific(scope.$index, scope.row)">具体查看</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
+					<div class="render-table render-table-right">
+						<el-table :data="specificOpen" max-height="760">
+							<el-table-column prop="id" label="ID"></el-table-column>
+							<el-table-column prop="name" label="姓名"></el-table-column>
+							<el-table-column prop="number" label="身份证" width="200px"></el-table-column>
+							<el-table-column prop="sex" label="性别">
+								<template slot-scope="scope">
+									<span v-if="scope.row.sex == 1">男</span>
+									<span v-if="scope.row.sex == 2">女</span>
+								</template>
+							</el-table-column>
+							<el-table-column prop="href" label="人脸图片">
+								<template slot-scope="scope">
+									<el-popover placement="top-start" title="" trigger="click">
+										<img :src="scope.row.href" style="max-width:800px; max-height:800px;" />
+										<img slot="reference" :src="scope.row.href" style="max-width:180px;max-height:80px;">
+									</el-popover>
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
+				</div>
+			</div>
+			<div class="o-main-right">
+				<!-- 面板显示 -->
+				<div class="o-panels">
+					<div class="panel">
+						<span>
+							<i class="icon-dot" style="color: #006cff"></i>
+							设备总数
+						</span>
+						<h4>{{deviceCount}}</h4>
+					</div>
+					<div class="panel">
+						<span>
+							<i class="icon-dot" style="color: #006cff"></i>
+							出租屋总数
+						</span>
+						<h4>{{CZWCount}}</h4>
+					</div>
+					<div class="panel">
+						<span>
+							<i class="icon-dot" style="color: #006cff"></i>
+							学校总数
+						</span>
+						<h4>{{XXCount}}</h4>
+					</div>
+					<div class="panel">
+						<span>
+							<i class="icon-dot" style="color: #006cff"></i>
+							抓拍点数
+						</span>
+						<h4>{{ZPDCount}}</h4>
+					</div>
+					<div class="panel">
+						<span>
+							<i class="icon-dot" style="color: #006cff"></i>
+							租客总数
+						</span>
+						<h4>{{tenantCount}}</h4>
+					</div>
+					<div class="panel">
+						<span>
+							<i class="icon-dot" style="color: #006cff"></i>
+							户主总数
+						</span>
+						<h4>{{householderCount}}</h4>
+					</div>
+					<div class="panel">
+						<span>
+							<i class="icon-dot" style="color: #006cff"></i>
+							男租客数
+						</span>
+						<h4>{{tenantMenCount}}</h4>
+					</div>
+					<div class="panel">
+						<span>
+							<i class="icon-dot" style="color: #006cff"></i>
+							女租客数
+						</span>
+						<h4>{{tenantWomenCount}}</h4>
+					</div>
+					<div class="panel">
+						<span>
+							<i class="icon-dot" style="color: #006cff"></i>
+							人脸总数
+						</span>
+						<h4>{{faceCount}}</h4>
+					</div>
+				</div>
+				<!-- 出租屋统计 -->
+				<div class="rent-chart">
+					<div id="rents"></div>
+				</div>
+			</div>
+		</div>
 
-					</div>
-				</div>
-			</div>
-			<div class="column">
-				<!-- 地图 -->
-				<div class="map">
-					<h3>出租屋地图分布</h3>
-					<div class="chart" v-loading="loading" element-loading-text="加载地图中">
-						<div id="geo" ref="geo"></div>
-					</div>
-				</div>
-			</div>
-			<div class="column">
-				<div class="manage panel">
-					<div class="inner user">
-						<!-- 操作 -->
-						<div class="operation">
-							<!-- 天气 -->
-							<div>
-								<span style="color: #68d8fe;">{{ nowDate + ' ' + nowTime + ' ' + nowWeek }}</span>
-							</div>
-						</div>
-						<!-- 用户列表 -->
-						<div class="image">
-							<img src="../../assets/image/admin.png" alt="">
-							<div class="name">{{username}}</div>
-							<div>
-								<span>
-									<el-button size="mini" @click="toManage" type="primary">进入后台管理</el-button>
-								</span>
-								<span>
-									<el-button size="mini" @click="loginOut" type="primary">重新登录</el-button>
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<h3>实时告警记录</h3>
-				<div class="police panel">
-					<div class="inner">
-						<div style="height: 600px; overflow: hidden;">
-							<vue-seamless-scroll :data="recordData" :class-option="recordDataStyle">
-								<div style="display: flex;justify-content: center;color: #fff;padding: 10px 0;" v-for="(item, index) in recordData"
-								 :key="index">
-									<div style="width: 20vw">
-										<el-popover placement="top-start" title="" trigger="click">
-											<img :src="item.log.image" style="max-width:800px;max-height:800px;">
-											<img slot="reference" :src="item.log.image" style="max-width:150px;max-height:150px;margin-right: 10px;">
-										</el-popover>
-									</div>
-									<div style="display: flex;flex-direction: column; justify-content: space-between; margin-right: 10px; width: 80vw;">
-										<div><span style="color: #68d8fe;">姓名: {{item.danger.name}}</span></div>
-										<div><span>设备名: {{item.log.device_uuid}}</span></div>
-										<div> <span style="color: #68d8fe;">抓拍地址: {{item.address}}</span></div>
-										<div><span> 抓拍时间: {{item.log.timestamp}} </span> </div>
-									</div>
-								</div>
-							</vue-seamless-scroll>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<h3>当天开门记录</h3>
-		<div class="open panel">
-			<div class="open-left" style="width: 30vw;">
-				<el-table :data="currentDayOpen" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
-					<el-table-column prop="id" label="ID" width="100px"></el-table-column>
-					<el-table-column prop="address" label="地址"></el-table-column>
-					<el-table-column prop="records.length" label="开门的次数" width="100px"></el-table-column>
-					<el-table-column label="操作" fixed="right" width="100px">
-						<template slot-scope="scope">
-							<el-button type="text" @click="showSpecific(scope.$index, scope.row)">具体查看</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
-			</div>
-			<div class="open-right" style="width: 60vw;">
-				<el-table :data="specificOpen"  stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700" >
-					<el-table-column prop="id" label="ID"></el-table-column>
-					<el-table-column prop="name" label="姓名"></el-table-column>
-					<el-table-column prop="number" label="身份证"></el-table-column>
-					<el-table-column prop="sex" label="性别">
-						<template slot-scope="scope">
-							<span v-if="scope.row.sex == 1">男</span>
-							<span v-if="scope.row.sex == 2">女</span>
-						</template>
-					</el-table-column>
-					<el-table-column prop="href" label="人脸图片" width="200px">
-						<template slot-scope="scope">
-							<el-popover placement="top-start" title="" trigger="click">
-								<img :src="scope.row.href" style="max-width:800px; max-height:800px;" />
-								<img slot="reference" :src="scope.row.href" style="max-width:180px;max-height:80px;">
-							</el-popover>
-						</template>
-					</el-table-column>
-				</el-table>
-			</div>
-		</div>
 	</div>
 </template>
 
@@ -240,11 +238,14 @@
 				nowDate: "", // 当前日期
 				nowTime: "", // 当前时间
 				nowWeek: "", // 当前星期
-				
+
 				currentDayOpen: [],
 				specificOpen: [],
 
 				username: localStorage.getItem('username'),
+
+				// 标签导航
+				active: 'gaojing'
 			}
 		},
 		computed: {
@@ -258,23 +259,58 @@
 		mounted() {
 			this.getAlerts();
 			this.getData();
-			// this.init();
 			this.getDangerLogs();
 			this.currentTime();
-			this.getCurrentDay()
-
+			this.getCurrentDay();
+		
 		},
 		methods: {
-			// 进入后台
-			toManage() {
-				this.$router.replace("/alert");
+			// 切换tab
+			clickTab(val) {
+				console.log(val)
+				this.loading = true;
+				if (val == 'ditu') {
+					this.active = 'ditu';
+					this.$nextTick(function() {
+						var type = ['CZW'];
+						API.addressesMap(1, 1000, type).then(res => {
+							res.data.forEach(item => {
+								if (item.lat && item.lng) {
+									dotData.push({
+										lat: item.lat,
+										lng: item.lng,
+										address: item.address
+									})
+								}
+							})
+							this.init();
+							this.loading = false;
+						}).catch(err => {
+							this.loading = false;
+						})
+					})
+				}
+				if (val == 'kaimen') {
+					this.active = 'kaimen';
+				}
+				if (val == 'gaojing') {
+					this.active = 'gaojing';
+				}
 			},
-			// 重新登录
-			loginOut() {
-				window.location.reload()
-				localStorage.removeItem('username')
-				this.$router.replace('/login')
+			handleCommand(command) {
+				var self = this;
+				if (command == 'toManage') {
+					// 进入后台
+					this.$router.replace("/alert");
+				}
+				if (command == 'loginOut') {
+					// 重新登录
+					window.location.reload()
+					localStorage.removeItem('username')
+					this.$router.replace('/login')
+				}
 			},
+
 			currentTime() {
 				setInterval(this.getDate, 500);
 			},
@@ -351,22 +387,7 @@
 					this.faceCount = res.faceCount;
 					this.renterSummary();
 				})
-				var type = ['CZW'];
-				API.addressesMap(1, 1000, type).then(res => {
-					res.data.forEach(item => {
-						if (item.lat && item.lng) {
-							dotData.push({
-								lat: item.lat,
-								lng: item.lng,
-								address: item.address
-							})
-						}
-					})
-					this.init();
-					this.loading = false;
-				}).catch(err => {
-					this.loading = false;
-				})
+			
 			},
 
 			// 表格透明化
@@ -388,27 +409,30 @@
 			},
 			// 地图
 			init() {
-				console.log(2)
 				var self = this;
-				var center = new TMap.LatLng(22.51595, 113.3926);
-				//初始化地图
-				var map = new TMap.Map("geo", {
-					zoom: 10, //设置地图缩放级别
-					center: center, //设置地图中心点坐标
-					mapStyleId: "style2" //个性化样式
-				});
-				//初始化散点图并添加至map图层
-				var dot = new TMap.visualization.Dot({
-						faceTo: "screen", //散点固定的朝向
+				self.$nextTick(function() {
+					console.log(2)
+					var self = this;
+					var center = new TMap.LatLng(22.51595, 113.3926);
+					//初始化地图
+					var map = new TMap.Map("geo", {
+						zoom: 13, //设置地图缩放级别
+						center: center, //设置地图中心点坐标
+						mapStyleId: "style2" //个性化样式
+					});
+					//初始化散点图并添加至map图层
+					var dot = new TMap.visualization.Dot({
+							faceTo: "screen", //散点固定的朝向
+						})
+						.addTo(map)
+						.setData(dotData); //设置数据
+					
+					// 绑定点击事件
+					dot.on("click", function(evt) {
+						if (evt.detail.dot) {
+							self.$message.success("当前点击地址为：" + evt.detail.dot.address)
+						}
 					})
-					.addTo(map)
-					.setData(dotData); //设置数据
-
-				// 绑定点击事件
-				dot.on("click", function(evt) {
-					if (evt.detail.dot) {
-						self.$message.success("当前点击地址为：" + evt.detail.dot.address)
-					}
 				})
 			},
 			// 出租屋人数比例
@@ -432,7 +456,7 @@
 						legend: {
 							orient: 'vertical',
 							bottom: 0,
-							right: 40,
+							right: 60,
 							data: [{
 								name: '男',
 								textStyle: {
@@ -480,14 +504,14 @@
 					rents.setOption(option);
 				})
 			},
-			
+
 			// 当天开门记录
 			getCurrentDay() {
 				API.currentDay().then(res => {
-					this.currentDayOpen = res.countData; 
+					this.currentDayOpen = res.countData;
 				})
 			},
-			
+
 			// 具体查看
 			showSpecific(index, row) {
 				this.specificOpen = row.records;
@@ -499,211 +523,244 @@
 
 <style scoped lang="scss">
 	#wrap {
-		width: 100%;
-		min-height: 100%;
-		background-color: #101129;
-	}
+		height: 100vh;
+		background-color: #171E3A;
 
-	.viewport {
-		/* 限定大小 */
-		display: flex;
-		flex-wrap: wrap;
-		min-width: 1024px;
-		max-width: 1920px;
-		min-height: 780px;
-		margin: 0 auto;
-		padding: 3.667rem 0.833rem 0;
-		background: url(../../assets/image/bg-img.png) no-repeat 0 0 / contain;
-		background-color: #101129;
-	}
-
-	// 概览区域
-	.overview {
-		height: 9rem;
-
-		.inner {
+		.o-header {
 			display: flex;
+			align-items: center;
 			justify-content: space-between;
-			flex-wrap: wrap;
-		}
+			height: 7vh;
+			padding: 0 10px;
+			background-color: #1E2746;
+			font-size: 28px;
+			color: #3E65FC;
 
-		h4 {
-			text-align: center;
-			font-size: 1.167rem;
-			padding-left: 0.2rem;
-			color: #fff;
-			margin-top: 0.333rem
-		}
-
-		span {
-			font-size: 1rem;
-			color: #4c9bfd;
-		}
-	}
-
-	.column {
-		flex: 3;
-		position: relative;
-	}
-	
-	h3 {
-		font-size: 24px;
-		color: #fff;
-	}
-
-	.column:nth-child(2) {
-		flex: 4;
-		margin: 1.333rem 0.833rem 0;
-	}
-
-	.panel {
-		/* 边框 */
-		box-sizing: border-box;
-		border: 2px solid red;
-		border-image: url(../../assets/image/border.png) 51 38 21 132;
-		border-width: 2.125rem 1.583rem 0.875rem 5.5rem;
-		position: relative;
-		margin-bottom: 0.833rem;
-	}
-
-	.panel .inner {
-		/* 装内容 */
-		/* height: 60px; */
-		position: absolute;
-		top: -2.125rem;
-		right: -1.583rem;
-		bottom: -0.875rem;
-		left: -5.5rem;
-		padding: 1rem 1.5rem;
-	}
-
-	// 重点人员进出记录
-	.record {
-		height: 24rem;
-		margin-top: 1rem;
-	}
-
-	// 地图
-	.map {
-		margin-top: 2.5rem;
-		margin-bottom: 1rem;
-
-
-		.chart {
-			flex: 1;
-			background-color: rgba(255, 255, 255, 0.05);
-			margin-top: .5rem;
-
-			#geo {
-				width: 100%;
-				height: 51rem;
-			}
-		}
-	}
-
-	// 人数统计
-	.summary {
-		display: flex;
-		justify-content: space-around;
-		align-items: flex-start;
-
-
-		.rent-people {
-			width: 100%;
-			height: 19rem;
-			margin-top: 10px;
-
-
-			#total-rent-sex,
-			#single-rent-sex {
-				width: 100%;
-				height: 15rem;
-				margin-top: 10px;
-			}
-
-			// 出租屋已租/空置
-			#rents {
-				width: 100%;
-				height: 15rem;
-			}
-
-			// 人员进出流量
-			#out-in {
-				width: 100%;
-				height: 15rem;
-				margin-top: 10px;
-			}
-		}
-	}
-
-	// 进入后台管理
-	.manage {
-		height: 10rem;
-
-		.user {
-			display: flex;
-			justify-content: space-between;
-
-			.name {
-				font-size: 30px;
-				color: #006cff;
-			}
-
-			.image {
-				text-align: center;
-				// margin-top: 20px;
-			}
-
-			img {
-				width: 50px;
-				height: 50px;
-				border-radius: 50%;
-				border: 2px #006cff solid;
-			}
-
-			// 操作
-			.operation {
+			.logo {
 				display: flex;
-				flex-direction: column;
-				justify-content: center;
 				align-items: center;
 
+				.o-logo img {
+					width: 50px;
+					height: 50px;
+				}
+			}
 
-				span {
-					font-size: 25px;
-					color: #fff;
+			.o-user {
+				display: flex;
+				align-items: center;
+
+				.o-time {
+					padding-right: 20px;
+				}
+			}
+
+		}
+
+		.o-main {
+			display: flex;
+
+			.o-main-left {
+				display: flex;
+				flex-direction: column;
+				position: relative;
+				width: 77vw;
+				padding: 0 20px 20px 20px;
+
+				.o-box {
+					position: absolute;
+					left: 40px;
+					right: 40px;
+
+					.o-tabs {
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						padding: 5px 0;
+						border-radius: 0 0 20px 20px;
+						background-color: #1E2746;
+
+						.o-tabs-item {
+							margin: 0 20px;
+
+							img {
+								width: 35px;
+								height: 35px;
+							}
+						}
+					}
+				}
+
+				.render {
+					display: flex;
+					width: 77vw;
+					margin-top: 60px;
+
+					.render-table {
+						width: 38vw;
+						margin-right: 10px;
+					}
+
+					.render-table-right {
+						width: 38vw;
+					}
+
+					// 告警记录
+					.alert-box {
+						width: 30vw;
+						height: 80vh;
+						overflow: hidden;
+						margin-right: 10px;
+						padding: 10px 50px;
+						border-radius: 10px;
+						background-color: #1E2746;
+
+						.alert-box-item {
+							display: flex;
+							justify-content: center;
+							color: #fff;
+							padding: 10px 0;
+
+							.item-image {
+								width: 10vw;
+							}
+
+							.item-info {
+								display: flex;
+								flex-direction: column;
+								justify-content: space-between;
+								width: 20vw;
+								margin-right: 10px;
+							}
+						}
+					}
+
+					// 进出记录
+					.in-out {
+						width: 46vw;
+						height: 80vh;
+						overflow: hidden;
+						padding: 10px 80px;
+						border-radius: 10px;
+						background-color: #1E2746;
+
+						.in-out-title {
+							display: flex;
+							justify-content: center;
+							align-items: center;
+
+							div {
+								width: 11vw;
+								padding: 10px 0;
+								color: #fff;
+							}
+						}
+
+					}
+				}
+
+				// 地图
+				.o-chart {
+					margin-top: 60px;
+
+					#geo {
+						width: 77vw;
+						height: 80vh;
+					}
+				}
+			}
+
+			.o-main-right {
+				width: 20vw;
+
+				.o-panels {
+					display: flex;
+					flex-wrap: wrap;
+					margin: 10px;
+					font-size: 20px;
+
+					.panel {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						width: 140px;
+						margin: 5px;
+						padding: 15px;
+						border-radius: 10px;
+						background-color: #1E2746;
+
+						span {
+							color: #4c9bfd;
+						}
+
+						h4 {
+							text-align: center;
+							font-size: 1.167rem;
+							padding-left: 0.2rem;
+							color: #fff;
+							margin-top: 0.333rem
+						}
+					}
+				}
+
+				.rent-chart {
+					margin: 10px;
+					padding: 50px 15px;
+					border-radius: 10px;
+					background-color: #1E2746;
+
+					// 出租屋已租/空置
+					#rents {
+						height: 28vh;
+					}
 				}
 			}
 		}
+
+
+
+
 	}
 
-	// 报警
-	.police {
-		height: 43rem;
-		margin-top: 1rem;
-	}
-
-	// 表格样式
-	.table /deep/ .el-table,
+	.render-table /deep/ .el-table,
 	.el-table__expanded-cell {
 		background-color: transparent;
 	}
 
-	.table /deep/ .el-table tr {
+	.render-table /deep/ .el-table th {
+		background-color: transparent !important;
+		border-bottom: 1px solid #5078fc;
+		color: #fefefe;
+	}
+
+	.render-table /deep/ .el-table tr {
 		background-color: transparent !important;
 	}
 
-	.table /deep/ .el-table--enable-row-transition .el-table__body td,
-	.el-table .cell {
-		background-color: transparent;
+	.render-table /deep/ .el-table--enable-row-transition .el-table__body td,
+	/deep/.el-table .cell {
+		border: none;
+		color: #5078fc;
 	}
-	
-	.open {
-		display: flex;
-		padding-bottom: 100px;
-		
-		div {
-			margin-right: 10px;
-		}
+
+
+	.render-table /deep/.el-table th>.cell {
+		color: rgba(254, 254, 254, 1);
+		font-weight: 700;
+	}
+
+	.render-table /deep/ .el-table {
+		// border: none;
+	}
+
+	.render-table /deep/ .el-table__fixed-right-patch {
+		display: none;
+	}
+
+	.el-table::before {
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 0px;
 	}
 </style>
