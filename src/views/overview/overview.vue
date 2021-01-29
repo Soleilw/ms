@@ -15,14 +15,10 @@
 				<div class="o-time">
 					{{ nowDate + ' ' + nowTime + ' ' + nowWeek }}
 				</div>
+				<el-button size="mini" @click="toManage" type="primary">进入后台管理</el-button>
+				<el-button size="mini" @click="loginOut" type="primary">重新登录</el-button>
 				<!-- 用户名 -->
-				<el-dropdown size="small" type="primary" @command="handleCommand" class="o-dropdown">
-					<span style="font-size: 24px;color: #ffffff;">{{username}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item divided command="toManage">进入后台管理</el-dropdown-item>
-						<el-dropdown-item divided command="loginOut">重新登录</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
+				<div style="margin-left: 10px;">{{username}}</div>
 			</div>
 		</div>
 		<div class="o-main">
@@ -262,7 +258,7 @@
 			this.getDangerLogs();
 			this.currentTime();
 			this.getCurrentDay();
-		
+
 		},
 		methods: {
 			// 切换tab
@@ -297,19 +293,29 @@
 					this.active = 'gaojing';
 				}
 			},
-			handleCommand(command) {
-				var self = this;
-				if (command == 'toManage') {
-					// 进入后台
-					this.$router.replace("/alert");
-				}
-				if (command == 'loginOut') {
-					// 重新登录
-					window.location.reload()
-					localStorage.removeItem('username')
-					this.$router.replace('/login')
-				}
+			// 进入后台
+			toManage() {
+				this.$router.replace("/alert");
 			},
+			// 重新登录
+			loginOut() {
+				window.location.reload()
+				localStorage.removeItem('username')
+				this.$router.replace('/login')
+			},
+			// handleCommand(command) {
+			// 	var self = this;
+			// 	if (command == 'toManage') {
+			// 		// 进入后台
+			// 		this.$router.replace("/alert");
+			// 	}
+			// 	if (command == 'loginOut') {
+			// 		// 重新登录
+			// 		window.location.reload()
+			// 		localStorage.removeItem('username')
+			// 		this.$router.replace('/login')
+			// 	}
+			// },
 
 			currentTime() {
 				setInterval(this.getDate, 500);
@@ -387,7 +393,7 @@
 					this.faceCount = res.faceCount;
 					this.renterSummary();
 				})
-			
+
 			},
 
 			// 表格透明化
@@ -426,7 +432,7 @@
 						})
 						.addTo(map)
 						.setData(dotData); //设置数据
-					
+
 					// 绑定点击事件
 					dot.on("click", function(evt) {
 						if (evt.detail.dot) {
