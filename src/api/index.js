@@ -556,4 +556,22 @@ API.currentDay = function() {
 	return axios.get(url.CountOpenRecord)
 }
 
+// 陌生人统计
+API.strangerRecord = function () {
+	return axios.get(url.CountStrangerRecord)
+}
+
+API.addressStrangerRecord = function (id) {
+	return axios.get(url.CountAddressStrangerRecord, {
+		id:id
+	})
+}
+
+// 搜索地址
+API.searchStrangerRecord = function (address) {
+	return axios.get(url.CountStrangerRecord,{
+		address: address
+	})
+}
+
 export default API

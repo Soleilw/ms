@@ -37,6 +37,10 @@
 							<img :src="active == 'kaimen' ? require(`@/assets/image/kaimen2.png`) : require(`@/assets/image/kaimen1.png`)"
 							 alt="" @click="clickTab('kaimen')">
 						</div>
+						<div class="o-tabs-item">
+							<img :src="active == 'stranger' ? require(`@/assets/image/storage2.png`) : require(`@/assets/image/storage1.png`)"
+							 alt="" @click="clickTab('stranger')">
+						</div>
 					</div>
 				</div>
 				<!-- 数据显示 -->
@@ -86,6 +90,7 @@
 						</div>
 					</div>
 				</div>
+				<!-- 开门记录 -->
 				<div class="render" v-show="active == 'kaimen'">
 					<div class="render-table">
 						<el-table :data="currentDayOpen" max-height="760">
@@ -115,6 +120,41 @@
 									<el-popover placement="top-start" title="" trigger="click">
 										<img :src="scope.row.href" style="max-width:800px; max-height:800px;" />
 										<img slot="reference" :src="scope.row.href" style="max-width:180px;max-height:80px;">
+									</el-popover>
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
+				</div>
+				<!-- 陌生人记录 -->
+				<div class="render" v-show="active == 'stranger'">
+					<div class="render-table">
+						<div class="o-search">
+							<el-input placeholder="请输入地址" v-model="addressStranger" @keyup.enter.native="search(addressStranger)" class="input-with-select">
+								  <el-button slot="prepend" style="color: #000000;" @click="addressRefer">刷新</el-button>
+							    <el-button slot="append" icon="el-icon-search" @click="search(addressStranger)"></el-button>
+							  </el-input>
+						</div>
+						<el-table :data="strangerData" max-height="710">
+							<el-table-column prop="id" label="ID" width="100px"></el-table-column>
+							<el-table-column prop="address" label="地址"></el-table-column>
+							<el-table-column prop="strangerCount" label="陌生人总数" width="100px"></el-table-column>
+							<el-table-column label="操作" width="100px">
+								<template slot-scope="scope">
+									<el-button type="text" @click="showStranger(scope.$index, scope.row)">具体查看</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
+					<div class="render-table render-table-right" v-loading="StrangerLoading" element-loading-text="正在获取数据">
+						<el-table :data="addressStrangerData" max-height="760">
+							<el-table-column prop="stranger_id" label="ID"></el-table-column>
+							<el-table-column prop="time" label="时间"></el-table-column>
+							<el-table-column prop="face_img" label="人脸图片">
+								<template slot-scope="scope">
+									<el-popover placement="top-start" title="" trigger="click">
+										<img :src="scope.row.face_img" style="max-width:800px; max-height:800px;" />
+										<img slot="reference" :src="scope.row.face_img" style="max-width:180px;max-height:80px;">
 									</el-popover>
 								</template>
 							</el-table-column>
@@ -241,7 +281,12 @@
 				username: localStorage.getItem('username'),
 
 				// 标签导航
-				active: 'gaojing'
+				active: 'gaojing',
+
+				strangerData: [] ,// 陌生人记录
+				addressStrangerData: [],
+				StrangerLoading: false,
+				addressStranger: '' // 搜索
 			}
 		},
 		computed: {
@@ -258,7 +303,7 @@
 			this.getDangerLogs();
 			this.currentTime();
 			this.getCurrentDay();
-
+			this.getStranger();
 		},
 		methods: {
 			// 切换tab
@@ -291,6 +336,9 @@
 				}
 				if (val == 'gaojing') {
 					this.active = 'gaojing';
+				}
+				if (val == 'stranger') {
+					this.active = 'stranger';
 				}
 			},
 			// 进入后台
@@ -396,23 +444,6 @@
 
 			},
 
-			// 表格透明化
-			getRowClass({
-				row,
-				column,
-				rowIndex,
-				columnIndex
-			}) {
-				return "background-color: rgba(255, 255, 255, 0.05); color: #006cff";
-			},
-			getCellClass({
-				row,
-				column,
-				rowIndex,
-				columnIndex
-			}) {
-				return "background-color: rgba(255, 255, 255, 0.05); color: #fff";
-			},
 			// 地图
 			init() {
 				var self = this;
@@ -522,6 +553,38 @@
 			showSpecific(index, row) {
 				this.specificOpen = row.records;
 				console.log(row.records)
+			},
+			
+			// 获取陌生人
+			getStranger() {
+				API.strangerRecord().then(res => {
+					this.strangerData = res.countData;
+				})
+			},
+			// 查看具体陌生人
+			showStranger(index, row) {
+				this.StrangerLoading = true;
+				API.addressStrangerRecord(row.id).then(res => {
+					console.log(res)
+					this.addressStrangerData = res;
+					this.StrangerLoading = false;
+				}).catch(err => {
+					this.StrangerLoading = false;
+				})
+			},
+			
+			// 搜索
+			search(val) {
+				API.searchStrangerRecord(val).then(res => {
+					this.strangerData = res.countData;
+				})
+			},
+			
+			// 刷新
+			addressRefer() {
+				API.strangerRecord().then(res => {
+					this.strangerData = res.countData;
+				})
 			}
 		}
 	}
@@ -606,7 +669,18 @@
 						width: 38vw;
 						margin-right: 10px;
 					}
-
+					
+					.o-search {
+						margin-bottom: 10px;
+						
+						/deep/ .el-input__inner {
+							background: transparent;
+							color: #ffffff;
+						}
+						
+						
+					}
+					
 					.render-table-right {
 						width: 38vw;
 					}

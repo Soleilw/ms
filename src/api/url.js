@@ -114,6 +114,9 @@ const url = {
 	// 统计
 	'Count': 'count' ,// 统计
 	'CountOpenRecord': '/count/open/record', // 当天开门记录
+	
+	'CountStrangerRecord': 'count/stranger/record', // 当天陌生人统计数据
+	'CountAddressStrangerRecord': 'count/address/stranger/record', // 获取单个地址陌生人详细进入记录
 }
 
 module.exports = url;
