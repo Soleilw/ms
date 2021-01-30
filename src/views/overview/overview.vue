@@ -299,11 +299,9 @@
 		},
 		mounted() {
 			this.getAlerts();
-			this.getData();
 			this.getDangerLogs();
+			this.getData();
 			this.currentTime();
-			this.getCurrentDay();
-			this.getStranger();
 		},
 		methods: {
 			// 切换tab
@@ -333,12 +331,16 @@
 				}
 				if (val == 'kaimen') {
 					this.active = 'kaimen';
+					this.getCurrentDay();
 				}
 				if (val == 'gaojing') {
 					this.active = 'gaojing';
+					this.getAlerts();
+					this.getDangerLogs();
 				}
 				if (val == 'stranger') {
 					this.active = 'stranger';
+					this.getStranger();
 				}
 			},
 			// 进入后台
