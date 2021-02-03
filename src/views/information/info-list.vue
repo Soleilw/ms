@@ -37,7 +37,8 @@
 			</el-table-column>
 		</el-table> -->
 		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0'}" max-height="620">
-			<el-table-column prop="id" label="ID"></el-table-column>
+			<el-table-column prop="id" label="ID" width="100px"></el-table-column>
+			<el-table-column prop="type" label="类型"></el-table-column>
 			<el-table-column prop="content" label="content">
 				<template slot-scope="scope">
 					<el-popover placement="right" width="800" trigger="click">
@@ -45,7 +46,6 @@
 						<el-button type="text" slot="reference">查看详情</el-button>
 					</el-popover>
 				</template>
-			
 			</el-table-column>
 			<el-table-column prop="remark" label="备注"></el-table-column>
 			<el-table-column prop="state" label="状态">
