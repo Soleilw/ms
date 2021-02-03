@@ -117,6 +117,9 @@ const url = {
 	
 	'CountStrangerRecord': 'count/stranger/record', // 当天陌生人统计数据
 	'CountAddressStrangerRecord': 'count/address/stranger/record', // 获取单个地址陌生人详细进入记录
+	
+	// 
+	'Transmits': 'transmits'
 }
 
 module.exports = url;

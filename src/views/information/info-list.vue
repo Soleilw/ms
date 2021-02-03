@@ -24,8 +24,8 @@
 			</div>
 		</el-dialog>
 
-		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0'}" max-height="620">
-			<!-- <el-table-column label="名称" type="selection"></el-table-column> -->
+		<!-- <el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0'}" max-height="620">
+			<el-table-column label="名称" type="selection"></el-table-column>
 			<el-table-column prop="id" label="文档ID"></el-table-column>
 			<el-table-column prop="title" label="文档标题"></el-table-column>
 			<el-table-column prop="updated_at" label="更新时间"></el-table-column>
@@ -33,6 +33,26 @@
 				<template slot-scope="scope">
 					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="danger" size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+				</template>
+			</el-table-column>
+		</el-table> -->
+		<el-table :data="tableDate" border :header-cell-style="{background:'#f0f0f0'}" max-height="620">
+			<el-table-column prop="id" label="ID"></el-table-column>
+			<el-table-column prop="content" label="content">
+				<template slot-scope="scope">
+					<el-popover placement="right" width="800" trigger="click">
+							{{scope.row.content}}
+						<el-button type="text" slot="reference">查看详情</el-button>
+					</el-popover>
+				</template>
+			
+			</el-table-column>
+			<el-table-column prop="remark" label="备注"></el-table-column>
+			<el-table-column prop="state" label="状态">
+				<template slot-scope="scope">
+					<span v-if="scope.row.state == 1">初始化</span>
+					<span v-if="scope.row.state == 2">成功</span>
+					<span v-if="scope.row.state == 3">失败</span>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -134,7 +154,7 @@
 			// 获取资讯类型
 			getDocument() {
 				var self = this;
-				API.informations(self.current)
+				API.getTransmits(self.current)
 					.then((res) => {
 						self.loading = false;
 						self.tableDate = res.data;

@@ -574,4 +574,8 @@ API.searchStrangerRecord = function (address) {
 	})
 }
 
+API.getTransmits = function () {
+	return axios.get(url.Transmits)
+}
+
 export default API
