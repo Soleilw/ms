@@ -169,7 +169,7 @@
 				var self = this;
 				self.current = val;
 				self.loading = true;
-				API.informations(val, self.size)
+				API.getTransmits(val, self.size)
 					.then((res) => {
 						self.loading = false;
 						self.tableDate = res.data;
@@ -184,7 +184,7 @@
 				var self = this;
 				self.size = val;
 				self.loading = true;
-				API.informations(self.current, val).then((res) => {
+				API.getTransmits(self.current, val).then((res) => {
 					self.loading = false;
 					self.tableDate = res.data;
 					self.total = res.total;
