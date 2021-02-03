@@ -101,6 +101,15 @@
 					<el-form-item label="联系方式">
 						<el-input v-model="form.contact"></el-input>
 					</el-form-item>
+					<el-form-item label="设备所在街路巷">
+						<el-input v-model="sbszjlx" placeholder="请填写设备所在街路巷"></el-input>
+					</el-form-item>
+					<el-form-item label="设备所在社区/村代码">
+						<el-input v-model="sbszsqc" placeholder="请填写设备所在社区/村代码"></el-input>
+					</el-form-item>
+					<el-form-item label="设备所在警务区代码">
+						<el-input v-model="sbszjwq" placeholder="请填写设备所在警务区代码"></el-input>
+					</el-form-item>
 					<div v-for="(item,index) in form.face_groups" :key="index">
 						<el-form-item label="人脸分组姓名">
 							<el-input v-model="item.name"></el-input>
@@ -131,6 +140,24 @@
 								</div>
 							</el-checkbox-group>
 						</div>
+					</el-form-item>
+					<el-form-item label="设备所在建筑物">
+						<el-input v-model="sbszjzw" placeholder="请填写设备所在建筑物"></el-input>
+					</el-form-item>
+					<el-form-item label="设备所在房屋">
+						<el-input v-model="sbszfw" placeholder="请填写设备所在房屋"></el-input>
+					</el-form-item>
+					<el-form-item label="设备所在单元">
+						<el-input v-model="sbszdy" placeholder="请填写设备所在单元"></el-input>
+					</el-form-item>
+					<el-form-item label="设备所在位置说明">
+						<el-input v-model="sbszwzsm" placeholder="请填写设备所在位置说明"></el-input>
+					</el-form-item>
+					<el-form-item label="关联摄像机编码">
+						<el-input v-model="glsxjbm" placeholder="请填写关联摄像机编码"></el-input>
+					</el-form-item>
+					<el-form-item label="设备管理单位名称">
+						<el-input v-model="sbgldwmc" placeholder="请填写设备管理单位名称"></el-input>
 					</el-form-item>
 					<div class="submit">
 						<el-form-item>
@@ -164,13 +191,26 @@
 					type: '',
 					address: '',
 					contact: '',
+					info: [],
+					
 					face_groups: [],
 					lng: '',
 					lat: '',
 					area_id: '',
 					stations: []
 				},
-				name: '', // 用于搜索
+			sbszjlx: '',
+			sbszsqc: '',
+			sbszjwq: '',
+			
+			sbszjzw: '',
+			sbszfw: '',
+			sbszdy: '',
+			sbszwzsm: '',
+			glsxjbm: '',
+			sbgldwmc: '',
+
+				name: '中山仓库', // 用于搜索
 
 				proList: [], // 省级列表
 				pro_id: '',
@@ -311,6 +351,8 @@
 					type: '',
 					address: '',
 					contact: '',
+					info: [],
+					
 					face_groups: [],
 					lng: '',
 					lat: '',
@@ -354,6 +396,19 @@
 			},
 			newProject() {
 				var self = this;
+				this.form.info = new Array();
+				this.form.info['sbszjlx'] = this.sbszjlx;
+				this.form.info['sbszsqc'] = this.sbszsqc;
+				this.form.info['sbszjwq'] = this.sbszjwq;
+				
+				this.form.info['sbszjzw'] = this.sbszjzw;
+				this.form.info['sbszfw'] = this.sbszfw;
+				this.form.info['sbszdy'] = this.sbszdy;
+				
+				this.form.info['sbszwzsm'] = this.sbszwzsm;
+				this.form.info['glsxjbm'] = this.glsxjbm;
+				this.form.info['sbgldwmc'] = this.sbgldwmc;
+				console.log(self.form);
 				API.address(self.form).then(res => {
 					self.dialogAddress = false;
 					self.$message.success("提交成功");
@@ -372,8 +427,9 @@
 				self.city_id = '';
 				self.community_id = '';
 				API.getaddress(row.id).then(res => {
+					console.log(res.address)
 					self.form = {
-						id: row.id,
+						id: res.id,
 						project_id: res.project_id,
 						area_id: res.area_id,
 						type: res.type,
@@ -382,8 +438,19 @@
 						face_groups: res.face_groups,
 						stations: res.stations,
 						lng: res.lng,
-						lat: res.lat,
+						lat: res.lat
 					}
+					this.sbszjlx = res.info.sbszjlx;
+					this.sbszsqc = res.info.sbszsqc;
+					this.sbszjwq = res.info.sbszjwq;
+					
+					this.sbszjzw = res.info.sbszjzw;
+					this.sbszfw = res.info.sbszfw;
+					this.sbszdy = res.info.sbszdy;
+					this.sbszwzsm =  res.info.sbszwzsm;
+					this.glsxjbm =  res.info.glsxjbm;
+					this.sbgldwmc = res.info.sbgldwmc;
+					
 					if (self.form.stations.length == self.stationList.length) {
 						self.checkAll = true;
 					}
@@ -434,7 +501,7 @@
 			communityChange(val) {
 				this.form.area_id = val;
 			},
-			
+
 			// 重新筛选
 			resetSelect() {
 				window.location.reload();
