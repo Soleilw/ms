@@ -192,25 +192,25 @@
 					address: '',
 					contact: '',
 					info: [],
-					
+
 					face_groups: [],
 					lng: '',
 					lat: '',
 					area_id: '',
 					stations: []
 				},
-			sbszjlx: '',
-			sbszsqc: '',
-			sbszjwq: '',
-			
-			sbszjzw: '',
-			sbszfw: '',
-			sbszdy: '',
-			sbszwzsm: '',
-			glsxjbm: '',
-			sbgldwmc: '',
+				sbszjlx: '',
+				sbszsqc: '',
+				sbszjwq: '',
 
-				name: '中山仓库', // 用于搜索
+				sbszjzw: '',
+				sbszfw: '',
+				sbszdy: '',
+				sbszwzsm: '',
+				glsxjbm: '',
+				sbgldwmc: '',
+
+				name: '', // 用于搜索
 
 				proList: [], // 省级列表
 				pro_id: '',
@@ -352,7 +352,7 @@
 					address: '',
 					contact: '',
 					info: [],
-					
+
 					face_groups: [],
 					lng: '',
 					lat: '',
@@ -400,11 +400,11 @@
 				this.form.info['sbszjlx'] = this.sbszjlx;
 				this.form.info['sbszsqc'] = this.sbszsqc;
 				this.form.info['sbszjwq'] = this.sbszjwq;
-				
+
 				this.form.info['sbszjzw'] = this.sbszjzw;
 				this.form.info['sbszfw'] = this.sbszfw;
 				this.form.info['sbszdy'] = this.sbszdy;
-				
+
 				this.form.info['sbszwzsm'] = this.sbszwzsm;
 				this.form.info['glsxjbm'] = this.glsxjbm;
 				this.form.info['sbgldwmc'] = this.sbgldwmc;
@@ -443,14 +443,14 @@
 					this.sbszjlx = res.info.sbszjlx;
 					this.sbszsqc = res.info.sbszsqc;
 					this.sbszjwq = res.info.sbszjwq;
-					
+
 					this.sbszjzw = res.info.sbszjzw;
 					this.sbszfw = res.info.sbszfw;
 					this.sbszdy = res.info.sbszdy;
-					this.sbszwzsm =  res.info.sbszwzsm;
-					this.glsxjbm =  res.info.glsxjbm;
+					this.sbszwzsm = res.info.sbszwzsm;
+					this.glsxjbm = res.info.glsxjbm;
 					this.sbgldwmc = res.info.sbgldwmc;
-					
+
 					if (self.form.stations.length == self.stationList.length) {
 						self.checkAll = true;
 					}
