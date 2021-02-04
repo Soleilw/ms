@@ -154,7 +154,7 @@
 			// 获取资讯类型
 			getDocument() {
 				var self = this;
-				API.getTransmits(self.current)
+				API.getTransmits(1)
 					.then((res) => {
 						self.loading = false;
 						self.tableDate = res.data;

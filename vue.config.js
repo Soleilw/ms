@@ -16,6 +16,8 @@ module.exports = {
 	},
 	configureWebpack: {
 		externals: {
+			// 'vue': 'Vue',
+			// 'element': 'ElementUI',
 			'TMap': 'TMap',
 		},
 		output: { // 输出重构  打包编译后的 文件名称  【模块名称.时间戳.js】
