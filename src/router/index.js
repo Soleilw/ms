@@ -10,7 +10,8 @@ export default new Router({
 	routes: [{
 			path: '/login',
 			name: 'login',
-			component: () => import('@/views/login.vue'),
+			// component: () => import('@/views/login.vue'),
+			component: resolve => require(['@/views/login.vue'], resolve),
 			meta: {
 				title: '登录'
 			},
@@ -18,7 +19,8 @@ export default new Router({
 		{
 			path: '/overview',
 			name: 'overview',
-			component: () => import('@/views/overview/overview'),
+			// component: () => import('@/views/overview/overview'),
+			component: resolve => require(['@/views/overview/overview'], resolve),
 			meta: {
 				title: '数据总览',
 				icon: 'el-icon-menu'
@@ -30,7 +32,8 @@ export default new Router({
 /* 准备动态添加的路由 */
 export const DynamicRoutes = [{
 		path: '',
-		component: () => import('@/components/layout/Home.vue'),
+		// component: () => import('@/components/layout/Home.vue'),
+		component: resolve => require(['@/components/layout/Home.vue'], resolve),
 		name: 'container',
 		redirect: 'alert',
 		// meta: {
@@ -41,6 +44,7 @@ export const DynamicRoutes = [{
 	},
 	{
 		path: '*',
-		component: () => import('@/views/404.vue')
+		// component: () => import('@/views/404.vue')
+		component: resolve => require(['@/views/404.vue'], resolve),
 	}
 ]

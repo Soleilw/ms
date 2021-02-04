@@ -1,7 +1,8 @@
 const dynamicRouter = [{
 		path: '/overview',
 		name: 'overview',
-		component: () => import('@/views/overview/overview'),
+		// component: () => import('@/views/overview/overview'),
+		component: resolve => require(['@/views/overview/overview'], resolve),
 		meta: {
 			title: '数据总览',
 			icon: 'el-icon-menu'
@@ -9,7 +10,8 @@ const dynamicRouter = [{
 	}, {
 		path: '/baiduaip',
 		name: 'baiduaip',
-		component: () => import('@/views/baiduAip/baiduAip'),
+		// component: () => import('@/views/baiduAip/baiduAip'),
+		component: resolve => require(['@/views/baiduAip/baiduAip'], resolve),
 		meta: {
 			title: '百度接口',
 			icon: 'el-icon-document'
@@ -18,7 +20,8 @@ const dynamicRouter = [{
 	{
 		path: '/project',
 		name: 'project',
-		component: () => import('@/views/project/project'),
+		// component: () => import('@/views/project/project'),
+		component: resolve => require(['@/views/project/project'], resolve),
 		meta: {
 			title: '项目管理',
 			icon: 'el-icon-folder'
@@ -27,7 +30,8 @@ const dynamicRouter = [{
 	{
 		path: '/police',
 		name: 'police',
-		component: () => import('@/views/police/index'),
+		// component: () => import('@/views/police/index'),
+		component: resolve => require(['@/views/police/index'], resolve),
 		meta: {
 			title: '日常管理',
 			icon: 'el-icon-setting'
@@ -35,7 +39,8 @@ const dynamicRouter = [{
 		children: [{
 				path: '/police-list',
 				name: 'policeList',
-				component: () => import('@/views/police/police-list'),
+				// component: () => import('@/views/police/police-list'),
+				component: resolve => require(['@/views/police/police-list'], resolve),
 				meta: {
 					title: '警员管理',
 					icon: 'el-icon-warning'
@@ -44,7 +49,8 @@ const dynamicRouter = [{
 			{
 				path: '/department',
 				name: 'department',
-				component: () => import('@/views/police/department'),
+				// component: () => import('@/views/police/department'),
+				component: resolve => require(['@/views/police/department'], resolve),
 				meta: {
 					title: '部门管理',
 					icon: 'el-icon-s-release'
@@ -53,7 +59,8 @@ const dynamicRouter = [{
 			{
 				path: '/account',
 				name: 'account',
-				component: () => import('@/views/police/account'),
+				// component: () => import('@/views/police/account'),
+				component: resolve => require(['@/views/police/account'], resolve),
 				meta: {
 					title: '账号管理',
 					icon: 'el-icon-s-release'
@@ -62,7 +69,8 @@ const dynamicRouter = [{
 			{
 				path: '/verifies',
 				name: 'personVerifies',
-				component: () => import('@/views/police/verifies'),
+				// component: () => import('@/views/police/verifies'),
+				component: resolve => require(['@/views/police/verifies'], resolve),
 				meta: {
 					title: '证件核验',
 					icon: 'el-icon-s-release'
@@ -71,7 +79,8 @@ const dynamicRouter = [{
 			{
 				path: '/address',
 				name: 'address',
-				component: () => import('@/views/address/index'),
+				// component: () => import('@/views/address/index'),
+				component: resolve => require(['@/views/address/index'], resolve),
 				meta: {
 					title: '地址管理',
 					icon: 'el-icon-location'
@@ -79,7 +88,8 @@ const dynamicRouter = [{
 				children: [{
 						path: '/address-list',
 						name: 'addressList',
-						component: () => import('@/views/address/address-list'),
+						// component: () => import('@/views/address/address-list'),
+						component: resolve => require(['@/views/address/address-list'], resolve),
 						meta: {
 							title: '地址列表',
 							icon: 'el-icon-warning'
@@ -88,7 +98,8 @@ const dynamicRouter = [{
 					{
 						path: '/areas',
 						name: 'areas',
-						component: () => import('@/views/address/areas'),
+						// component: () => import('@/views/address/areas'),
+						component: resolve => require(['@/views/address/areas'], resolve),
 						meta: {
 							title: '地区管理',
 							icon: 'el-icon-s-release'
@@ -99,7 +110,8 @@ const dynamicRouter = [{
 			{
 				path: '/outInLogs',
 				name: 'outInLogs',
-				component: () => import('@/views/outInLogs/outInLogs'),
+				// component: () => import('@/views/outInLogs/outInLogs'),
+				component: resolve => require(['@/views/outInLogs/outInLogs'], resolve),
 				meta: {
 					title: '进出记录管理',
 					icon: 'el-icon-setting'
@@ -109,7 +121,8 @@ const dynamicRouter = [{
 			{
 				path: '/area-list',
 				name: 'areaList',
-				component: () => import('@/views/area/area-list'),
+				// component: () => import('@/views/area/area-list'),
+				component: resolve => require(['@/views/area/area-list'], resolve),
 				meta: {
 					title: '辖区管理',
 					icon: 'el-icon-map-location'
@@ -118,7 +131,8 @@ const dynamicRouter = [{
 			{
 				path: '/screen-saver',
 				name: 'screenSaver',
-				component: () => import('@/views/police/screen-saver'),
+				// component: () => import('@/views/police/screen-saver'),
+				component: resolve => require(['@/views/police/screen-saver'], resolve),
 				meta: {
 					title: '屏保管理',
 					icon: 'el-icon-s-release'
@@ -129,7 +143,8 @@ const dynamicRouter = [{
 	{
 		path: '/security',
 		name: 'security',
-		component: () => import('@/views/security/index'),
+		// component: () => import('@/views/security/index'),
+		component: resolve => require(['@/views/security/index'], resolve),
 		meta: {
 			title: '安防布控',
 			icon: 'el-icon-setting'
@@ -137,7 +152,8 @@ const dynamicRouter = [{
 		children: [{
 				path: '/upload',
 				name: 'upload',
-				component: () => import('@/views/security/upload'),
+				// component: () => import('@/views/security/upload'),
+				component: resolve => require(['@/views/security/upload'], resolve),
 				meta: {
 					title: '可疑人脸上传',
 					icon: 'el-icon-warning'
@@ -146,7 +162,8 @@ const dynamicRouter = [{
 			{
 				path: '/search',
 				name: 'search',
-				component: () => import('@/views/security/search'),
+				// component: () => import('@/views/security/search'),
+				component: resolve => require(['@/views/security/search'], resolve),
 				meta: {
 					title: '搜索人脸',
 					icon: 'el-icon-s-release'
@@ -155,7 +172,8 @@ const dynamicRouter = [{
 			{
 				path: '/dangerlogs',
 				name: 'dangerlogs',
-				component: () => import('@/views/danger/dangerlogs'),
+				// component: () => import('@/views/danger/dangerlogs'),
+				component: resolve => require(['@/views/danger/dangerlogs'], resolve),
 				meta: {
 					title: '可疑人脸日志',
 					icon: 'el-icon-s-release'
@@ -166,7 +184,8 @@ const dynamicRouter = [{
 	{
 		path: '/statistical',
 		name: 'statistical',
-		component: () => import('@/views/statistical/index'),
+		// component: () => import('@/views/statistical/index'),
+		component: resolve => require(['@/views/statistical/index'], resolve),
 		meta: {
 			title: '统计',
 			icon: 'el-icon-setting'
@@ -174,7 +193,8 @@ const dynamicRouter = [{
 		children: [{
 				path: '/data',
 				name: 'data',
-				component: () => import('@/views/statistical/data'),
+				// component: () => import('@/views/statistical/data'),
+				component: resolve => require(['@/views/statistical/data'], resolve),
 				meta: {
 					title: '数据统计',
 					icon: 'el-icon-warning'
@@ -183,7 +203,8 @@ const dynamicRouter = [{
 			{
 				path: '/generate',
 				name: 'generate',
-				component: () => import('@/views/statistical/generate'),
+				// component: () => import('@/views/statistical/generate'),
+				component: resolve => require(['@/views/statistical/generate'], resolve),
 				meta: {
 					title: '导出数据表',
 					icon: 'el-icon-s-release'
@@ -194,7 +215,8 @@ const dynamicRouter = [{
 	{
 		path: '/alert',
 		name: 'alert',
-		component: () => import('@/views/alert/alert'),
+		// component: () => import('@/views/alert/alert'),
+		component: resolve => require(['@/views/alert/alert'], resolve),
 		meta: {
 			title: '告警处理',
 			icon: 'el-icon-setting'
@@ -231,7 +253,8 @@ const dynamicRouter = [{
 	{
 		path: '/face',
 		name: 'face',
-		component: () => import('@/views/face/index'),
+		// component: () => import('@/views/face/index'),
+		component: resolve => require(['@/views/face/index'], resolve),
 		meta: {
 			title: '人脸管理',
 			icon: 'el-icon-picture'
@@ -239,7 +262,8 @@ const dynamicRouter = [{
 		children: [{
 				path: '/face-list',
 				name: 'faceList',
-				component: () => import('@/views/face/face-list'),
+				// component: () => import('@/views/face/face-list'),
+				component: resolve => require(['@/views/face/face-list'], resolve),
 				meta: {
 					title: '人脸列表',
 					icon: 'el-icon-warning'
@@ -248,7 +272,8 @@ const dynamicRouter = [{
 			{
 				path: '/push-logs',
 				name: 'pushLogs',
-				component: () => import('@/views/face/push-logs'),
+				// component: () => import('@/views/face/push-logs'),
+				component: resolve => require(['@/views/face/push-logs'], resolve),
 				meta: {
 					title: '推送记录',
 					icon: 'el-icon-s-release'
@@ -259,7 +284,8 @@ const dynamicRouter = [{
 	{
 		path: '/device',
 		name: 'device',
-		component: () => import('@/views/device/index'),
+		// component: () => import('@/views/device/index'),
+		component: resolve => require(['@/views/device/index'], resolve),
 		meta: {
 			title: '设备管理',
 			icon: 'el-icon-video-camera'
@@ -267,7 +293,8 @@ const dynamicRouter = [{
 		children: [{
 				path: '/device-list',
 				name: 'deviceList',
-				component: () => import('@/views/device/device-list'),
+				// component: () => import('@/views/device/device-list'),
+				component: resolve => require(['@/views/device/device-list'], resolve),
 				meta: {
 					title: '设备列表',
 					icon: 'el-icon-warning'
@@ -276,7 +303,8 @@ const dynamicRouter = [{
 			{
 				path: '/command',
 				name: 'command',
-				component: () => import('@/views/device/command'),
+				// component: () => import('@/views/device/command'),
+				component: resolve => require(['@/views/device/command'], resolve),
 				meta: {
 					title: '指令管理',
 					icon: 'el-icon-s-release'
@@ -287,7 +315,8 @@ const dynamicRouter = [{
 	{
 		path: '/package',
 		name: 'package',
-		component: () => import('@/views/package/package'),
+		// component: () => import('@/views/package/package'),
+		component: resolve => require(['@/views/package/package'], resolve),
 		meta: {
 			title: '安装包管理',
 			icon: 'el-icon-shopping-bag-2'

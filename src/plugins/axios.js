@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import axios from 'axios'
-import {
-	Message
-} from 'element-ui'
-import {
-	MessageBox
-} from 'element-ui';
+// import {
+// 	Message
+// } from 'element-ui'
+// import {
+// 	MessageBox
+// } from 'element-ui';
 var Qs = require('qs')
 import cookies from "@/utils/cookies.js"
 
