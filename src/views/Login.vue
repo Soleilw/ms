@@ -17,6 +17,7 @@
 				</div>
 			</div>
 
+
 			<!-- <el-form :model="loginForm" ref="loginForm" label-width="40px" class="form_info">
 				<el-form-item prop="username" label="账号">
 					<el-input v-model="loginForm.username" placeholder="username"></el-input>
@@ -29,6 +30,7 @@
 				</el-form-item>
       </el-form>-->
 		</div>
+		<div class="footer"><span>中山市沙溪公安分局联合研发</span> </div>
 	</div>
 </template>
 
@@ -111,5 +113,17 @@
 		.login_btn {
 			width: 100%;
 		}
+	}
+
+	.footer {
+		clear: both;
+		display: block;
+		text-align: center;
+		margin: 0px auto;
+		position: absolute;
+		bottom: 50px;
+		width: 100%;
+		color: #fff;
+		font-size: 20px;
 	}
 </style>

@@ -37,7 +37,7 @@
 					<el-table-column prop="type" label="类型"></el-table-column>
 					<el-table-column label="操作">
 						<template slot-scope="scope">
-							<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+							<el-popconfirm title="是否要删除该条数据" @confirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
 								<el-button slot="reference" type="text">删除</el-button>
 							</el-popconfirm>
 						</template>
@@ -144,7 +144,7 @@
 			},
 			getFace() {
 				var self = this;
-				API.faces(self.current).then(res => {
+				API.faces(1).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
@@ -193,7 +193,19 @@
 				})
 			},
 			// 操作
-			handleDel() {},
+			handleDel(index, row) {
+				console.log(11)
+				var self = this;
+				console.log(11,row)
+				var id = row.id;
+				API.delFace(id).then(res => {
+					self.$message.success('删除成功');
+					self.getFace();
+					self.current = 1;
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
 			// 上传图片
 			// upload() {
 			// 	this.$refs.upload.submit();

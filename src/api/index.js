@@ -125,6 +125,13 @@ API.faces = function(page, limit, name) {
 	})
 }
 
+// 删除人脸
+API.delFace = function(id) {
+	return axios.get(url.DeleteFace, {
+		id: id
+	})
+}
+
 // 搜索人脸
 API.searchFace = function(data) {
 	return axios.post(url.SearchImageFace, data)

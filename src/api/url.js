@@ -30,9 +30,9 @@ const url = {
 	'Area': '/area', // 新增地区
 	
 	// 人脸管理
-	'Face': '/face', // 新增人脸
+	'Face': '/face', // 新增人脸  删除人脸,方式‘delete’
 	'PassFace': '/pass/face', // 人脸通过
-	'Face': '/face', // 删除人脸,方式‘delete’
+	'DeleteFace': '/delete/face', // 删除人脸
 	'Faces': '/faces', // 获取人脸列表
 	'PushRecords': '/push/records', // 获取推送记录
 	'PushRecordCommands': '/push/record/commands', // 获取推送详情

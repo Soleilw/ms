@@ -81,7 +81,7 @@
 							<el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 							<el-button v-if="scope.row.state == 1" type="text" @click="handleAudit(scope.$index, scope.row)">审核</el-button>
 							<!-- <el-button type="primary" size="mini" @click="handleReset(scope.$index, scope.row)">短信推送结果</el-button> -->
-							<el-popconfirm title="是否要删除该警员信息" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">
+							<el-popconfirm title="是否要删除该警员信息" @confirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">
 								<el-button slot="reference" type="text">删除</el-button>
 							</el-popconfirm>
 						</template>
