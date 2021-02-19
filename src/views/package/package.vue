@@ -15,7 +15,7 @@
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button size="mini" type="primary" @click="handleShowVersion(scope.$index, scope.row)">查看版本</el-button>
-					<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">
+					<el-popconfirm title="是否要删除该条数据" @confirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">
 						<el-button slot="reference" size="mini" type="danger">删除</el-button>
 					</el-popconfirm>
 				</template>

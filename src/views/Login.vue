@@ -30,7 +30,7 @@
 				</el-form-item>
       </el-form>-->
 		</div>
-		<div class="footer"><span>中山市沙溪公安分局联合研发</span> </div>
+		<div class="footer"><span>中山市公安局沙溪分局联合研发</span> </div>
 	</div>
 </template>
 

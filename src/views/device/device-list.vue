@@ -109,7 +109,7 @@
 										<el-button type="text" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+										<el-popconfirm title="是否要删除该条数据" @confirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
 											<el-button slot="reference" type="text">删除</el-button>
 										</el-popconfirm>
 									</el-dropdown-item>
