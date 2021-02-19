@@ -42,7 +42,7 @@
 			<el-table-column prop="content" label="content">
 				<template slot-scope="scope">
 					<el-popover placement="right" width="800" trigger="click">
-							{{scope.row.content}}
+						<textarea v-model="scope.row.content" cols="100" rows="40" style="width: 100%;font-size: 15px;line-height: 20px;"></textarea>
 						<el-button type="text" slot="reference">查看详情</el-button>
 					</el-popover>
 				</template>
