@@ -581,8 +581,11 @@ API.searchStrangerRecord = function (address) {
 	})
 }
 
-API.getTransmits = function () {
-	return axios.get(url.Transmits)
+API.getTransmits = function (page, limit) {
+	return axios.get(url.Transmits,{
+		page: page,
+		limit: limit
+	})
 }
 
 export default API
