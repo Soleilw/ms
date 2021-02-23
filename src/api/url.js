@@ -3,6 +3,7 @@ const url = {
 	'Login': '/login', // 登录
 	'Password': '/password', // 重置密码
 	'Token': '/token', // token
+	'Logout': '/logout', // 获取登录记录
 	'Permissions': '/permissions', // 角色权限
 	'LoginLogs': '/login/logs', // 获取登录记录
 
