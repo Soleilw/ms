@@ -33,10 +33,10 @@
 							<img :src="active == 'gaojing' ? require(`@/assets/image/gaojing2.png`) : require(`@/assets/image/gaojing1.png`)"
 							 alt="" @click="clickTab('gaojing')">
 						</div>
-						<div class="o-tabs-item">
+						<!-- <div class="o-tabs-item">
 							<img :src="active == 'kaimen' ? require(`@/assets/image/kaimen2.png`) : require(`@/assets/image/kaimen1.png`)"
 							 alt="" @click="clickTab('kaimen')">
-						</div>
+						</div> -->
 						<div class="o-tabs-item">
 							<img :src="active == 'stranger' ? require(`@/assets/image/storage2.png`) : require(`@/assets/image/storage1.png`)"
 							 alt="" @click="clickTab('stranger')">
@@ -329,10 +329,10 @@
 						})
 					})
 				}
-				if (val == 'kaimen') {
-					this.active = 'kaimen';
-					this.getCurrentDay();
-				}
+				// if (val == 'kaimen') {
+				// 	this.active = 'kaimen';
+				// 	this.getCurrentDay();
+				// }
 				if (val == 'gaojing') {
 					this.active = 'gaojing';
 					this.getAlerts();

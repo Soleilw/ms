@@ -44,6 +44,9 @@
 					<el-form-item label="相似度">
 						<el-input v-model="searchForm.match_score" placeholder="请输入相似度"></el-input>
 					</el-form-item>
+					<el-form-item label="关键字">
+						<el-input v-model="searchForm.search" placeholder="请输入姓名/手机号/身份证"></el-input>
+					</el-form-item>
 					<el-form-item label="上传图片">
 						<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="1" :before-upload="beforeAvatarUpload"
 						 :auto-upload="false" :on-success="handleAvatarSuccess" :on-exceed="handleExceed" :data="imgData" list-type="picture-card">

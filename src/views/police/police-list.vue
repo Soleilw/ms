@@ -6,6 +6,14 @@
 					<el-button type="primary" @click="addPolice">添加警员</el-button>
 				</div>
 				<div class="btn">
+					<div class="tip">根据姓名或手机号筛选：</div>
+				</div>
+				<div class="btn">
+					<el-input placeholder="输入姓名/手机号" v-model="keyname" class="input-with-select" @keyup.enter.native="search(keyname)">
+						<el-button slot="append" icon="el-icon-search" @click="search(keyname)"></el-button>
+					</el-input>
+				</div>
+				<div class="btn">
 					<div class="tip">根据状态筛选：</div>
 				</div>
 				<div class="btn">
@@ -228,7 +236,9 @@
 				],
 				auditState: '',
 				station: '', // 搜索辖区
-
+				
+				keyname: '', // 搜索关键字
+				
 				tableData: [{}],
 				// 操作
 				dialogAudit: false, // 审核
@@ -524,6 +534,21 @@
 					self.getPolice();
 				});
 			},
+			
+			// 搜索
+			search() {
+				var self = this;
+				self.loading = true;
+				self.current = 1;
+				API.policemen(1, self.size, self.station, self.department, self.auditState, self.keyname).then(res => {
+					self.loading = false;
+					self.tableData = res.data;
+					self.total = res.total;
+					self.$message.success('搜索成功！');
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
 
 
 			// 分页
@@ -531,7 +556,7 @@
 				var self = this;
 				self.current = val;
 				self.loading = true;
-				API.policemen(val, self.size, self.station, self.department, self.auditState).then(res => {
+				API.policemen(val, self.size, self.station, self.department, self.auditState, self.keyname).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;
@@ -544,7 +569,7 @@
 				var self = this;
 				self.size = val;
 				self.loading = true;
-				API.policemen(self.current, val, self.station, self.department, self.auditState).then(res => {
+				API.policemen(self.current, val, self.station, self.department, self.auditState, self.keyname).then(res => {
 					self.loading = false;
 					self.tableData = res.data;
 					self.total = res.total;

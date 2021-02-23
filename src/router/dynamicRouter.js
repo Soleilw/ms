@@ -399,44 +399,44 @@ const dynamicRouter = [{
 	// 		}
 	// 	]
 	// },
-	// {
-	// 	path: '/renter',  //  住户管理
-	// 	name: 'renter',
-	// 	component: () => import('@/views/renter/index'),
-	// 	meta: {
-	// 		title: '住户管理',
-	// 		icon: 'el-icon-user',
-	// 	},
-	// 	children: [{
-	// 			path: '/renter-list',
-	// 			name: 'renterList',
-	// 			component: () => import('@/views/renter/renter-list'),
-	// 			meta: {
-	// 				title: '住户列表',
-	// 				icon: 'el-icon-warning'
-	// 			}
-	// 		}
-	// 	]
-	// },
-	// {
-	// 	path: '/school',  //  学校管理
-	// 	name: 'school',
-	// 	component: () => import('@/views/school/index'),
-	// 	meta: {
-	// 		title: '学校管理',
-	// 		icon: 'el-icon-user',
-	// 	},
-	// 	children: [{
-	// 			path: '/school-list',
-	// 			name: 'schoolList',
-	// 			component: () => import('@/views/school/school-list'),
-	// 			meta: {
-	// 				title: '学校列表',
-	// 				icon: 'el-icon-warning'
-	// 			}
-	// 		}
-	// 	]
-	// },
+	{
+		path: '/renter',  //  住户管理
+		name: 'renter',
+		component: () => import('@/views/renter/index'),
+		meta: {
+			title: '房屋管理',
+			icon: 'el-icon-user',
+		},
+		children: [{
+				path: '/renter-list',
+				name: 'renterList',
+				component: () => import('@/views/renter/renter-list'),
+				meta: {
+					title: '住户列表',
+					icon: 'el-icon-warning'
+				}
+			}
+		]
+	},
+	{
+		path: '/school',  //  学校管理
+		name: 'school',
+		component: () => import('@/views/school/index'),
+		meta: {
+			title: '学校管理',
+			icon: 'el-icon-user',
+		},
+		children: [{
+				path: '/school-list',
+				name: 'schoolList',
+				component: () => import('@/views/school/school-list'),
+				meta: {
+					title: '学校列表',
+					icon: 'el-icon-warning'
+				}
+			}
+		]
+	},
 	{
 		path: '/information', // 资讯管理
 		name: 'information',

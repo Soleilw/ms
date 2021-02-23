@@ -40,7 +40,7 @@
 		<el-dialog title="添加用户" :visible.sync="dialogUser" width="60%" :close-on-click-modal="false">
 			<div class="box">
 				<el-form :model="form" label-width="80px">
-					<el-form-item label="账号">
+					<el-form-item label="姓名">
 						<el-input v-model="form.name" placeholder="请输入昵称"></el-input>
 					</el-form-item>
 					<el-form-item label="账号">
