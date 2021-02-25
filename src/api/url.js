@@ -120,7 +120,10 @@ const url = {
 	'CountAddressStrangerRecord': 'count/address/stranger/record', // 获取单个地址陌生人详细进入记录
 	
 	// 
-	'Transmits': 'transmits'
+	'Transmits': 'transmits',
+	
+	// 掉线设备
+	'OfflineDevices': '/offline/devices'
 }
 
 module.exports = url;

@@ -33,10 +33,10 @@
 							<img :src="active == 'gaojing' ? require(`@/assets/image/gaojing2.png`) : require(`@/assets/image/gaojing1.png`)"
 							 alt="" @click="clickTab('gaojing')">
 						</div>
-						<!-- <div class="o-tabs-item">
+						<div class="o-tabs-item">
 							<img :src="active == 'kaimen' ? require(`@/assets/image/kaimen2.png`) : require(`@/assets/image/kaimen1.png`)"
 							 alt="" @click="clickTab('kaimen')">
-						</div> -->
+						</div>
 						<div class="o-tabs-item">
 							<img :src="active == 'stranger' ? require(`@/assets/image/storage2.png`) : require(`@/assets/image/storage1.png`)"
 							 alt="" @click="clickTab('stranger')">
@@ -92,19 +92,25 @@
 				</div>
 				<!-- 开门记录 -->
 				<div class="render" v-show="active == 'kaimen'">
-					<div class="render-table">
-						<el-table :data="currentDayOpen" max-height="760">
-							<el-table-column prop="id" label="ID" width="100px"></el-table-column>
-							<el-table-column prop="address" label="地址"></el-table-column>
-							<el-table-column prop="records.length" label="开门的次数" width="100px"></el-table-column>
-							<el-table-column label="操作" width="100px">
-								<template slot-scope="scope">
-									<el-button type="text" @click="showSpecific(scope.$index, scope.row)">具体查看</el-button>
-								</template>
-							</el-table-column>
+					<div class="render-table" style="width: 100vw;">
+						<div class="o-search">
+							<el-select v-model="offline_sort" placeholder="最后上线时间" filterable @change="sortChange" style="margin-right: 10px;">
+								<el-option v-for="(item, index) in sortList" :key="index" :label="item.label" :value="item.value">
+								</el-option>
+							</el-select>
+							<el-select v-model="offline_filter" placeholder="请选择filter" filterable @change="filterChange">
+								<el-option v-for="(item, index) in filterList" :key="index" :label="item.label" :value="item.value">
+								</el-option>
+							</el-select>
+						</div>
+						<el-table :data="offlineList" max-height="760">
+							<el-table-column prop="uuid" label="uuid"></el-table-column>
+							<el-table-column prop="remark" label="remark"></el-table-column>
+							<el-table-column prop="offlineLong" label="offlineLong" width="100px"></el-table-column>
+							<el-table-column prop="version" label="version"></el-table-column>
 						</el-table>
 					</div>
-					<div class="render-table render-table-right">
+					<!-- 	<div class="render-table render-table-right">
 						<el-table :data="specificOpen" max-height="760">
 							<el-table-column prop="id" label="ID"></el-table-column>
 							<el-table-column prop="name" label="姓名"></el-table-column>
@@ -124,16 +130,16 @@
 								</template>
 							</el-table-column>
 						</el-table>
-					</div>
+					</div> -->
 				</div>
 				<!-- 陌生人记录 -->
 				<div class="render" v-show="active == 'stranger'">
 					<div class="render-table">
 						<div class="o-search">
 							<el-input placeholder="请输入地址" v-model="addressStranger" @keyup.enter.native="search(addressStranger)" class="input-with-select">
-								  <el-button slot="prepend" style="color: #000000;" @click="addressRefer">刷新</el-button>
-							    <el-button slot="append" icon="el-icon-search" @click="search(addressStranger)"></el-button>
-							  </el-input>
+								<el-button slot="prepend" style="color: #000000;" @click="addressRefer">刷新</el-button>
+								<el-button slot="append" icon="el-icon-search" @click="search(addressStranger)"></el-button>
+							</el-input>
 						</div>
 						<el-table :data="strangerData" max-height="710">
 							<el-table-column prop="id" label="ID" width="100px"></el-table-column>
@@ -283,10 +289,32 @@
 				// 标签导航
 				active: 'gaojing',
 
-				strangerData: [] ,// 陌生人记录
+				strangerData: [], // 陌生人记录
 				addressStrangerData: [],
 				StrangerLoading: false,
-				addressStranger: '' // 搜索
+				addressStranger: '', // 搜索
+
+				offlineList: [],
+				offline_sort: '',
+				offline_filter: '',
+				sortList: [{
+						value: 1,
+						label: ' 从早到晚'
+					},
+					{
+						value: 2,
+						label: ' 从晚到早'
+					}
+				],
+				filterList: [{
+						value: 1,
+						label: ' 其他'
+					},
+					{
+						value: 2,
+						label: ' 仅显示未启用'
+					}
+				]
 			}
 		},
 		computed: {
@@ -329,10 +357,10 @@
 						})
 					})
 				}
-				// if (val == 'kaimen') {
-				// 	this.active = 'kaimen';
-				// 	this.getCurrentDay();
-				// }
+				if (val == 'kaimen') {
+					this.active = 'kaimen';
+					this.getOffline();
+				}
 				if (val == 'gaojing') {
 					this.active = 'gaojing';
 					this.getAlerts();
@@ -551,12 +579,34 @@
 				})
 			},
 
+			// 掉线设备
+			getOffline() {
+				API.getOfflineDevices(this.offline_sort, this.offline_filter).then(res => {
+					this.offlineList = res;
+					console.log(res)
+				})
+			},
+
+			sortChange(val) {
+				API.getOfflineDevices(val, this.offline_filter).then(res => {
+					this.offlineList = res;
+					console.log(res)
+				})
+			},
+
+			filterChange(val) {
+				API.getOfflineDevices(this.offline_sort, val).then(res => {
+					this.offlineList = res;
+					console.log(res)
+				})
+			},
+
 			// 具体查看
 			showSpecific(index, row) {
 				this.specificOpen = row.records;
 				console.log(row.records)
 			},
-			
+
 			// 获取陌生人
 			getStranger() {
 				API.strangerRecord().then(res => {
@@ -574,14 +624,14 @@
 					this.StrangerLoading = false;
 				})
 			},
-			
+
 			// 搜索
 			search(val) {
 				API.searchStrangerRecord(val).then(res => {
 					this.strangerData = res.countData;
 				})
 			},
-			
+
 			// 刷新
 			addressRefer() {
 				API.strangerRecord().then(res => {
@@ -671,18 +721,18 @@
 						width: 38vw;
 						margin-right: 10px;
 					}
-					
+
 					.o-search {
 						margin-bottom: 10px;
-						
+
 						/deep/ .el-input__inner {
 							background: transparent;
 							color: #ffffff;
 						}
-						
-						
+
+
 					}
-					
+
 					.render-table-right {
 						width: 38vw;
 					}

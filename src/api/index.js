@@ -588,4 +588,12 @@ API.getTransmits = function (page, limit) {
 	})
 }
 
+// 掉线设备
+API.getOfflineDevices = function(sort, filter) {
+	return axios.get(url.OfflineDevices,{
+		sort: sort,
+		filter: filter
+	})
+}
+
 export default API
