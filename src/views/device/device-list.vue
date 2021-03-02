@@ -90,7 +90,7 @@
 										<el-button type="text" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-button v-if="scope.row.type == 4 || scope.row.type == 1" type="text" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
+										<el-button v-if="scope.row.type == 4 || scope.row.type == 1 || scope.row.type == 6" type="text" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
 										<el-button  v-if="scope.row.type == 4 || scope.row.type == 1 || scope.row.type == 5 || scope.row.type == 6"
