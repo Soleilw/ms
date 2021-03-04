@@ -456,7 +456,19 @@
 					}
 				})
 			},
-			handleDel() {},
+			// 删除地址
+			handleDel(index, row) {
+				var self = this;
+					console.log(row)
+					var id = row.id
+					API.delAddress(id).then(res => {
+						self.$message.success('删除成功');
+						self.getAddress();
+						self.current = 1;
+					}).catch(err => {
+						self.loading = false;
+					})
+			},
 
 
 			// 获取社区列表（省市区选中）

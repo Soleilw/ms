@@ -21,9 +21,8 @@ const url = {
 	'RestoreProject': '/restore/project', // 恢复项目
 	
 	// 地址管理
-	'Address': '/address', // 新增地址
+	'Address': '/address', // 新增地址，删除地址,方式‘delete’
 	'Addresses': '/addresses', // 获取地址列表
-	'Address': '/address', // 删除地址,方式‘delete’
 	'RestoreAddress': '/restore/address', // 恢复地址
 	'AddressTypes': '/address/types', // 地址类型
 	'AddressTypes': '/address/types', // 恢复地址
@@ -102,6 +101,7 @@ const url = {
 	// 辖区管理
 	'PoliceStation': '/police/station', // 添加公安辖区
 	'PoliceStations': '/police/stations', // 获取公安辖区
+	'DelPoliceStation': '/del/police/station', // 删除辖区
 	
 	
 	// 资讯管理

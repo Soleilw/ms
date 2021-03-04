@@ -9,8 +9,35 @@
 		<el-dialog title="添加公安辖区" :visible.sync="dialogPoliceArea" width="50%">
 			<div class="box">
 				<el-form :model="form" label-width="80px">
-					<el-form-item label="辖区名字">
+					<!-- <el-form-item label="辖区名字">
 						<el-input v-model="form.name"></el-input>
+					</el-form-item>
+					<div class="submit">
+						<el-form-item>
+							<el-button type="primary" @click="newPoliceArea">提交</el-button>
+						</el-form-item>
+					</div> -->
+					<el-form-item label="辖区名称">
+						<el-input v-model="form.name" placeholder="请输入地区名称"></el-input>
+						<div v-show="hasCurrentArea">当前辖区属于：{{currentArea}}</div>
+					</el-form-item>
+					<el-form-item label="选择辖区">
+						<el-select v-model="pro_id" placeholder="请选择辖区" @change="proChange" style="margin-right: 10px;">
+							<el-option v-for="item in proList" :key="item.id" :label="item.name" :value="item.id">
+							</el-option>
+						</el-select>
+						<div v-if="cityList.length > 0">
+							<el-select v-model="city_id" placeholder="请选择辖区" @change="cityChange" style="margin-right: 10px;">
+								<el-option v-for="item in cityList" :key="item.id" :label="item.name" :value="item.id">
+								</el-option>
+							</el-select>
+						</div>
+						<div v-if="areaList.length > 0">
+							<el-select v-model="areas_id" placeholder="请选择辖区" @change="areasChange" style="margin-right: 10px;">
+								<el-option v-for="item in areaList" :key="item.id" :label="item.name" :value="item.id">
+								</el-option>
+							</el-select>
+						</div>
 					</el-form-item>
 					<div class="submit">
 						<el-form-item>
@@ -26,7 +53,9 @@
 			<el-table-column prop="name" label="名称"></el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<el-popconfirm title="是否要删除该条数据" @confirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+					<el-button type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-popconfirm title="是否要删除该条数据" @confirm="handleDel(scope.$index, scope.row)" style="margin-left: 10px;"
+					 cancelButtonType="primary">
 						<el-button slot="reference" size="mini" type="danger">删除</el-button>
 					</el-popconfirm>
 				</template>
@@ -52,13 +81,19 @@
 				dialogPoliceArea: false,
 				form: {
 					name: '',
+					parent_id: '',
 				},
+
+				proList: [],
+				pro_id: '',
+				cityList: [],
+				city_id: '',
+				areaList: [],
+				areas_id: '',
+
 				tableData: [],
-				 form1: {
-					 switch_title: '人脸开关',
-					 version: '1.0.1',
-					 switch_value: '2'
-				 },
+				currentArea: '', // 当前辖区属于
+				hasCurrentArea: false,
 				// 分页
 				current: 1, // 当前页
 				size: 10, // 每页出现几条
@@ -67,6 +102,8 @@
 		},
 		mounted() {
 			this.getPoliceStation();
+			// 获取parent_id
+			this.getFather();
 		},
 		methods: {
 			getPoliceStation() {
@@ -79,13 +116,25 @@
 					this.loading = false;
 				})
 			},
+
+
 			// 添加新的AIP
 			addPoliceArea() {
 				var self = this;
+				self.hasCurrentArea = false;
 				self.dialogPoliceArea = true;
+				self.pro_id = '';
+				self.city_id = '';
+				self.areas_id = '';
+				self.proList = [];
+				self.cityList = [];
+				self.areaList = [];
 				self.form = {
 					name: '',
+					parent_id: 0,
 				}
+				// 获取parent_id
+				this.getFather();
 			},
 
 			newPoliceArea() {
@@ -96,15 +145,14 @@
 					self.getPoliceStation();
 					self.current = 1;
 					self.form = {};
-				}).catch(err => {
-				})
+				}).catch(err => {})
 			},
 			// 操作
 			handleDel(index, row) {
 				var self = this;
 				console.log(row)
 				var id = row.id
-				API.delAip(id).then(res => {
+				API.delPoliceStation(id).then(res => {
 					self.$message.success('删除成功');
 					self.getPoliceStation();
 					self.current = 1;
@@ -112,6 +160,68 @@
 					self.loading = false;
 				})
 			},
+
+			// 编辑
+			handleEdit(index, row) {
+				var self = this;
+				self.pro_id = '';
+				self.city_id = '';
+				self.areas_id = '';
+				self.hasCurrentArea = true;
+				var edit_id = row.id;
+				API.onePoliceStation(edit_id).then(res => {
+					self.dialogPoliceArea = true;
+					self.form.name = res.name;
+					self.form.id = edit_id;
+					self.form.parent_id = res.parent_id;
+					if(res.parent) {
+						self.currentArea = res.parent.name;
+					} else {
+						self.currentArea = '无';
+					}
+					this.getFather();
+				}).catch(err => {
+					self.loading = false;
+				})
+			},
+
+
+			// 获取辖区父级列表
+			getFather() {
+				var self = this;
+				API.getParentPoliceStations(1, 100000, 0).then(res => {
+					self.proList = res.data;
+				}).catch(err => {
+					this.loading = false;
+				})
+			},
+			proChange(val) {
+				this.getCity(val)
+				this.form.parent_id = val;
+			},
+			getCity(val) {
+				var self = this;
+				API.getParentPoliceStations(1, 100000, val).then(res => {
+					self.cityList = res.data;
+				})
+			},
+			cityChange(val) {
+				this.getAreas(val)
+				this.form.parent_id = val;
+			},
+
+			getAreas(val) {
+				var self = this;
+				API.getParentPoliceStations(1, 100000, val).then(res => {
+					self.areaList = res.data;
+				})
+			},
+
+			areasChange(val) {
+				this.form.parent_id = val;
+			},
+
+
 
 			// 分页
 			currentChange(val) {

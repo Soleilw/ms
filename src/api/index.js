@@ -83,6 +83,13 @@ API.getaddress = function(id) {
 	})
 }
 
+// 删除地址
+API.delAddress = function(id) {
+	return axios.del(url.Address, {
+		id: id
+	})
+}
+
 API.addresses = function(page, limit, project_id, area_id, address) {
 	return axios.get(url.Addresses, {
 		page: page,
@@ -512,6 +519,29 @@ API.policeStations = function(page, limit, name) {
 		page: page,
 		limit: limit,
 		name: name
+	})
+}
+
+// 获取辖区父级列表
+API.getParentPoliceStations = function(page,limit,parent_id) {
+	return axios.get(url.PoliceStations, {
+		page: page,
+		limit: limit,
+		parent_id: parent_id
+	})
+}
+
+// 获取单个辖区
+API.onePoliceStation = function(id) {
+	return axios.get(url.PoliceStation, {
+		id: id
+	})
+}
+
+// 删除辖区
+API.delPoliceStation= function(id) {
+	return axios.get(url.DelPoliceStation, {
+		id: id
 	})
 }
 

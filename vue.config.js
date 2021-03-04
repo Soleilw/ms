@@ -21,8 +21,8 @@ module.exports = {
 			'TMap': 'TMap',
 		},
 		output: { // 输出重构  打包编译后的 文件名称  【模块名称.时间戳.js】
-			filename: `js/[name].${TimeStamp}.js`,
-			chunkFilename: `js/[name].${TimeStamp}.js`
+			filename: `[name].${TimeStamp}.js`,
+			chunkFilename: `[name].${TimeStamp}.js`
 		}
 	}
 }

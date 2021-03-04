@@ -388,6 +388,9 @@
 											<div class="level2">
 												<el-checkbox label="areaList" @change="oneChange">辖区列表</el-checkbox>
 											</div>
+											<div class="level2">
+												<el-checkbox label="allAreaList" @change="oneChange">查看所有</el-checkbox>
+											</div>
 										</div>
 										<div class="tb set" style="width: 60%;">
 										</div>
@@ -874,6 +877,7 @@
 
 					"area", // 辖区管理
 					"areaList",
+					"allAreaList", // 辖区查看所有
 
 					"user", // 用户管理
 					"userList",
