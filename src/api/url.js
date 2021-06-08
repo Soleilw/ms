@@ -102,6 +102,7 @@ const url = {
 	'PoliceStation': '/police/station', // 添加公安辖区
 	'PoliceStations': '/police/stations', // 获取公安辖区
 	'DelPoliceStation': '/del/police/station', // 删除辖区
+	'policeStationTree': '/police/station/tree', // 树形辖区
 	
 	
 	// 资讯管理
@@ -123,7 +124,8 @@ const url = {
 	'Transmits': 'transmits',
 	
 	// 掉线设备
-	'OfflineDevices': '/offline/devices'
+	'OfflineDevices': '/offline/devices',
+	
 }
 
 module.exports = url;

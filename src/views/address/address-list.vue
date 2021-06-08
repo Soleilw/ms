@@ -61,6 +61,11 @@
 							<el-option v-for="(item, index) in projectList" :label="item.name" :value="item.id" :key="index"></el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="选择百度接口">
+						<el-select v-model="form.aip_id">
+							<el-option v-for="(item, index) in baiduList" :label="item.name" :value="item.id" :key="index"></el-option>
+						</el-select>
+					</el-form-item>
 					<el-form-item label="选择类型">
 						<el-select v-model="form.type">
 							<el-option v-for="(value, name) in typeList" :label="value" :value="name" :key="name"></el-option>
@@ -95,7 +100,7 @@
 						<el-switch v-model="showMap" active-color="#2a9f93">
 						</el-switch>
 						<div v-if="showMap">
-							<v-map @callback="getLoc"></v-map>
+							<v-map @getLoc="getLoc"></v-map>
 						</div>
 					</el-form-item>
 					<el-form-item label="联系方式">
@@ -188,6 +193,7 @@
 				typeList: [],
 				form: {
 					project_id: '',
+					aip_id: '',
 					type: '',
 					address: '',
 					contact: '',
@@ -271,6 +277,8 @@
 						}
 					}
 				},
+				// 获取百度接口
+				baiduList: []
 			}
 		},
 		mounted() {
@@ -280,8 +288,16 @@
 			this.getPro();
 			// 省市区数据
 			this.getProArae();
+			this.getAip();
 		},
 		methods: {
+			// 获取百度接口
+			getAip() {
+				var self = this;
+				API.aips(1, 100).then(res => {
+					self.baiduList = res.data;
+				})
+			},
 			// 获取社区列表（省市区选中）
 			getProArae() {
 				var self = this;
@@ -348,6 +364,7 @@
 				self.community_id = '';
 				self.form = {
 					project_id: '',
+					aip_id: '',
 					type: '',
 					address: '',
 					contact: '',
@@ -431,6 +448,7 @@
 					self.form = {
 						id: res.id,
 						project_id: res.project_id,
+						aip_id: res.aip_id,
 						area_id: res.area_id,
 						type: res.type,
 						address: res.address,
@@ -440,16 +458,16 @@
 						lng: res.lng,
 						lat: res.lat
 					}
-					this.sbszjlx = res.info.sbszjlx;
-					this.sbszsqc = res.info.sbszsqc;
-					this.sbszjwq = res.info.sbszjwq;
+					this.sbszjlx =  res.info ? res.info.sbszjlx : '';
+					this.sbszsqc = res.info ? res.info.sbszsqc : '';
+					this.sbszjwq = res.info ? res.info.sbszjwq : '';
 
-					this.sbszjzw = res.info.sbszjzw;
-					this.sbszfw = res.info.sbszfw;
-					this.sbszdy = res.info.sbszdy;
-					this.sbszwzsm = res.info.sbszwzsm;
-					this.glsxjbm = res.info.glsxjbm;
-					this.sbgldwmc = res.info.sbgldwmc;
+					this.sbszjzw = res.info ? res.info.sbszjzw : '';
+					this.sbszfw = res.info ? res.info.sbszfw : '';
+					this.sbszdy = res.info ? res.info.sbszdy : '';
+					this.sbszwzsm = res.info ? res.info.sbszwzsm : '';
+					this.glsxjbm = res.info ? res.info.glsxjbm : '';
+					this.sbgldwmc = res.info ? res.info.sbgldwmc : '';
 
 					if (self.form.stations.length == self.stationList.length) {
 						self.checkAll = true;

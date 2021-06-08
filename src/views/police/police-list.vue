@@ -182,7 +182,7 @@
 <script>
 	import md5 from 'blueimp-md5'
 	import axios from 'axios'
-	import API from '@/api//index.js'
+	import API from '@/api/index.js'
 
 	export default {
 		data() {

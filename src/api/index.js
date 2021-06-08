@@ -522,6 +522,15 @@ API.policeStations = function(page, limit, name) {
 	})
 }
 
+// 树形辖区获取
+API.getpoliceStationSTree = function (page, limit, name) {
+	return axios.get(url.policeStationTree, {
+		page: page,
+		limit: limit,
+		name: name
+	})
+}
+
 // 获取辖区父级列表
 API.getParentPoliceStations = function(page,limit,parent_id) {
 	return axios.get(url.PoliceStations, {

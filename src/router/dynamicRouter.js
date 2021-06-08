@@ -181,37 +181,37 @@ const dynamicRouter = [{
 			}
 		]
 	},
-	{
-		path: '/statistical',
-		name: 'statistical',
-		// component: () => import('@/views/statistical/index'),
-		component: resolve => require(['@/views/statistical/index'], resolve),
-		meta: {
-			title: '统计',
-			icon: 'el-icon-setting'
-		},
-		children: [{
-				path: '/data',
-				name: 'data',
-				// component: () => import('@/views/statistical/data'),
-				component: resolve => require(['@/views/statistical/data'], resolve),
-				meta: {
-					title: '数据统计',
-					icon: 'el-icon-warning'
-				}
-			},
-			{
-				path: '/generate',
-				name: 'generate',
-				// component: () => import('@/views/statistical/generate'),
-				component: resolve => require(['@/views/statistical/generate'], resolve),
-				meta: {
-					title: '导出数据表',
-					icon: 'el-icon-s-release'
-				},
-			}
-		]
-	},
+	// {
+	// 	path: '/statistical',
+	// 	name: 'statistical',
+	// 	// component: () => import('@/views/statistical/index'),
+	// 	component: resolve => require(['@/views/statistical/index'], resolve),
+	// 	meta: {
+	// 		title: '统计',
+	// 		icon: 'el-icon-setting'
+	// 	},
+	// 	children: [{
+	// 			path: '/data',
+	// 			name: 'data',
+	// 			// component: () => import('@/views/statistical/data'),
+	// 			component: resolve => require(['@/views/statistical/data'], resolve),
+	// 			meta: {
+	// 				title: '数据统计',
+	// 				icon: 'el-icon-warning'
+	// 			}
+	// 		},
+	// 		{
+	// 			path: '/generate',
+	// 			name: 'generate',
+	// 			// component: () => import('@/views/statistical/generate'),
+	// 			component: resolve => require(['@/views/statistical/generate'], resolve),
+	// 			meta: {
+	// 				title: '导出数据表',
+	// 				icon: 'el-icon-s-release'
+	// 			},
+	// 		}
+	// 	]
+	// },
 	{
 		path: '/alert',
 		name: 'alert',
@@ -399,44 +399,44 @@ const dynamicRouter = [{
 	// 		}
 	// 	]
 	// },
-	{
-		path: '/renter',  //  住户管理
-		name: 'renter',
-		component: () => import('@/views/renter/index'),
-		meta: {
-			title: '房屋管理',
-			icon: 'el-icon-user',
-		},
-		children: [{
-				path: '/renter-list',
-				name: 'renterList',
-				component: () => import('@/views/renter/renter-list'),
-				meta: {
-					title: '住户列表',
-					icon: 'el-icon-warning'
-				}
-			}
-		]
-	},
-	{
-		path: '/school',  //  学校管理
-		name: 'school',
-		component: () => import('@/views/school/index'),
-		meta: {
-			title: '学校管理',
-			icon: 'el-icon-user',
-		},
-		children: [{
-				path: '/school-list',
-				name: 'schoolList',
-				component: () => import('@/views/school/school-list'),
-				meta: {
-					title: '学校列表',
-					icon: 'el-icon-warning'
-				}
-			}
-		]
-	},
+	// {
+	// 	path: '/renter',  //  住户管理
+	// 	name: 'renter',
+	// 	component: () => import('@/views/renter/index'),
+	// 	meta: {
+	// 		title: '房屋管理',
+	// 		icon: 'el-icon-user',
+	// 	},
+	// 	children: [{
+	// 			path: '/renter-list',
+	// 			name: 'renterList',
+	// 			component: () => import('@/views/renter/renter-list'),
+	// 			meta: {
+	// 				title: '住户列表',
+	// 				icon: 'el-icon-warning'
+	// 			}
+	// 		}
+	// 	]
+	// },
+	// {
+	// 	path: '/school',  //  学校管理
+	// 	name: 'school',
+	// 	component: () => import('@/views/school/index'),
+	// 	meta: {
+	// 		title: '学校管理',
+	// 		icon: 'el-icon-user',
+	// 	},
+	// 	children: [{
+	// 			path: '/school-list',
+	// 			name: 'schoolList',
+	// 			component: () => import('@/views/school/school-list'),
+	// 			meta: {
+	// 				title: '学校列表',
+	// 				icon: 'el-icon-warning'
+	// 			}
+	// 		}
+	// 	]
+	// },
 	{
 		path: '/information', // 资讯管理
 		name: 'information',

@@ -38,12 +38,12 @@
         },
 
         mounted() {
-            var self = this
+            var self = this;
             window.addEventListener('message', function(event) {
                 // 对于无法识别的地址，直接返回无法选择
-                var loc = event.data
+                var loc = event.data;
                 if (loc && loc.module === 'locationPicker') { // 防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
-                    self.$emit('callback', loc)
+                    self.$emit('getLoc', loc)
                 }
             }, false)
         }

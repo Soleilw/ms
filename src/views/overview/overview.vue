@@ -251,15 +251,7 @@
 	import axios from 'axios'
 	import TMap from 'TMap'
 
-	var dotData = [{
-			lng: 113.341355,
-			lat: 22.525103
-		},
-		{
-			lng: 113.341355,
-			lat: 22.525103
-		},
-	];
+	var dotData = [];
 	export default {
 		data() {
 			return {
@@ -478,9 +470,8 @@
 			init() {
 				var self = this;
 				self.$nextTick(function() {
-					console.log(2)
 					var self = this;
-					var center = new TMap.LatLng(22.51595, 113.3926);
+					var center = new TMap.LatLng(dotData[0].lat, dotData[0].lng);
 					//初始化地图
 					var map = new TMap.Map("geo", {
 						zoom: 13, //设置地图缩放级别

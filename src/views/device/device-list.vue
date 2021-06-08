@@ -153,7 +153,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="选择地址">
-						<el-select v-model="face_address" placeholder="请选择地址" @change="addressChange">
+						<el-select v-model="face_address" placeholder="请选择地址" @change="addressChange" filterable>
 							<el-option v-for="item in addressList" :key="item.id" :label="item.address" :value="item.id">
 							</el-option>
 						</el-select>
@@ -186,8 +186,8 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="安装包版本">
-						<el-select v-model="face_apk_version" placeholder="请选择版本">
-							<el-option v-for="item in versionList" :key="item.id" :label="item.version" :value="item.id">
+						<el-select v-model="face_apk_version" placeholder="请选择版本" @change="apkVersionChange">
+							<el-option v-for="item in versionList" :key="item.version" :label="item.version" :value="item.version">
 							</el-option>
 						</el-select>
 					</el-form-item>
@@ -797,7 +797,7 @@
 			// 获取地址
 			getAddress(val) {
 				var self = this;
-				API.addresses(1, 1000, val).then(res => {
+				API.addresses(1, 10000, val).then(res => {
 					self.addressList = res.data;
 				})
 			},
@@ -975,11 +975,17 @@
 					self.form.direction = res.direction;
 					self.form.remark = res.remark;
 					self.form.face_groups = res.face_group;
-
+					
+					if(res.origin_version) {
+						self.form.apk = res.origin_version.apk_id;
+						self.form.apk_version = res.origin_version.version;
+						self.face_apk_version = res.origin_version.version;
+					}
+				
+					
 					self.face_project = res.project;
 					self.face_address = res.address_id;
 					self.face_apk = res.apk;
-					self.face_apk_version = res.apk_version;
 					self.face_type = res.type_string;
 					API.faceGroup(res.address_id).then(res => {
 						self.faceGroupList = res.data;

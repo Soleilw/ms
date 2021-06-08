@@ -17,7 +17,7 @@
 						<el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
 					</el-form-item>
 				</el-form>
-				<div class="footer"><span>中山市公安局沙溪分局联合研发</span> </div>
+				<div class="footer"><span>中山市公安局沙溪分局联合研发</span><img src="../assets/image/badges-2.png" alt=""> </div>
 			</div>
 		</div>
 	</div>
@@ -133,5 +133,10 @@
 		display: flex;
 		justify-content: center;
 		font-size: 20px;
+		
+		img {
+			width: 20px;
+			height: 20px;
+		}
 	}
 </style>
