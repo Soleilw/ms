@@ -28,7 +28,8 @@
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<el-button size="mini" type="primary" @click="sendScreen(scope.$index, scope.row)">发布此屏保</el-button>
-					<el-popconfirm title="是否要删除该条数据" @confirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary" style="margin-left: 10px;">
+					<el-popconfirm title="是否要删除该条数据" @confirm="handleDel(scope.$index, scope.row)"
+						cancelButtonType="primary" style="margin-left: 10px;">
 						<el-button slot="reference" size="mini" type="danger">删除</el-button>
 					</el-popconfirm>
 				</template>
@@ -45,9 +46,10 @@
 						<el-input v-model="form.remark"></el-input>
 					</el-form-item>
 					<el-form-item label="上传屏保图片">
-						<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="5" :before-upload="beforeAvatarUpload"
-						 :auto-upload="false" :on-success="handleAvatarSuccess" :on-remove="handleRemove" :on-exceed="handleExceed"
-						 :on-change="handleChange" :data="imgData" multiple list-type="picture-card">
+						<el-upload action="https://upload-z2.qiniup.com" ref="upload" :limit="5"
+							:before-upload="beforeAvatarUpload" :auto-upload="false" :on-success="handleAvatarSuccess"
+							:on-remove="handleRemove" :on-exceed="handleExceed" :on-change="handleChange"
+							:data="imgData" multiple list-type="picture-card">
 							<el-button size="small" type="primary">选择图片</el-button>
 						</el-upload>
 					</el-form-item>
@@ -61,7 +63,7 @@
 			</div>
 		</el-dialog>
 
-		<el-dialog title="发布" :visible.sync="dialogSend" :modal="false" width="80%" >
+		<el-dialog title="发布" :visible.sync="dialogSend" :modal="false" width="80%">
 			<div class="box">
 				<el-form :model="sendForm" label-width="100px">
 					<!-- <el-form-item label="选择APK">
@@ -70,8 +72,9 @@
 						</el-select>
 					</el-form-item> -->
 					<el-form-item label="屏保时间">
-						<el-time-picker is-range v-model="screenTime" range-separator="至" start-placeholder="屏保开始时间" end-placeholder="屏保结束时间"
-						 placeholder="选择时间范围" :value-format="timeScreen" @change="screenTimeChange">
+						<el-time-picker is-range v-model="screenTime" range-separator="至" start-placeholder="屏保开始时间"
+							end-placeholder="屏保结束时间" placeholder="选择时间范围" :value-format="timeScreen"
+							@change="screenTimeChange">
 						</el-time-picker>
 					</el-form-item>
 					<el-form-item label="图片切换间隔时间">
@@ -82,13 +85,15 @@
 					</el-form-item>
 					<el-form-item label="选择类型">
 						<el-select v-model="sendForm.type" @change="typeChange">
-							<el-option v-for="(item, index) in typeList" :label="item.label" :value="item.value" :key="index"></el-option>
+							<el-option v-for="(item, index) in typeList" :label="item.label" :value="item.value"
+								:key="index"></el-option>
 						</el-select>
 					</el-form-item>
 					<div v-if="sendForm.type === 2">
 						<el-form-item label="选择项目">
 							<el-select v-model="project_id" placeholder="请选择项目" @change="changeProject">
-								<el-option v-for="(item,index) in projectList" :key="index" :label="item.name" :value="item.id">
+								<el-option v-for="(item,index) in projectList" :key="index" :label="item.name"
+									:value="item.id">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -96,7 +101,9 @@
 					<div v-if="sendForm.type === 2 && hasAddress">
 						<el-form-item label="选择地址">
 							<!-- <el-checkbox v-model="checkAll" @change="handleCheckAllAddress">全选</el-checkbox> -->
-							<el-transfer filterable v-model="sendForm.addresses" :data="addressList" :titles="['id-地址', '选中地址']" :button-texts="['取消', '确定']"  @change="handleCheckAllAddress">
+							<el-transfer filterable v-model="sendForm.addresses" :data="addressList"
+								:titles="['id-地址', '选中地址']" :button-texts="['取消', '确定']"
+								@change="handleCheckAllAddress">
 								<span slot-scope="{ option }">
 									{{ option.key }} - {{ option.label }}</span>
 							</el-transfer>
@@ -113,20 +120,23 @@
 					<div v-if="sendForm.type === 3">
 						<el-form-item label="选择项目">
 							<el-select v-model="project_id" placeholder="请选择项目" @change="changeProject">
-								<el-option v-for="(item,index) in projectList" :key="index" :label="item.name" :value="item.id">
+								<el-option v-for="(item,index) in projectList" :key="index" :label="item.name"
+									:value="item.id">
 								</el-option>
 							</el-select>
 						</el-form-item>
 					</div>
 					<div v-if="sendForm.type === 3 && hasAddress">
 						<el-form-item label="选择地址">
-							<el-transfer v-loading="dialogLoading" element-loading-text="获取数据中" filterable v-model="sendForm.addresses" :data="addressList" :titles="['id-地址', '选中地址']" :button-texts="['取消', '确定']"  @change="handleCheckAllAddress">
+							<el-transfer v-loading="dialogLoading" element-loading-text="获取数据中" filterable
+								v-model="sendForm.addresses" :data="addressList" :titles="['id-地址', '选中地址']"
+								:button-texts="['取消', '确定']" @change="handleCheckAllAddress">
 								<span slot-scope="{ option }">
 									{{ option.key }} - {{ option.label }}</span>
 							</el-transfer>
 							<!-- <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox> -->
 							<div class="facebox">
-							<!-- 	<el-transfer filterable v-model="sendForm.addresses" :data="addressList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']">
+								<!-- 	<el-transfer filterable v-model="sendForm.addresses" :data="addressList" :titles="['姓名', '选中警员']" :button-texts="['取消', '确定']">
 									<span slot-scope="{ option }">
 										{{ option.id }} - {{ option.address }}</span>
 								</el-transfer>
@@ -140,20 +150,48 @@
 							</div>
 						</el-form-item>
 					</div>
+					<div v-if="sendForm.type === 4">
+						<el-form-item label="选择社区">
+							<el-select v-model="pro_id" placeholder="请选择省份" @change="proChange"
+								style="margin-right: 10px;">
+								<el-option v-for="item in proList" :key="item.id" :label="item.title" :value="item.id">
+								</el-option>
+							</el-select>
+							<el-select v-model="city_id" placeholder="请选择市级" @change="cityChange"
+								style="margin-right: 10px;">
+								<el-option v-for="item in cityList" :key="item.id" :label="item.title" :value="item.id">
+								</el-option>
+							</el-select>
+							<el-select v-model="community_id" placeholder="请选择区级" @change="areasChange"
+								style="margin-right: 10px;">
+								<el-option v-for="item in areaList" :key="item.id" :label="item.title" :value="item.id">
+								</el-option>
+							</el-select>
+							<el-select v-model="areas_id" placeholder="请选择社区" @change="communityChange"
+								style="margin-right: 10px;">
+								<el-option v-for="item in communityList" :key="item.id" :label="item.title"
+									:value="item.id">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</div>
 					<div v-if="hasType">
 						<el-form-item label="选择方向">
 							<el-select v-model="sendForm.direction" @change="handleCheckeddirection">
-								<el-option v-for="(item, index) in directionList" :label="item.name" :value="item.value" :key="index"></el-option>
+								<el-option v-for="(item, index) in directionList" :label="item.name" :value="item.value"
+									:key="index"></el-option>
 							</el-select>
 						</el-form-item>
 
 						<el-form-item label="选择设备">
 							<div class="facebox">
-								<el-transfer v-loading="dialogLoading" element-loading-text="获取数据中" filterable v-model="sendForm.devices" :data="deviceList" :titles="['uuid-备注', '选中地址']" :button-texts="['取消', '确定']">
+								<el-transfer v-loading="dialogLoading" element-loading-text="获取数据中" filterable
+									v-model="sendForm.devices" :data="deviceList" :titles="['uuid-备注', '选中地址']"
+									:button-texts="['取消', '确定']">
 									<span slot-scope="{ option }">
 										{{ option.key }} - {{ option.label }}</span>
 								</el-transfer>
-							<!-- 	<div v-for="(item,index) in deviceList" :key="index">
+								<!-- 	<div v-for="(item,index) in deviceList" :key="index">
 									<el-checkbox-group v-model="sendForm.devices" class="facebox-item">
 										<el-checkbox :label="item.id">{{item.uuid}} / {{item.remark ? item.remark : '无'}}</el-checkbox>
 									</el-checkbox-group>
@@ -173,8 +211,9 @@
 
 
 		<div class="block">
-<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-			 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
+			<el-pagination @current-change="currentChange" :current-page.sync="current"
+				:page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]" :page-size="size"
+				layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
 			</el-pagination>
 		</div>
 	</div>
@@ -228,6 +267,9 @@
 				}, {
 					value: 3,
 					label: '自定义'
+				}, {
+					value: 4,
+					label: '按社区选择'
 				}],
 				directionList: [{
 					value: 'out',
@@ -236,6 +278,14 @@
 					value: 'in',
 					name: '进'
 				}],
+				proList: [], // 省级列表
+				pro_id: '',
+				cityList: [], // 市级列表
+				city_id: '',
+				communityList: [], // 区级列表
+				community_id: '',
+				areaList: [], //  社区列表
+				areas_id: '',
 				// 发布
 				sendForm: {
 					saver_id: '',
@@ -246,7 +296,8 @@
 					end: '',
 					interval_time: '',
 					start_time: '',
-					direction: ''
+					direction: '',
+					area_id: ''
 				},
 				project_id: '', // 项目id
 				addressList: [],
@@ -255,7 +306,7 @@
 				hasType: false,
 				deviceList: [],
 				dialogLoading: false, // 加载地址设备时
-				
+
 				// 分页
 				current: 1, // 当前页
 				size: 10, // 每页出现几条
@@ -265,6 +316,7 @@
 		mounted() {
 			this.getScreenSaver();
 			this.getQiniuToken();
+			this.getPro();
 		},
 		methods: {
 			// 获取屏保
@@ -320,6 +372,49 @@
 					}).catch(err => {})
 				}
 			},
+			// 获取社区列表（省市区选中）
+			getPro() {
+				var self = this;
+				API.areas(1, 100, 0).then(res => {
+					self.proList = res.data;
+				})
+			},
+			proChange(val) {
+				this.getCity(val)
+			},
+			getCity(val) {
+				var self = this;
+				API.areas(1, 100, val).then(res => {
+					self.cityList = res.data;
+				})
+			},
+			cityChange(val) {
+				this.getAreas(val)
+			},
+
+			getAreas(val) {
+				var self = this;
+				API.areas(1, 100, val).then(res => {
+					self.areaList = res.data;
+				})
+			},
+
+			areasChange(val) {
+				this.getCommunity(val)
+			},
+
+
+			getCommunity(val) {
+				var self = this;
+				API.areas(1, 100, val).then(res => {
+					self.communityList = res.data;
+				})
+			},
+
+			communityChange(val) {
+				this.areas_id = val;
+				this.sendForm.area_id = this.areas_id;
+			},
 			// 上传屏保图片
 			getQiniuToken() {
 				var self = this;
@@ -365,8 +460,9 @@
 				if (self.imgData.key) {
 					self.screenSaverList.push(`${self.qiniuaddr}/${self.imgData.key}`)
 					for (var i = 0; i < self.screenSaverList.length; i++) {
-						if (_screenSaverList.indexOf(self.screenSaverList[i]) === -1 && self.screenSaverList[i].substring(self.screenSaverList[
-								i].lastIndexOf('.') + 1) === 'png') {
+						if (_screenSaverList.indexOf(self.screenSaverList[i]) === -1 && self.screenSaverList[i].substring(
+								self.screenSaverList[
+									i].lastIndexOf('.') + 1) === 'png') {
 							_screenSaverList.push(self.screenSaverList[i])
 						}
 					}
@@ -391,18 +487,18 @@
 			sendScreen(index, row) {
 				let self = this;
 				self.dialogSend = true;
-				self.sendForm = {
-					saver_id: '',
-					type: '',
-					addresses: [], // 地址id
-					devices: [], // 设备id
-					start: '',
-					end: '',
-					interval_time: '',
-					start_time: ''
-				}
+				self.pro_id = '';
+				self.city_id = '';
+				self.community_id = '';
+				self.screenTime = '';
+				self.intervalTime = [];
+				self.leaveTime = [];
+				self.sendForm.type = '';
+				self.sendForm.end = '';
+				self.sendForm.start = '';
 				self.sendForm.saver_id = row.id;
-				console.log(this.sendForm.saver_id)
+
+				console.log(this.sendForm)
 			},
 			// 选中时间
 			chooseTime(val) {
@@ -448,6 +544,12 @@
 					self.hasAddress = false;
 					self.hasType = false;
 					self.getProject()
+				}
+				if (self.sendForm.type === 4) {
+					self.pro_id = '';
+					self.city_id = '';
+					self.community_id = '';
+					self.areas_id  = '';
 				}
 			},
 			getProject() {
@@ -556,6 +658,22 @@
 							self.$message.success("发布成功");
 							this.dialogSend = false;
 						});
+						break;
+					case 4:
+					var formData_4 = {
+						saver_id: self.sendForm.saver_id,
+						type: 4,
+						area_id: self.sendForm.area_id,
+						start: self.sendForm.start,
+						end: self.sendForm.end,
+						interval_time: self.sendForm.interval_time,
+						start_time: self.sendForm.start_time,
+					}
+					console.log(formData_4)
+					API.issueScreenSaver(formData_4).then(res => {
+						self.$message.success("发布成功");
+						this.dialogSend = false;
+					})
 				}
 			},
 			// 操作
@@ -571,7 +689,7 @@
 					self.loading = false;
 				})
 			},
-			
+
 			// 分页
 			currentChange(val) {
 				var self = this;
