@@ -54,6 +54,7 @@ const url = {
 	"SendDeviceCommand": 'send/device/command', // 发送指令
 	"CatchFaces": '/catch/faces', // 查看人像
 	"RestartDeviceCommands": 'restart/device/commands', // 重启指令队列
+	"DevicePhotos": '/device/photos', // 上传获取设备图片
 	
 	// apk管理
 	'Apk': '/apk', // 创建apk

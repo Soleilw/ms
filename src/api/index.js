@@ -304,6 +304,18 @@ API.deviceUserList = function(page, limit, uuid) {
 	})
 }
 
+// 上传设备图片
+API.upLoadDeviceImages = function(data) {
+	return axios.post(url.DevicePhotos, data)
+}
+
+// 获取设备图片
+API.getDeviceImages = function(device_id) {
+	return axios.get(url.DevicePhotos, {
+		device_id: device_id
+	})
+}
+
 // 搜索设备号
 // API.search = function(page,limit,uuid) {
 // 	return axios.get(url.Devices, {page:page, limit:limit,uuid:uuid})

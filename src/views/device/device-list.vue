@@ -9,7 +9,8 @@
 					<div class="tip">根据设备号筛选：</div>
 				</div>
 				<div class="btn">
-					<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select" @keyup.enter.native="search(uuid)">
+					<el-input placeholder="输入设备号" v-model="uuid" class="input-with-select"
+						@keyup.enter.native="search(uuid)">
 						<el-button slot="append" icon="el-icon-search" @click="search(uuid)"></el-button>
 					</el-input>
 				</div>
@@ -17,7 +18,8 @@
 					<div class="tip">根据地址筛选：</div>
 				</div>
 				<div class="btn">
-					<el-input placeholder="输入姓名" v-model="address_name" class="input-with-select" @keyup.enter.native="addressSearch(address_name)">
+					<el-input placeholder="输入姓名" v-model="address_name" class="input-with-select"
+						@keyup.enter.native="addressSearch(address_name)">
 						<el-button slot="append" icon="el-icon-search" @click="addressSearch(address_name)"></el-button>
 					</el-input>
 				</div>
@@ -26,7 +28,8 @@
 				</div>
 				<div class="btn">
 					<el-select v-model="type" placeholder="请选择类型" @change="typeChange">
-						<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
+						<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]"
+							:value="index">
 						</el-option>
 					</el-select>
 				</div>
@@ -34,11 +37,13 @@
 					<div class="tip">根据省市区筛选：</div>
 				</div>
 				<div class="btn">
-					<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData" @change="proChange" :props="props"></el-cascader>
+					<el-cascader v-model="pro_city_area" placeholder="请选择省市区" :options="cascaderData"
+						@change="proChange" :props="props"></el-cascader>
 				</div>
 				<div class="btn">
 					<el-select v-model="area_address_id" placeholder="请选择地址" filterable @change="areaAddressChange">
-						<el-option v-for="(item, index) in area_address_List" :key="index" :label="item.address" :value="item.id">
+						<el-option v-for="(item, index) in area_address_List" :key="index" :label="item.address"
+							:value="item.id">
 						</el-option>
 					</el-select>
 				</div>
@@ -47,7 +52,8 @@
 				</div>
 				<div class="btn">
 					<el-select v-model="deviceState" placeholder="请选择状态" filterable @change="deviceStateChange">
-						<el-option v-for="(item, index) in deviceStateList" :key="index" :label="item.online" :value="item.offline">
+						<el-option v-for="(item, index) in deviceStateList" :key="index" :label="item.online"
+							:value="item.offline">
 						</el-option>
 					</el-select>
 				</div>
@@ -60,7 +66,8 @@
 			</div>
 
 			<div class="content-box-right">
-				<el-table :data="tableDate" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="700">
+				<el-table :data="tableDate" stripe border :header-cell-style="{background:'#f0f0f0', color: '#003366'}"
+					max-height="700">
 					<el-table-column prop="id" label="ID" width="80px"></el-table-column>
 					<el-table-column prop="address.address" label="地址" width="400px"></el-table-column>
 					<el-table-column prop="uuid" label="uuid" width="200px"></el-table-column>
@@ -84,32 +91,49 @@
 								</el-button>
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item>
-										<el-button type="text" @click="handleExit(scope.$index, scope.row)">编辑</el-button>
+										<el-button type="text" @click="handleExit(scope.$index, scope.row)">编辑
+										</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-button type="text" @click="handleShowLog(scope.$index, scope.row)">查看日志</el-button>
+										<el-button type="text" @click="handleShowLog(scope.$index, scope.row)">查看日志
+										</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-button v-if="scope.row.type == 4 || scope.row.type == 1 || scope.row.type == 6" type="text" @click="handleUserList(scope.$index, scope.row)">查看用户</el-button>
+										<el-button
+											v-if="scope.row.type == 4 || scope.row.type == 1 || scope.row.type == 6"
+											type="text" @click="handleUserList(scope.$index, scope.row)">查看用户
+										</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-button  v-if="scope.row.type == 4 || scope.row.type == 1 || scope.row.type == 5 || scope.row.type == 6"
-										 type="text" @click="resetCommandList(scope.$index, scope.row)">重启指令队列</el-button>
+										<el-button
+											v-if="scope.row.type == 4 || scope.row.type == 1 || scope.row.type == 5 || scope.row.type == 6"
+											type="text" @click="resetCommandList(scope.$index, scope.row)">重启指令队列
+										</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-button type="text" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录</el-button>
+										<el-button type="text" @click="handleShowRecord(scope.$index, scope.row)">查看进出记录
+										</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-button type="text" @click="handleShowFace(scope.$index, scope.row)">查看人脸组</el-button>
+										<el-button type="text" @click="handleShowFace(scope.$index, scope.row)">查看人脸组
+										</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-button type="text" @click="handleShowCommands (scope.$index, scope.row)">查看指令</el-button>
+										<el-button type="text" @click="handleShowCommands (scope.$index, scope.row)">
+											查看指令</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-button type="text" @click="handleHeart(scope.$index, scope.row)">查看心跳</el-button>
+										<el-button type="text" @click="handleHeart(scope.$index, scope.row)">查看心跳
+										</el-button>
 									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-popconfirm title="是否要删除该条数据" @confirm="handleDel(scope.$index, scope.row)" cancelButtonType="primary">
+										<el-button type="text" @click="updateDeviceImage(scope.$index, scope.row)">
+											上传设备图片
+										</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-popconfirm title="是否要删除该条数据" @confirm="handleDel(scope.$index, scope.row)"
+											cancelButtonType="primary">
 											<el-button slot="reference" type="text">删除</el-button>
 										</el-popconfirm>
 									</el-dropdown-item>
@@ -119,13 +143,14 @@
 					</el-table-column>
 				</el-table>
 				<div class="block">
-					<el-pagination @current-change="currentChange" :current-page.sync="current" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-					 :page-size="size" layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
+					<el-pagination @current-change="currentChange" :current-page.sync="current"
+						:page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]" :page-size="size"
+						layout="sizes, prev, pager, next, jumper" @size-change="sizeChange" :total="total">
 					</el-pagination>
 				</div>
 			</div>
 		</div>
-		
+
 		<el-dialog title="重启指令队列" :visible.sync="dialogResetCommand" width="20%" align="center">
 			<div style="font-size: 20px; margin-bottom: 30px">是否重启指令队列</div>
 			<span>
@@ -142,19 +167,22 @@
 					</el-form-item>
 					<el-form-item label="类型">
 						<el-select v-model="face_type" placeholder="请选择类型" @change="faceTypeChange">
-							<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]" :value="index">
+							<el-option v-for="(item,index) in typeList" :key="index" :label="typeList[index]"
+								:value="index">
 							</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="选择项目">
 						<el-select v-model="face_project" placeholder="请选择项目" @change="changeProject">
-							<el-option v-for="(item,index) in projectList" :key="index" :label="item.name" :value="item.id">
+							<el-option v-for="(item,index) in projectList" :key="index" :label="item.name"
+								:value="item.id">
 							</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="选择地址">
 						<el-select v-model="face_address" placeholder="请选择地址" @change="addressChange" filterable>
-							<el-option v-for="item in addressList" :key="item.id" :label="item.address" :value="item.id">
+							<el-option v-for="item in addressList" :key="item.id" :label="item.address"
+								:value="item.id">
 							</el-option>
 						</el-select>
 					</el-form-item>
@@ -164,7 +192,9 @@
 							<div class="facebox">
 								<el-checkbox-group v-model="form.face_groups" class="facebox-item">
 									<div v-for="(item,index) in faceGroupList" :key="index">
-										<el-checkbox :label="item.group_name" @change="checkOneChange">{{item.group_name}}</el-checkbox>
+										<el-checkbox :label="item.group_name" @change="checkOneChange">
+											{{item.group_name}}
+										</el-checkbox>
 									</div>
 								</el-checkbox-group>
 							</div>
@@ -187,7 +217,8 @@
 					</el-form-item>
 					<el-form-item label="安装包版本">
 						<el-select v-model="face_apk_version" placeholder="请选择版本" @change="apkVersionChange">
-							<el-option v-for="item in versionList" :key="item.version" :label="item.version" :value="item.version">
+							<el-option v-for="item in versionList" :key="item.version" :label="item.version"
+								:value="item.version">
 							</el-option>
 						</el-select>
 					</el-form-item>
@@ -206,7 +237,8 @@
 					</el-form-item>
 					<el-form-item label="选择方向">
 						<el-select v-model="form.direction" placeholder="请选择地址">
-							<el-option v-for="item in directionList" :key="item.id" :label="item.direction" :value="item.id">
+							<el-option v-for="item in directionList" :key="item.id" :label="item.direction"
+								:value="item.id">
 							</el-option>
 						</el-select>
 					</el-form-item>
@@ -219,12 +251,49 @@
 			</div>
 		</el-dialog>
 
+		<!-- 上传设备图片 -->
+		<el-dialog title="上传设备图片" :visible.sync="dialogDeviceImage" width="80%">
+			<div class="box">
+				<el-form :model="upLoadDMForm" label-width="140px">
+					<el-form-item label="设备图片">
+						<el-upload action="https://upload-z2.qiniup.com" ref="upload"
+							:before-upload="beforeAvatarUpload" :auto-upload="false" :on-success="handleAvatarSuccess"
+							:on-remove="handleRemove" :on-change="handleChange" :data="imgData" multiple
+							list-type="picture-card">
+							<el-button size="small" type="primary">选择图片</el-button>
+						</el-upload>
+					</el-form-item>
+					<div style="width: 80%;">
+						<el-form-item label="已上传设备图片">
+							<el-table :data="alreadyPhotos" border
+								:header-cell-style="{background:'#f0f0f0', color: '#003366'}">
+								<el-table-column prop="id" label="ID" width="100px"></el-table-column>
+								<el-table-column prop="href" label="设备图片">
+									<template slot-scope="scope">
+										<el-popover placement="top-start" title="" trigger="click">
+											<img :src="scope.row.href" style="max-width:800px; max-height:800px;" />
+											<img slot="reference" :src="scope.row.href" style="max-width:50px;max-height:50px;">
+										</el-popover>
+									</template>
+								</el-table-column>
+							</el-table>
+						</el-form-item>
+					</div>
+					<div class="submit">
+						<el-form-item>
+							<el-button type="primary" @click="upLoadDI">提交</el-button>
+						</el-form-item>
+					</div>
 
+
+				</el-form>
+			</div>
+		</el-dialog>
 
 		<!-- 查看日志 -->
 		<el-dialog title="查看日志" :visible.sync="dialogLogs" width="80%">
-			<el-table :data="logstable" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" v-loading="logLoading"
-			 element-loading-text="获取数据中">
+			<el-table :data="logstable" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}"
+				v-loading="logLoading" element-loading-text="获取数据中">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="time" label="时间"></el-table-column>
@@ -251,8 +320,9 @@
 				</el-table-column> -->
 			</el-table>
 			<div class="block">
-				<el-pagination @current-change="logCurrentChange" :current-page.sync="currentLog" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-				 :page-size="sizeLog" layout="sizes, prev, pager, next, jumper" @size-change="logSizeChange" :total="totalLog">
+				<el-pagination @current-change="logCurrentChange" :current-page.sync="currentLog"
+					:page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]" :page-size="sizeLog"
+					layout="sizes, prev, pager, next, jumper" @size-change="logSizeChange" :total="totalLog">
 				</el-pagination>
 			</div>
 		</el-dialog>
@@ -263,8 +333,8 @@
 
 		<!-- 查看进出记录 -->
 		<el-dialog title="查看进出记录" :visible.sync="dialogShowRecord" width="80%">
-			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" max-height="620"
-			 v-loading="faceLoading" element-loading-text="获取数据中">
+			<el-table :data="faceLogsTable" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}"
+				max-height="620" v-loading="faceLoading" element-loading-text="获取数据中">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="face.name" label="名称"></el-table-column>
@@ -281,8 +351,9 @@
 				</el-table-column>
 			</el-table>
 			<div class="block">
-				<el-pagination @current-change="faceCurrentChange" :current-page.sync="currentFace" :page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]"
-				 :page-size="sizeFace" layout="sizes, prev, pager, next, jumper" @size-change="faceSizeChange" :total="totalFace">
+				<el-pagination @current-change="faceCurrentChange" :current-page.sync="currentFace"
+					:page-sizes="[10, 20, 50, 100, 150, 200, 250, 300]" :page-size="sizeFace"
+					layout="sizes, prev, pager, next, jumper" @size-change="faceSizeChange" :total="totalFace">
 				</el-pagination>
 			</div>
 		</el-dialog>
@@ -324,7 +395,8 @@
 						</el-form-item> -->
 						<el-form-item label="指令">
 							<el-select v-model="command" @change="changeCommand">
-								<el-option v-for="(value, name) in commandList" :key="name" :label="value" :value="name"></el-option>
+								<el-option v-for="(value, name) in commandList" :key="name" :label="value"
+									:value="name"></el-option>
 							</el-select>
 						</el-form-item>
 						<!-- 发送密码 -->
@@ -435,7 +507,8 @@
 
 			</div>
 
-			<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" :max-height="480">
+			<el-table :data="commandsData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}"
+				:max-height="480">
 				<el-table-column prop="id" label="ID"></el-table-column>
 				<el-table-column prop="device_uuid" label="设备ID"></el-table-column>
 				<el-table-column prop="command" label="指令"></el-table-column>
@@ -455,7 +528,8 @@
 		<!-- 查看用户-->
 		<el-dialog title="查看用户" :visible.sync="dialogUserList" width="80%">
 			<div style="margin-bottom: 20px;">总人数：{{totalUserListPage}}人</div>
-			<el-table :data="userListData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}" :max-height="600">
+			<el-table :data="userListData" border :header-cell-style="{background:'#f0f0f0', color: '#003366'}"
+				:max-height="600">
 				<el-table-column type="index" width="50" label="序号">
 				</el-table-column>
 				<el-table-column prop="name" label="姓名"></el-table-column>
@@ -470,7 +544,8 @@
 				</el-table-column>
 				<el-table-column label="操作">
 					<template slot-scope="scope">
-						<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDelUser(scope.$index, scope.row)" cancelButtonType="primary">
+						<el-popconfirm title="是否要删除该条数据" @onConfirm="handleDelUser(scope.$index, scope.row)"
+							cancelButtonType="primary">
 							<el-button slot="reference" size="mini" type="danger">删除</el-button>
 						</el-popconfirm>
 					</template>
@@ -482,6 +557,8 @@
 </template>
 
 <script>
+	import axios from 'axios'
+	import md5 from 'blueimp-md5'
 	import API from '@/api/index.js'
 	import DATE from '@/utils/date.js'
 	let id = 0;
@@ -643,13 +720,28 @@
 				area_address_id: '',
 
 				address_name: '', // 根据地址搜索
-				
+
 				dialogResetCommand: false, // 重启指令队列
 				reset_device_uuid: '',
 
+				dialogDeviceImage: false, // 上传设备图片
+				deviceImageList: [],
+				upLoadDMForm: {
+					device_id: '',
+					photos: [], // 上传要提交的数组
+				},
+				imgData: {
+					key: '',
+					token: ''
+				},
+				fileName: '',
+				suffix: '',
+				qiniuaddr: "https://tu.fengniaotuangou.cn", // 七牛云图片外链地址
+				alreadyPhotos: [],
 			}
 		},
 		mounted() {
+			this.getQiniuToken();
 			this.getDevice();
 			this.getAddress();
 			this.getUuid();
@@ -672,7 +764,8 @@
 			proChange(val) {
 				var self = this;
 				self.pro_city_area_id = val[3];
-				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState, self
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self
+					.deviceState, self
 					.address_name).then(res => {
 					self.loading = false;
 					self.tableDate = res.data;
@@ -690,7 +783,8 @@
 
 			areaAddressChange(val) {
 				var self = this;
-				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, val, self.deviceState, self.address_name).then(
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, val, self.deviceState, self
+					.address_name).then(
 					res => {
 						self.loading = false;
 						self.tableDate = res.data;
@@ -703,7 +797,8 @@
 			// 根据地址搜索
 			addressSearch(val) {
 				var self = this;
-				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState, val)
+				API.devices(1, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self
+						.deviceState, val)
 					.then(res => {
 						self.loading = false;
 						self.tableDate = res.data;
@@ -717,7 +812,8 @@
 			search() {
 				var self = this;
 				self.loading = true;
-				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState, self.address_name)
+				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,
+						self.address_name)
 					.then(res => {
 						self.loading = false;
 						self.tableDate = res.data;
@@ -730,7 +826,8 @@
 			typeChange(val) {
 				var self = this;
 				self.loading = true;
-				API.devices(1, self.size, val, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState, self.address_name)
+				API.devices(1, self.size, val, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,
+						self.address_name)
 					.then(res => {
 						self.loading = false;
 						self.tableDate = res.data;
@@ -746,7 +843,8 @@
 			deviceStateChange(val) {
 				var self = this;
 				self.loading = true;
-				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, val, self.address_name).then(
+				API.devices(1, 10, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, val, self
+					.address_name).then(
 					res => {
 						self.loading = false;
 						self.tableDate = res.data;
@@ -975,14 +1073,14 @@
 					self.form.direction = res.direction;
 					self.form.remark = res.remark;
 					self.form.face_groups = res.face_group;
-					
-					if(res.origin_version) {
+
+					if (res.origin_version) {
 						self.form.apk = res.origin_version.apk_id;
 						self.form.apk_version = res.origin_version.version;
 						self.face_apk_version = res.origin_version.version;
 					}
-				
-					
+
+
 					self.face_project = res.project;
 					self.face_address = res.address_id;
 					self.face_apk = res.apk;
@@ -1355,14 +1453,14 @@
 					})
 				})
 			},
-			
+
 			// 重启指令队列
 			resetCommandList(index, row) {
 				let self = this;
 				self.reset_device_uuid = row.uuid;
 				self.dialogResetCommand = true;
 			},
-			
+
 			toResetCommand() {
 				let self = this;
 				API.resetCommand(self.reset_device_uuid).then((res) => {
@@ -1375,12 +1473,95 @@
 			resetSelect() {
 				window.location.reload();
 			},
+
+			// 上传设备图片
+			updateDeviceImage(index, row) {
+				let self = this;
+				self.upLoadDMForm.device_id = row.id;
+				self.dialogDeviceImage = true;
+
+				API.getDeviceImages(self.upLoadDMForm.device_id).then(res => {
+					self.alreadyPhotos = res;
+				})
+
+			},
+			upLoadDI() {
+				let self = this;
+				self.$refs.upload.submit();
+			},
+			// 上传屏保图片
+			getQiniuToken() {
+				var self = this;
+				axios.get('https://api.fengniaotuangou.cn/api/upload/token').then(res => {
+					console.log(res.data.uptoken)
+					self.imgData.token = res.data.uptoken;
+				})
+			},
+			// 移除照片
+			handleRemove(file, fileList) {
+				console.log(file, fileList)
+				if (fileList.length == 0) {
+					return;
+				}
+			},
+			// 改变图片
+			handleChange(file, fileList) {
+				var self = this;
+				console.log(111)
+				// for (let i = 0; i < fileList.length; i++) {
+				// 	console.log(fileList)
+				// 	if (fileList[i].name.substring(fileList[i].name.lastIndexOf('.') + 1) === 'png') {
+				// 		console.log(11, fileList[i].name)
+				// 	} else {
+				// 		self.$message.error('该图片类型错误,请上传后缀为png的图片');
+				// 		fileList.pop(fileList[i]);
+				// 		return false;
+				// 	}
+				// }
+			},
+			// 上传前
+			beforeAvatarUpload(file) {
+				var self = this;
+				console.log(111)
+				self.getQiniuToken();
+				// 上传之前,把图片推进deviceImageList
+				self.fileName = md5(file.name);
+				self.suffix = file.name.substring(file.name.lastIndexOf('.') + 1);
+				self.imgData.key = `tmp_${self.fileName}.${self.suffix}`
+				// 上传之前后,把图片推进deviceImageList
+				var _deviceImageList = [];
+				if (self.imgData.key) {
+					self.deviceImageList.push(`${self.qiniuaddr}/${self.imgData.key}`)
+					for (var i = 0; i < self.deviceImageList.length; i++) {
+						_deviceImageList.push(self.deviceImageList[i])
+					}
+					self.upLoadDMForm.photos = _deviceImageList;
+					console.log(self.upLoadDMForm.photos)
+				}
+			},
+			// 上传成功
+			handleAvatarSuccess(res, file, fileList) {
+				var self = this;
+				API.upLoadDeviceImages(self.upLoadDMForm).then(res => {
+					self.$message.success('提交成功');
+					API.getDeviceImages(self.upLoadDMForm.device_id).then(res => {
+						self.alreadyPhotos = res;
+					})
+					self.$refs.upload.clearFiles();
+					self.upLoadDMForm = {
+						device_id: '',
+						photos: [], // 上传要提交的数组
+					};
+				})
+				this.getQiniuToken();
+			},
 			// 设备列表的分页
 			currentChange(val) {
 				var self = this;
 				self.current = val;
 				self.loading = true;
-				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,
+				API.devices(val, self.size, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self
+					.deviceState,
 					self.address_name).then(
 					res => {
 						self.loading = false;
@@ -1395,7 +1576,8 @@
 				var self = this;
 				self.loading = true;
 				self.size = val;
-				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self.deviceState,
+				API.devices(self.current, val, self.type, self.uuid, self.pro_city_area_id, self.area_address_id, self
+						.deviceState,
 						self.address_name)
 					.then(res => {
 						self.loading = false;
@@ -1406,6 +1588,7 @@
 					})
 			}
 		},
+
 
 		beforeDestroy() {
 			clearInterval(this.timer)
